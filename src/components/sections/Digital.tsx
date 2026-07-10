@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 
 const NeuralMesh = dynamic(
@@ -25,6 +26,7 @@ const items = [
 
 export function Digital() {
   const t = useTranslations("Digital");
+  const n = useTranslations("Nav");
 
   return (
     <section id="digital" className="section-pad">
@@ -39,6 +41,12 @@ export function Digital() {
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[color-mix(in_srgb,var(--foreground)_75%,transparent)]">
             {t("intro")}
           </p>
+          <Link
+            href="/digital"
+            className="focus-ring mt-4 inline-block text-sm tracking-wide text-[var(--holive-gold)] hover:underline"
+          >
+            {n("digital")} →
+          </Link>
         </SectionReveal>
 
         <SectionReveal delay={0.08} className="mt-12">

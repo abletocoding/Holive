@@ -118,6 +118,79 @@ export class NeuralAmbient {
     this.master.gain.linearRampToValueAtTime(target, now + 0.12);
   }
 
+  /**
+   * Singing-bowl / cuenco hit — inharmonic partials with exponential decay.
+   * Call on each node tap (or flash). Safe if audio not started yet.
+   */
+  playBowlHit(nodeIndex = 0) {
+    if (!this.ctx || this.muted || !this.started) return;
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const dest = this.master;
+    if (!dest) return;
+
+    // Slight pitch shift per node so each circle has its own bowl voice
+    const base = 185 + (nodeIndex % 4) * 28;
+    // Tibetan-bowl-like inharmonic ratios (not equal temperament)
+    const partials: { ratio: number; gain: number; decay: number }[] = [
+      { ratio: 1, gain: 0.42, decay: 1.8 },
+      { ratio: 1.52, gain: 0.28, decay: 1.45 },
+      { ratio: 2.05, gain: 0.18, decay: 1.15 },
+      { ratio: 2.74, gain: 0.12, decay: 0.95 },
+      { ratio: 3.48, gain: 0.07, decay: 0.7 },
+      { ratio: 4.21, gain: 0.04, decay: 0.5 },
+    ];
+
+    const hitGain = ctx.createGain();
+    hitGain.gain.value = 0.55;
+    hitGain.connect(dest);
+
+    for (const p of partials) {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = base * p.ratio;
+
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(p.gain, now + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
+
+      // Soft lowpass so highs bloom then settle (bowl body)
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(4200, now);
+      filter.frequency.exponentialRampToValueAtTime(1800, now + p.decay * 0.6);
+      filter.Q.value = 0.9;
+
+      osc.connect(g);
+      g.connect(filter);
+      filter.connect(hitGain);
+      osc.start(now);
+      osc.stop(now + p.decay + 0.05);
+    }
+
+    // Brief strike transient (felt as the mallet tap)
+    const noiseLen = Math.floor(ctx.sampleRate * 0.04);
+    const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < noiseLen; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (noiseLen * 0.18));
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buf;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.22, now);
+    ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+    const nf = ctx.createBiquadFilter();
+    nf.type = "bandpass";
+    nf.frequency.value = 1800 + nodeIndex * 120;
+    nf.Q.value = 1.2;
+    noise.connect(nf);
+    nf.connect(ng);
+    ng.connect(hitGain);
+    noise.start(now);
+  }
+
   private buildGraph(ctx: AudioContext) {
     const master = ctx.createGain();
     master.gain.value = 0;

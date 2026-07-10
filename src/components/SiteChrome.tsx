@@ -3,10 +3,12 @@
 import type { ReactNode } from "react";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { SiteHeader } from "@/components/ui/SiteHeader";
+import { HoliCompanion } from "@/components/holi/HoliCompanion";
 import { useTranslations } from "next-intl";
 
 export function SiteChrome({ children }: { children: ReactNode }) {
   const t = useTranslations("Nav");
+  const h = useTranslations("Holi.companion");
 
   return (
     <ThemeProvider>
@@ -15,7 +17,7 @@ export function SiteChrome({ children }: { children: ReactNode }) {
       </a>
       <SiteHeader />
       {children}
-      {/* Chat slot: mount Crisp/Intercom when NEXT_PUBLIC_CRISP_WEBSITE_ID is set */}
+      <HoliCompanion messages={[h("a"), h("b"), h("c"), h("d")]} />
     </ThemeProvider>
   );
 }

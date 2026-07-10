@@ -5,10 +5,13 @@
   },
   "Nav": {
     "skip": "Skip to content",
+    "home": "Home",
     "manifesto": "Manifesto",
-    "services": "Marketing",
+    "services": "Services",
     "digital": "Digitalization",
     "courses": "Courses",
+    "blog": "Blog",
+    "about": "About",
     "process": "Process",
     "contact": "Contact",
     "themeLight": "Light mode",
@@ -23,6 +26,62 @@
     "ctaPrimary": "Talk to Holive",
     "ctaSecondary": "Explore courses",
     "scrollHint": "Scroll"
+  },
+  "Pages": {
+    "services": {
+      "eyebrow": "Services",
+      "title": "Solutions that move brand and market",
+      "intro": "Strategy, content, design, and print — one voice across physical and digital.",
+      "holiTip": "Pick one channel to tend well before you open ten more."
+    },
+    "digital": {
+      "eyebrow": "Digitalization",
+      "title": "Systems that work while you grow",
+      "intro": "Webs, SaaS, automations, and advisory — living code for living businesses.",
+      "holiTip": "Digitize the repeatable. Keep humans on the decisions that matter."
+    },
+    "courses": {
+      "eyebrow": "Courses",
+      "title": "Learn the method. Scale with Holive.",
+      "intro": "Practical tracks built to apply — waitlist open while we plant the next season.",
+      "catalog": "Catalog",
+      "waitlist": "Join the waitlist",
+      "statusWaitlist": "Waitlist",
+      "statusSoon": "Soon",
+      "holiTip": "Learn to deliver. Then let the system carry the weight.",
+      "outcomes": "You will leave with"
+    },
+    "blog": {
+      "eyebrow": "Blog",
+      "title": "Notes from the ecosystem",
+      "intro": "Entrepreneurial field notes — useful, bilingual in spirit, Holive voice.",
+      "read": "Read",
+      "min": "{n} min",
+      "back": "All posts",
+      "holiAside": "I read this twice. The second time I planted one action."
+    },
+    "about": {
+      "eyebrow": "Philosophy",
+      "title": "Purity. Loyalty. Living systems.",
+      "body": "Holive helps traditional businesses and growth-minded teams move into digital life without losing soul — marketing, systems, and learning that feel pure, loyal, and alive.",
+      "holiTitle": "Meet Holi",
+      "holiBody": "Holi is our crayon companion: the archetype of leaving comfort to build something useful. She believes businesses are living ecosystems — plant processes, harvest time. Never fluff without action.",
+      "pillarsTitle": "What we stand on"
+    },
+    "contact": {
+      "eyebrow": "Contact",
+      "title": "Tell us your next move",
+      "body": "One message is enough. We reply with clarity — no noise.",
+      "holiTip": "Say the real friction. We build from honesty."
+    }
+  },
+  "Holi": {
+    "companion": {
+      "a": "Welcome — scroll with intention.",
+      "b": "Systems over noise. Keep going.",
+      "c": "Almost there — plant one clear next step.",
+      "d": "You made it. Sync the neural pulse below?"
+    }
   },
   "Manifesto": {
     "eyebrow": "What Holive is",
@@ -171,7 +230,7 @@
     "highScore": "Best",
     "gameOver": "Signal lost",
     "tap": "Memorize purple & gold pulses, then tap them back.",
-    "audioNote": "Starting sync enables binaural beats + ambient pad (headphones recommended).",
+    "audioNote": "Starting sync enables binaural beats, zen pad, and singing-bowl hits on each node (headphones recommended).",
     "watch": "Watch the pulse…",
     "yourTurn": "Your turn — replay the signal",
     "levelUp": "Signal locked. Going deeper…",
@@ -183,7 +242,9 @@
     "mute": "Mute",
     "unmute": "Unmute / audio",
     "volume": "Volume",
-    "binauralHint": "Binaural {beat} Hz (theta) · carrier {carrier} Hz — calm focus"
+    "binauralHint": "Binaural {beat} Hz (theta) · carrier {carrier} Hz — calm focus",
+    "mantraLabel": "Mantra",
+    "bowlHint": "Each node sings a bowl hit — headphones recommended"
   },
   "Widgets": {
     "neural": {

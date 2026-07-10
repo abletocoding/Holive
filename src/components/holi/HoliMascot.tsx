@@ -2,14 +2,33 @@
 
 import { useState } from "react";
 
+export type HoliPose = "idle" | "wave" | "think" | "celebrate" | "guide";
+
 type Props = {
   className?: string;
   facing?: "right" | "left";
+  /** Prefer PNG pose assets; falls back to SVG doodle. */
+  pose?: HoliPose;
+  alt?: string;
 };
 
-/** Holi — olive-with-eye crayon stickman. Uses /brand/holi.svg with inline SVG fallback. */
-export function HoliMascot({ className, facing = "right" }: Props) {
-  const [useFallback, setUseFallback] = useState(false);
+const POSE_SRC: Record<Exclude<HoliPose, "idle">, string> = {
+  wave: "/brand/holi/holi-wave.webp",
+  think: "/brand/holi/holi-think.webp",
+  celebrate: "/brand/holi/holi-celebrate.webp",
+  guide: "/brand/holi/holi-guide.webp",
+};
+
+/** Holi — olive-with-eye crayon stickman. Pose PNGs or /brand/holi.svg. */
+export function HoliMascot({
+  className,
+  facing = "right",
+  pose = "idle",
+  alt = "",
+}: Props) {
+  const [failed, setFailed] = useState(false);
+  const preferPose = pose !== "idle" && !failed;
+  const src = preferPose ? POSE_SRC[pose] : "/brand/holi.svg";
 
   return (
     <span
@@ -19,60 +38,17 @@ export function HoliMascot({ className, facing = "right" }: Props) {
         transform: facing === "left" ? "scaleX(-1)" : undefined,
       }}
     >
-      {!useFallback ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src="/brand/holi.svg"
-          alt=""
-          width={64}
-          height={80}
-          className="h-full w-full object-contain"
-          onError={() => setUseFallback(true)}
-        />
-      ) : (
-        <svg
-          viewBox="0 0 64 80"
-          width="64"
-          height="80"
-          aria-hidden
-          className="h-full w-full"
-        >
-          <ellipse
-            cx="32"
-            cy="8"
-            rx="10"
-            ry="3"
-            fill="none"
-            stroke="#e0c35a"
-            strokeWidth="1.8"
-          />
-          <ellipse
-            cx="32"
-            cy="28"
-            rx="14"
-            ry="18"
-            fill="#6b2fa0"
-            stroke="#e0c35a"
-            strokeWidth="2.2"
-          />
-          <circle
-            cx="38"
-            cy="26"
-            r="5"
-            fill="#faf8ff"
-            stroke="#0c0a10"
-            strokeWidth="1.6"
-          />
-          <circle cx="39.5" cy="26" r="2.2" fill="#0c0a10" />
-          <path
-            d="M32 46 L32 58 M32 50 L22 56 M32 50 L42 56 M32 58 L24 72 M32 58 L40 72"
-            fill="none"
-            stroke="#4a1d7a"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-          />
-        </svg>
-      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={alt}
+        width={64}
+        height={80}
+        className="h-full w-full object-contain"
+        onError={() => {
+          if (preferPose) setFailed(true);
+        }}
+      />
     </span>
   );
 }

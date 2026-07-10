@@ -7,6 +7,7 @@ import { Courses } from "@/components/sections/Courses";
 import { Process } from "@/components/sections/Process";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
+import { ShowcaseStrip } from "@/components/sections/ShowcaseStrip";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -21,6 +22,7 @@ export default async function HomePage({ params }: Props) {
       <Hero />
       <main id="main">
         <Manifesto />
+        <ShowcaseStrip />
         <Services />
         <Digital />
         <Courses />

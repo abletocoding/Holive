@@ -10,6 +10,10 @@ import {
   BINAURAL_META,
   NeuralAmbient,
 } from "@/lib/audio/neuralAmbient";
+import {
+  BUSINESS_MANTRAS,
+  mantraForLocale,
+} from "@/lib/game/mantras";
 
 const STORAGE_KEY = "holive-neural-highscore";
 const NODE_COUNT = 4;
@@ -46,7 +50,7 @@ function randomNode() {
 /**
  * Neural Pulse — Simon-like pattern memory in an immersive arena.
  * Holi is coach/avatar only; mechanic is purple/gold neural nodes.
- * Audio: 220/226 Hz binaural (6 Hz theta) + zen pad — starts on gesture.
+ * Audio: binaural + zen pad + singing-bowl hits on each node.
  */
 export function HoliGame() {
   const t = useTranslations("HoliGame");
@@ -64,6 +68,7 @@ export function HoliGame() {
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(0.35);
   const [fsDenied, setFsDenied] = useState(false);
+  const [mantraIdx, setMantraIdx] = useState(0);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<NeuralAmbient | null>(null);
@@ -86,7 +91,15 @@ export function HoliGame() {
     };
   }, []);
 
-  // Lock body scroll while arena is open (non-native fullscreen)
+  // Rotate mantras while arena is open
+  useEffect(() => {
+    if (!arena) return;
+    const id = window.setInterval(() => {
+      setMantraIdx((i) => (i + 1) % BUSINESS_MANTRAS.length);
+    }, 6500);
+    return () => window.clearInterval(id);
+  }, [arena]);
+
   useEffect(() => {
     if (!arena) return;
     const prev = document.body.style.overflow;
@@ -109,12 +122,20 @@ export function HoliGame() {
     setAudioOn(false);
   }, []);
 
-  const flashNode = useCallback(async (idx: number, ms = 420) => {
-    setLit(idx);
-    await new Promise((r) => setTimeout(r, ms));
-    setLit(null);
-    await new Promise((r) => setTimeout(r, 140));
+  const bowlHit = useCallback((idx: number) => {
+    audioRef.current?.playBowlHit(idx);
   }, []);
+
+  const flashNode = useCallback(
+    async (idx: number, ms = 420) => {
+      setLit(idx);
+      bowlHit(idx);
+      await new Promise((r) => setTimeout(r, ms));
+      setLit(null);
+      await new Promise((r) => setTimeout(r, 140));
+    },
+    [bowlHit],
+  );
 
   const playSequence = useCallback(
     async (seq: number[]) => {
@@ -140,6 +161,7 @@ export function HoliGame() {
       }
       sequenceRef.current = seq;
       setLevel(nextLevel);
+      setMantraIdx((i) => (i + 1) % BUSINESS_MANTRAS.length);
       void playSequence(seq);
     },
     [playSequence],
@@ -152,6 +174,7 @@ export function HoliGame() {
     setScore(0);
     setLevel(0);
     setCoach("idle");
+    setMantraIdx(Math.floor(Math.random() * BUSINESS_MANTRAS.length));
     try {
       await ensureAudio();
     } catch {
@@ -218,6 +241,7 @@ export function HoliGame() {
   const enterArena = useCallback(() => {
     setArena(true);
     setFsDenied(false);
+    setMantraIdx(Math.floor(Math.random() * BUSINESS_MANTRAS.length));
   }, []);
 
   const leaveArena = useCallback(async () => {
@@ -251,16 +275,18 @@ export function HoliGame() {
     setMuted(next);
   }, [audioOn, ensureAudio]);
 
-  const onVolume = useCallback((v: number) => {
-    setVolume(v);
-    audioRef.current?.setVolume(v);
-    if (v > 0 && muted) {
-      setMuted(false);
-      audioRef.current?.setMuted(false);
-    }
-  }, [muted]);
+  const onVolume = useCallback(
+    (v: number) => {
+      setVolume(v);
+      audioRef.current?.setVolume(v);
+      if (v > 0 && muted) {
+        setMuted(false);
+        audioRef.current?.setMuted(false);
+      }
+    },
+    [muted],
+  );
 
-  // Esc closes arena when not in native fullscreen (browser handles FS exit)
   useEffect(() => {
     if (!arena) return;
     const onKey = (e: KeyboardEvent) => {
@@ -284,14 +310,14 @@ export function HoliGame() {
             : t("subtitle");
 
   const playing = phase === "watch" || phase === "input" || phase === "levelup";
+  const mantra = mantraForLocale(BUSINESS_MANTRAS[mantraIdx]!, locale);
 
-  /* —— Footer teaser (not in arena) —— */
   if (!arena) {
     return (
       <div className="relative w-full overflow-hidden rounded-none border border-[color-mix(in_srgb,var(--holive-purple)_35%,transparent)] bg-[linear-gradient(165deg,#0c0618_0%,#07060a_55%,#12081f_100%)]">
         <NeuralBackdrop reduced={reduced} soft />
         <div className="relative z-10 flex flex-col items-center gap-4 px-5 py-10 text-center sm:px-8 sm:py-12">
-          <HoliMascot className="h-14 w-11 opacity-90" />
+          <HoliMascot pose="guide" className="h-16 w-12 opacity-90" />
           <div>
             <h3 className="font-display text-2xl font-semibold tracking-wide text-[var(--holive-gold)] sm:text-3xl">
               {t("title")}
@@ -316,7 +342,6 @@ export function HoliGame() {
     );
   }
 
-  /* —— Immersive arena (fixed full viewport) —— */
   return (
     <div
       ref={stageRef}
@@ -326,11 +351,11 @@ export function HoliGame() {
     >
       <NeuralBackdrop reduced={reduced} />
 
-      {/* Top bar */}
       <header className="relative z-20 flex shrink-0 items-start justify-between gap-3 px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <HoliMascot
-            className={`h-9 w-7 shrink-0 transition-transform sm:h-11 sm:w-9 ${
+            pose={coach === "cheer" ? "celebrate" : coach === "oops" ? "think" : "guide"}
+            className={`h-10 w-8 shrink-0 transition-transform sm:h-12 sm:w-9 ${
               coach === "cheer"
                 ? "scale-110"
                 : coach === "oops"
@@ -361,7 +386,6 @@ export function HoliGame() {
         </div>
       </header>
 
-      {/* Controls row */}
       <div className="relative z-20 flex flex-wrap items-center justify-center gap-2 px-3 pb-2 sm:gap-3 sm:px-5">
         <ControlBtn onClick={() => void onToggleFs()} label={isFs ? t("exitFullscreen") : t("fullscreen")} />
         <ControlBtn
@@ -397,6 +421,20 @@ export function HoliGame() {
         {statusLabel}
       </p>
 
+      {/* Rotating business mantras */}
+      <div
+        key={mantraIdx}
+        className="relative z-20 mx-auto max-w-lg px-5 pb-2 text-center animate-[fadeIn_0.6s_ease]"
+        aria-live="polite"
+      >
+        <p className="font-mono-code text-[0.55rem] tracking-[0.28em] text-white/35 uppercase">
+          {t("mantraLabel")}
+        </p>
+        <p className="mt-1 text-sm leading-snug text-[color-mix(in_srgb,var(--holive-gold)_85%,white)] sm:text-base">
+          “{mantra}”
+        </p>
+      </div>
+
       {audioOn && !muted && (
         <p className="relative z-20 px-4 pb-1 text-center text-[0.6rem] tracking-wide text-white/35">
           {t("binauralHint", {
@@ -406,13 +444,9 @@ export function HoliGame() {
         </p>
       )}
 
-      {/* Play field — large touch targets */}
       <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 sm:px-8">
         <div
-          className={`relative grid w-full max-w-[min(92vw,28rem)] grid-cols-2 gap-4 sm:gap-6 ${
-            // Landscape phones: wider, shorter nodes
-            "landscape:max-w-[min(70vh,32rem)] landscape:gap-3"
-          }`}
+          className={`relative grid w-full max-w-[min(92vw,28rem)] grid-cols-2 gap-4 sm:gap-6 landscape:max-w-[min(70vh,32rem)] landscape:gap-3`}
         >
           {Array.from({ length: NODE_COUNT }, (_, i) => {
             const isLit = lit === i;
@@ -454,7 +488,10 @@ export function HoliGame() {
 
         {(phase === "idle" || phase === "wrong") && (
           <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/55 px-5 text-center backdrop-blur-[2px]">
-            <HoliMascot className="mb-3 h-12 w-10 opacity-90" />
+            <HoliMascot
+              pose={phase === "wrong" ? "think" : "wave"}
+              className="mb-3 h-14 w-11 opacity-90"
+            />
             <p className="font-display text-2xl text-[var(--holive-gold)] sm:text-3xl">
               {phase === "wrong" ? t("gameOver") : t("title")}
             </p>
@@ -476,7 +513,7 @@ export function HoliGame() {
           aria-hidden
           className="pointer-events-none absolute bottom-3 left-3 z-20 opacity-50 sm:bottom-5 sm:left-5"
         >
-          <HoliMascot className="h-8 w-6 sm:h-10 sm:w-8" />
+          <HoliMascot pose="celebrate" className="h-10 w-8 sm:h-12 sm:w-9" />
         </div>
       )}
     </div>

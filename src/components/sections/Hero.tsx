@@ -3,6 +3,9 @@
 import dynamic from "next/dynamic";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import { MagneticButton } from "@/components/effects/MagneticButton";
+import { TextScramble } from "@/components/effects/TextScramble";
 
 const MatrixRain = dynamic(
   () =>
@@ -57,14 +60,17 @@ export function Hero() {
           </p>
         </motion.div>
 
-        <motion.h1
-          className="mt-5 max-w-xl font-display text-[clamp(1.45rem,3.6vw,2.35rem)] font-medium leading-tight text-[var(--holive-gold-bright)]"
+        <motion.div
           initial={reduce ? false : { opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
         >
-          {t("headline")}
-        </motion.h1>
+          <TextScramble
+            as="h1"
+            text={t("headline")}
+            className="mt-5 max-w-xl font-display text-[clamp(1.45rem,3.6vw,2.35rem)] font-medium leading-tight text-[var(--holive-gold-bright)]"
+          />
+        </motion.div>
 
         <motion.p
           className="mt-4 max-w-md text-base leading-relaxed text-[color-mix(in_srgb,var(--holive-white)_82%,transparent)] md:text-lg"
@@ -81,18 +87,22 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.4 }}
         >
-          <a
-            href="#contact"
-            className="focus-ring inline-flex items-center justify-center bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold tracking-wide text-[var(--holive-black)] transition hover:bg-[var(--holive-gold-bright)]"
-          >
-            {t("ctaPrimary")}
-          </a>
-          <a
-            href="#courses"
-            className="focus-ring inline-flex items-center justify-center border border-[color-mix(in_srgb,var(--holive-white)_35%,transparent)] px-6 py-3 text-sm font-semibold tracking-wide text-[var(--holive-white)] transition hover:border-[var(--holive-gold)] hover:text-[var(--holive-gold)]"
-          >
-            {t("ctaSecondary")}
-          </a>
+          <MagneticButton>
+            <Link
+              href="/contact"
+              className="focus-ring inline-flex items-center justify-center bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold tracking-wide text-[var(--holive-black)] transition hover:bg-[var(--holive-gold-bright)]"
+            >
+              {t("ctaPrimary")}
+            </Link>
+          </MagneticButton>
+          <MagneticButton strength={0.22}>
+            <Link
+              href="/courses"
+              className="focus-ring inline-flex items-center justify-center border border-[color-mix(in_srgb,var(--holive-white)_35%,transparent)] px-6 py-3 text-sm font-semibold tracking-wide text-[var(--holive-white)] transition hover:border-[var(--holive-gold)] hover:text-[var(--holive-gold)]"
+            >
+              {t("ctaSecondary")}
+            </Link>
+          </MagneticButton>
         </motion.div>
 
         <p className="font-mono-code mt-14 text-[0.65rem] uppercase tracking-[0.35em] text-[color-mix(in_srgb,var(--holive-white)_45%,transparent)]">

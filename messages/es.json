@@ -5,10 +5,13 @@
   },
   "Nav": {
     "skip": "Saltar al contenido",
+    "home": "Inicio",
     "manifesto": "Manifesto",
-    "services": "Marketing",
+    "services": "Soluciones",
     "digital": "Digitalización",
     "courses": "Cursos",
+    "blog": "Blog",
+    "about": "Filosofía",
     "process": "Proceso",
     "contact": "Contacto",
     "themeLight": "Modo claro",
@@ -23,6 +26,62 @@
     "ctaPrimary": "Hablar con Holive",
     "ctaSecondary": "Explorar cursos",
     "scrollHint": "Desciende"
+  },
+  "Pages": {
+    "services": {
+      "eyebrow": "Soluciones",
+      "title": "Soluciones que mueven marca y mercado",
+      "intro": "Estrategia, contenido, diseño e impresión — una voz en lo físico y lo digital.",
+      "holiTip": "Cuida bien un canal antes de abrir otros diez."
+    },
+    "digital": {
+      "eyebrow": "Digitalización",
+      "title": "Sistemas que trabajan mientras creces",
+      "intro": "Webs, SaaS, automatizaciones y asesoría — código vivo para negocios vivos.",
+      "holiTip": "Digitaliza lo repetible. Deja lo humano en las decisiones que importan."
+    },
+    "courses": {
+      "eyebrow": "Cursos",
+      "title": "Aprende el método. Escala con Holive.",
+      "intro": "Tracks prácticos para aplicar — lista de espera abierta mientras sembramos la siguiente temporada.",
+      "catalog": "Catálogo",
+      "waitlist": "Unirme a la lista",
+      "statusWaitlist": "Lista de espera",
+      "statusSoon": "Pronto",
+      "holiTip": "Aprende para entregar. Luego deja que el sistema cargue el peso.",
+      "outcomes": "Te llevas"
+    },
+    "blog": {
+      "eyebrow": "Blog",
+      "title": "Notas del ecosistema",
+      "intro": "Apuntes de trinchera emprendedora — útiles, con voz Holive.",
+      "read": "Leer",
+      "min": "{n} min",
+      "back": "Todos los posts",
+      "holiAside": "Lo leí dos veces. La segunda planté una acción."
+    },
+    "about": {
+      "eyebrow": "Filosofía",
+      "title": "Pureza. Lealtad. Sistemas vivos.",
+      "body": "Holive ayuda a negocios tradicionales y equipos ambiciosos a entrar en la vida digital sin perder el alma — marketing, sistemas y aprendizaje con pureza, lealtad y vida.",
+      "holiTitle": "Conoce a Holi",
+      "holiBody": "Holi es nuestra compañera de crayón: el arquetipo de quien deja la zona cómoda para construir algo útil. Cree que los negocios son ecosistemas vivos — sembrar procesos, cosechar tiempo. Nunca fluff sin acción.",
+      "pillarsTitle": "En qué nos sostenemos"
+    },
+    "contact": {
+      "eyebrow": "Contacto",
+      "title": "Cuéntanos tu siguiente movimiento",
+      "body": "Un mensaje basta. Respondemos con claridad — sin ruido.",
+      "holiTip": "Di la fricción real. Construimos desde la honestidad."
+    }
+  },
+  "Holi": {
+    "companion": {
+      "a": "Bienvenido — desplázate con intención.",
+      "b": "Sistemas sobre ruido. Sigue.",
+      "c": "Casi — planta un siguiente paso claro.",
+      "d": "Llegaste. ¿Sincronizamos el pulso neural abajo?"
+    }
   },
   "Manifesto": {
     "eyebrow": "Qué es Holive",
@@ -171,7 +230,7 @@
     "highScore": "Récord",
     "gameOver": "Señal perdida",
     "tap": "Memoriza los pulsos púrpura y oro, luego repítelos.",
-    "audioNote": "Al sincronizar se activan beats binaurales + pad ambiental (mejor con auriculares).",
+    "audioNote": "Al sincronizar se activan beats binaurales, pad zen y golpes de cuenco en cada nodo (mejor con auriculares).",
     "watch": "Observa el pulso…",
     "yourTurn": "Tu turno — repite la señal",
     "levelUp": "Señal fijada. Más profundo…",
@@ -183,7 +242,9 @@
     "mute": "Silenciar",
     "unmute": "Sonido / audio",
     "volume": "Volumen",
-    "binauralHint": "Binaural {beat} Hz (theta) · portadora {carrier} Hz — foco calmado"
+    "binauralHint": "Binaural {beat} Hz (theta) · portadora {carrier} Hz — foco calmado",
+    "mantraLabel": "Mantra",
+    "bowlHint": "Cada nodo suena como cuenco — mejor con auriculares"
   },
   "Widgets": {
     "neural": {

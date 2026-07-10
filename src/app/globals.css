@@ -267,3 +267,35 @@ body {
       rgba(155, 109, 255, 0.03) 29px
     );
 }
+
+@keyframes holiBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.holi-bob {
+  animation: holiBob 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holi-bob {
+    animation: none;
+  }
+}
+
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  padding-top: clamp(6.5rem, 14vw, 8.5rem);
+  padding-bottom: clamp(3rem, 6vw, 4.5rem);
+}
+
+.prose-holive p + p {
+  margin-top: 1rem;
+}
+

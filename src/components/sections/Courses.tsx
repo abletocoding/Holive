@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { WaitlistForm } from "@/components/forms/WaitlistForm";
 import {
@@ -8,11 +9,13 @@ import {
   HoliDoodleMotif,
   SketchFrame,
 } from "@/components/ui/Doodle";
+import { HoliMascot } from "@/components/holi/HoliMascot";
 
 const teasers = ["one", "two", "three"] as const;
 
 export function Courses() {
   const t = useTranslations("Courses");
+  const n = useTranslations("Nav");
 
   return (
     <section
@@ -38,16 +41,27 @@ export function Courses() {
 
       <div className="mx-auto max-w-6xl">
         <SectionReveal>
-          <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
-            {t("eyebrow")}
-          </p>
-          <h2 className="font-display mt-3 max-w-2xl text-[clamp(1.9rem,4.2vw,3.2rem)] font-semibold leading-tight">
-            {t("title")}
-          </h2>
-          <CrayonUnderline />
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-[color-mix(in_srgb,var(--foreground)_78%,transparent)]">
-            {t("body")}
-          </p>
+          <div className="flex flex-wrap items-start gap-4">
+            <HoliMascot pose="celebrate" className="h-14 w-11 shrink-0" />
+            <div>
+              <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
+                {t("eyebrow")}
+              </p>
+              <h2 className="font-display mt-3 max-w-2xl text-[clamp(1.9rem,4.2vw,3.2rem)] font-semibold leading-tight">
+                {t("title")}
+              </h2>
+              <CrayonUnderline />
+              <p className="mt-4 max-w-xl text-base leading-relaxed text-[color-mix(in_srgb,var(--foreground)_78%,transparent)]">
+                {t("body")}
+              </p>
+              <Link
+                href="/courses"
+                className="focus-ring mt-4 inline-block text-sm tracking-wide text-[var(--holive-gold)] hover:underline"
+              >
+                {n("courses")} →
+              </Link>
+            </div>
+          </div>
         </SectionReveal>
 
         <SectionReveal delay={0.1}>

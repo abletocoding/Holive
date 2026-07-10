@@ -1,12 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 
 const layers = ["strategy", "social", "design", "print"] as const;
 
 export function Services() {
   const t = useTranslations("Services");
+  const n = useTranslations("Nav");
 
   return (
     <section
@@ -28,6 +30,12 @@ export function Services() {
           <p className="mt-4 max-w-xl text-base leading-relaxed text-[color-mix(in_srgb,var(--foreground)_75%,transparent)]">
             {t("intro")}
           </p>
+          <Link
+            href="/services"
+            className="focus-ring mt-4 inline-block text-sm tracking-wide text-[var(--holive-gold)] hover:underline"
+          >
+            {n("services")} →
+          </Link>
         </SectionReveal>
 
         <div className="story-rail mt-16 space-y-14 md:space-y-20">
