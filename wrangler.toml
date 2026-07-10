@@ -1,0 +1,15 @@
+# Holive — Cloudflare Workers via OpenNext
+# Docs: https://opennext.js.org/cloudflare
+
+name = "holive"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+# Bind secrets in Cloudflare dashboard or via `wrangler secret put`:
+# NEXT_PUBLIC_SUPABASE_URL
+# NEXT_PUBLIC_SUPABASE_ANON_KEY

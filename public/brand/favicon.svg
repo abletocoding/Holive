@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <filter id="crayon" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="0.7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <!-- Transparent ground; crayon mark only for crisp tabs -->
+  <g filter="url(#crayon)">
+    <path
+      d="M8 12c4-8 12-9 16 1"
+      fill="none"
+      stroke="#C9A84C"
+      stroke-width="1.8"
+      stroke-linecap="round"
+    />
+    <path
+      d="M16 7
+         c7-0.5 11.5 4 12 11
+         c0.5 6.5-2.5 12-8 14
+         c-2.5 1-5.5 1-8 0
+         c-6.5-2-10-8-9.5-14
+         c0.5-6.5 5.5-10.5 13.5-11z"
+      fill="#330072"
+      stroke="#101820"
+      stroke-width="1.1"
+      stroke-linejoin="round"
+    />
+    <ellipse cx="16.5" cy="17" rx="4.5" ry="5" fill="#FFFFFF" stroke="#101820" stroke-width="0.9"/>
+    <circle cx="17" cy="17.5" r="2.7" fill="#C9A84C"/>
+    <circle cx="17.2" cy="17.7" r="1.35" fill="#101820"/>
+    <circle cx="15.6" cy="16.2" r="0.7" fill="#FFFFFF"/>
+  </g>
+</svg>

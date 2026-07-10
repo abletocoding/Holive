@@ -1,0 +1,203 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/* App theme bridge — brand vars live in tokens.css */
+:root,
+.theme-light {
+  --surface-muted: #ebe4f5;
+  --hero-veil: linear-gradient(
+    165deg,
+    rgba(26, 0, 61, 0.92) 0%,
+    rgba(16, 24, 32, 0.88) 45%,
+    rgba(16, 24, 32, 0.95) 100%
+  );
+  --glow-gold: 0 0 40px rgba(201, 168, 76, 0.28);
+  --glow-purple: 0 0 60px rgba(51, 0, 114, 0.35);
+  --matrix-dim: var(--matrix-green-fade);
+}
+
+.theme-dark {
+  --surface-muted: #1a1524;
+  --hero-veil: linear-gradient(
+    165deg,
+    rgba(20, 8, 40, 0.75) 0%,
+    rgba(16, 24, 32, 0.55) 40%,
+    rgba(16, 24, 32, 0.92) 100%
+  );
+  --glow-gold: 0 0 48px rgba(212, 188, 110, 0.22);
+  --glow-purple: 0 0 80px rgba(90, 42, 158, 0.28);
+  --matrix-dim: var(--matrix-green-fade);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-holive-purple: var(--holive-purple);
+  --color-holive-purple-bright: var(--holive-purple-bright);
+  --color-holive-gold: var(--holive-gold);
+  --color-holive-gold-bright: var(--holive-gold-bright);
+  --color-holive-black: var(--holive-black);
+  --color-holive-white: var(--holive-white);
+  --color-matrix: var(--matrix-green);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-holive-body);
+  --font-display: var(--font-holive-display);
+  --font-mono: var(--font-holive-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-holive-body);
+  overflow-x: clip;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--holive-purple) 45%, transparent);
+  color: var(--holive-white);
+}
+
+.font-display {
+  font-family: var(--font-holive-display);
+}
+
+.font-mono-code {
+  font-family: var(--font-holive-mono);
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background: var(--holive-gold);
+  color: var(--holive-black);
+  font-weight: 600;
+  border-radius: 0.25rem;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.section-pad {
+  padding-inline: clamp(1.25rem, 4vw, 3.5rem);
+  padding-block: clamp(4.5rem, 12vw, 8rem);
+}
+
+.brand-gradient-text {
+  background: var(--gradient-holy);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--holive-gold);
+  outline-offset: 3px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.story-rail {
+  position: relative;
+}
+
+.story-rail::before {
+  content: "";
+  position: absolute;
+  left: 0.35rem;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--holive-gold),
+    var(--holive-purple),
+    transparent
+  );
+  opacity: 0.55;
+}
+
+@media (min-width: 768px) {
+  .story-rail::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Crayon / doodle accents — soft sections only */
+.doodle-zone {
+  position: relative;
+}
+
+.doodle-frame {
+  border: 2px solid color-mix(in srgb, var(--holive-purple) 35%, transparent);
+  border-radius: 2px 14px 4px 12px / 12px 3px 14px 5px;
+  padding: 1.25rem 1.35rem;
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  box-shadow:
+    1px 2px 0 color-mix(in srgb, var(--holive-gold) 22%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--holive-gold) 12%, transparent);
+}
+
+.theme-dark .doodle-frame {
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+}
+
+.doodle-border-sketch {
+  border: 1.5px solid color-mix(in srgb, var(--holive-purple) 40%, transparent);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.doodle-underline {
+  text-decoration: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' fill='none'%3E%3Cpath d='M2 5c20-3 40 2 60-1s38-1 56 2' stroke='%23C9A84C' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 0.35em;
+  padding-bottom: 0.15em;
+}
+
+.doodle-stroke-top {
+  border-top: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none' viewBox='0 0 200 6' fill='none'%3E%3Cpath d='M0 3c40-3 80 3 120-1s50 2 80 1' stroke='%23330072' stroke-width='1.8' stroke-linecap='round' opacity='0.45'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: top left;
+  background-size: 100% 6px;
+  padding-top: 1.1rem;
+}

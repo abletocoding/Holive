@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 128" role="img" aria-label="Holive">
+  <title>Holive</title>
+  <defs>
+    <filter id="crayon" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.25" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <!-- Mark (crayon olive + eye + halo) -->
+  <g filter="url(#crayon)" transform="translate(0,0)">
+    <path
+      d="M34 48c8-26 52-28 60 2"
+      fill="none"
+      stroke="#C9A84C"
+      stroke-width="4.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M64 28
+         c26-2 44 16 46 44
+         c2 26-10 48-32 56
+         c-10 4-22 5-34 1
+         c-26-8-40-32-38-56
+         c2-26 22-43 58-45z"
+      fill="#330072"
+      stroke="#101820"
+      stroke-width="2.8"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M60 28c2-12 8-18 14-22c-2 8 0 14 2 22"
+      fill="#1A003D"
+      stroke="#101820"
+      stroke-width="1.8"
+      stroke-linecap="round"
+    />
+    <ellipse cx="66" cy="70" rx="18" ry="20" fill="#FFFFFF" stroke="#101820" stroke-width="2.2"/>
+    <circle cx="68" cy="72" r="11" fill="#C9A84C" stroke="#101820" stroke-width="1.4"/>
+    <circle cx="69" cy="73" r="6" fill="#101820"/>
+    <circle cx="63" cy="67" r="2.6" fill="#FFFFFF"/>
+  </g>
+  <!-- Wordmark HOLIVE — slightly imperfect display paths -->
+  <g fill="#101820" transform="translate(148, 34)">
+    <!-- H -->
+    <path d="M0 8h10v48H0V8zm30 0h10v48H30V8zM10 28h20v8H10z"/>
+    <!-- O -->
+    <path d="M54 8c16 0 28 11 28 28s-12 28-28 28-28-11-28-28S38 8 54 8zm0 10c-9 0-16 7-16 18s7 18 16 18 16-7 16-18-7-18-16-18z"/>
+    <!-- L -->
+    <path d="M96 8h10v40h22v8H96V8z"/>
+    <!-- I — gold tick (871 C screen) -->
+    <path d="M136 8h10v48h-10V8z"/>
+    <rect x="134" y="4" width="14" height="3" fill="#C9A84C"/>
+    <!-- V -->
+    <path d="M162 8h12l12 48h-11l-7-30-7 30h-11L162 8z"/>
+    <!-- E -->
+    <path d="M204 8h36v8h-26v12h22v8h-22v12h26v8h-36V8z"/>
+  </g>
+</svg>

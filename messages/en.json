@@ -1,0 +1,170 @@
+{
+  "Meta": {
+    "title": "Holive — Purity, loyalty, and code",
+    "description": "Full-stack marketing, digitalization, and courses. We transform businesses with sacred precision and living systems."
+  },
+  "Nav": {
+    "skip": "Skip to content",
+    "manifesto": "Manifesto",
+    "services": "Marketing",
+    "digital": "Digitalization",
+    "courses": "Courses",
+    "process": "Process",
+    "contact": "Contact",
+    "themeLight": "Light mode",
+    "themeDark": "Dark mode",
+    "localeEs": "ES",
+    "localeEn": "EN"
+  },
+  "Hero": {
+    "brand": "HOLIVE",
+    "headline": "Living code. Sacred brand.",
+    "sub": "Marketing, systems, and courses for businesses that choose purity, loyalty, and real transformation.",
+    "ctaPrimary": "Talk to Holive",
+    "ctaSecondary": "Explore courses",
+    "scrollHint": "Scroll"
+  },
+  "Manifesto": {
+    "eyebrow": "What Holive is",
+    "title": "Purity. Loyalty. Transformation.",
+    "body": "Holive joins the sacred fidelity of brand with the precision of code. We help SMBs and ambitious teams move from traditional to digital — without losing soul, with systems that live.",
+    "pillars": {
+      "purity": {
+        "title": "Purity",
+        "text": "Clear message, clean design, promises kept."
+      },
+      "loyalty": {
+        "title": "Loyalty",
+        "text": "Long-term relationships. Your growth is ours."
+      },
+      "code": {
+        "title": "Code",
+        "text": "Automations, sites, and data that hold the vision."
+      }
+    }
+  },
+  "Services": {
+    "eyebrow": "Marketing",
+    "title": "Stories you see, touch, and measure",
+    "intro": "Not a card grid — a layered journey from strategy to print, from feed to storefront.",
+    "layers": {
+      "strategy": {
+        "title": "Integrated strategy",
+        "text": "Physical + digital aligned. One voice, many channels."
+      },
+      "social": {
+        "title": "Social & content",
+        "text": "Living presence: rhythm, narrative, community."
+      },
+      "design": {
+        "title": "Graphic design",
+        "text": "Identity, assets, and visual systems with character."
+      },
+      "print": {
+        "title": "Editorial & print",
+        "text": "Banners, flyers, magazines, books — tangible brand."
+      }
+    }
+  },
+  "Digital": {
+    "eyebrow": "Digitalization",
+    "title": "Systems that work while you grow",
+    "intro": "Webs, SaaS, tracking, integrations, and solution manufacturing — with high-touch advisory when it matters.",
+    "items": {
+      "webs": {
+        "title": "Webs & products",
+        "text": "Experiences that convert, not just look good."
+      },
+      "systems": {
+        "title": "Systems & SaaS",
+        "text": "Custom tools to operate with clarity."
+      },
+      "automation": {
+        "title": "Automations",
+        "text": "Flows that remove friction and free time."
+      },
+      "maquila": {
+        "title": "Solution manufacturing",
+        "text": "We build and integrate what your business needs."
+      },
+      "advisory": {
+        "title": "Advisory",
+        "text": "Tech decisions with business judgment."
+      }
+    }
+  },
+  "Courses": {
+    "eyebrow": "Courses",
+    "title": "Learn the method. Scale with Holive.",
+    "body": "Practical training in marketing, digitalization, and systems — built to apply, not just consume. Waitlist open.",
+    "teasers": {
+      "one": "Marketing with soul and metrics",
+      "two": "Digitalization for SMBs",
+      "three": "Automation without jargon"
+    },
+    "waitlistCta": "Join the waitlist",
+    "waitlistPlaceholder": "you@email.com",
+    "waitlistName": "Name",
+    "waitlistSuccess": "You're on the list. We'll be in touch.",
+    "waitlistError": "Couldn't save your email. Try again.",
+    "waitlistMissing": "Supabase isn't configured. Check environment variables."
+  },
+  "Process": {
+    "eyebrow": "Process",
+    "title": "How we work",
+    "steps": {
+      "listen": {
+        "title": "Listen",
+        "text": "Honest diagnosis: business, brand, real friction."
+      },
+      "design": {
+        "title": "Design",
+        "text": "Brand architecture, offer, and systems."
+      },
+      "build": {
+        "title": "Build",
+        "text": "Visible execution: campaigns, sites, automations."
+      },
+      "evolve": {
+        "title": "Evolve",
+        "text": "Measurement, iteration, long-term loyalty."
+      }
+    }
+  },
+  "Contact": {
+    "eyebrow": "Contact",
+    "title": "Tell us your next move",
+    "body": "One message is enough. We reply with clarity — no noise.",
+    "name": "Name",
+    "email": "Email",
+    "company": "Company (optional)",
+    "interest": "Interest",
+    "interestOptions": {
+      "marketing": "Marketing",
+      "digital": "Digitalization",
+      "courses": "Courses",
+      "other": "Other"
+    },
+    "message": "Message",
+    "submit": "Send",
+    "sending": "Sending…",
+    "success": "Received. We'll be in touch soon.",
+    "error": "Something failed. Try again or email us directly.",
+    "missing": "Demo mode: configure Supabase to capture leads."
+  },
+  "Footer": {
+    "tagline": "Purity · Loyalty · Code",
+    "rights": "© {year} Holive. holive.org",
+    "gameHint": "Made it this far? Holi is waiting below."
+  },
+  "HoliGame": {
+    "title": "Holi Run",
+    "subtitle": "Tap / space to jump. Collect gold. Avoid the void.",
+    "start": "Play",
+    "restart": "Again",
+    "score": "Score",
+    "highScore": "Best",
+    "gameOver": "Round over",
+    "tap": "Tap to jump"
+  }
+}

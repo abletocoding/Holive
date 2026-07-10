@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Holive mark">
+  <title>Holive mark</title>
+  <defs>
+    <filter id="crayon" x="-12%" y="-12%" width="124%" height="124%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.35" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#crayon)">
+    <!-- Sacred halo — gold crayon arc (871 C screen) -->
+    <path
+      d="M34 48c8-26 52-28 60 2"
+      fill="none"
+      stroke="#C9A84C"
+      stroke-width="4.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <!-- Olive body — wobbly (2685 C) -->
+    <path
+      d="M64 28
+         c26-2 44 16 46 44
+         c2 26-10 48-32 56
+         c-10 4-22 5-34 1
+         c-26-8-40-32-38-56
+         c2-26 22-43 58-45z"
+      fill="#330072"
+      stroke="#101820"
+      stroke-width="2.8"
+      stroke-linejoin="round"
+    />
+    <!-- Leaf nub -->
+    <path
+      d="M60 28c2-12 8-18 14-22c-2 8 0 14 2 22"
+      fill="#1A003D"
+      stroke="#101820"
+      stroke-width="1.8"
+      stroke-linecap="round"
+    />
+    <!-- Eye white -->
+    <ellipse cx="66" cy="70" rx="18" ry="20" fill="#FFFFFF" stroke="#101820" stroke-width="2.2"/>
+    <!-- Iris — gold -->
+    <circle cx="68" cy="72" r="11" fill="#C9A84C" stroke="#101820" stroke-width="1.4"/>
+    <!-- Pupil — Black 6 C -->
+    <circle cx="69" cy="73" r="6" fill="#101820"/>
+    <!-- Specular -->
+    <circle cx="63" cy="67" r="2.6" fill="#FFFFFF"/>
+  </g>
+</svg>

@@ -1,0 +1,77 @@
+/**
+ * Holive brand tokens
+ * Docs: docs/brand/color-tokens.md, docs/brand/typography.md
+ * Import from app CSS (e.g. globals.css): @import "../styles/tokens.css";
+ * Prefer editing this file over globals.css when another agent owns theme wiring.
+ *
+ * Pantone screen anchors (aligned with /public/brand logo SVGs):
+ *   2685 C → #330072 · 871 C → #C9A84C · Black 6 C → #101820 · White
+ */
+
+:root {
+  /* Core palette — Pantone-aligned screen approx */
+  --holive-purple: #330072;
+  --holive-purple-bright: #5a2a9e;
+  --holive-purple-deep: #1a003d;
+  --holive-gold: #c9a84c;
+  --holive-gold-bright: #d4bc6e;
+  --holive-white: #ffffff;
+  --holive-black: #101820;
+  --holive-ink: #141018;
+
+  /* Matrix effect only — never primary brand */
+  --matrix-green: #00ff41;
+  --matrix-green-dim: color-mix(in srgb, #00ff41 50%, transparent);
+  --matrix-green-fade: color-mix(in srgb, #00ff41 12%, transparent);
+
+  /* Gradients */
+  --gradient-holy: linear-gradient(145deg, #1a003d 0%, #330072 45%, #c9a84c 100%);
+  --gradient-void: linear-gradient(180deg, #101820 0%, #141018 50%, #1a003d 100%);
+  --gradient-light: linear-gradient(180deg, #ffffff 0%, #f7f4fb 60%, #e8e0f0 100%);
+
+  /* Type stacks (wire next/font variables in layout when ready) */
+  --font-holive-display: var(--font-holive-display-face, "Syne"), ui-sans-serif, sans-serif;
+  --font-holive-body: var(--font-holive-body-face, "Fraunces"), ui-serif, Georgia, serif;
+  --font-holive-mono: var(--font-holive-mono-face, "IBM Plex Mono"), ui-monospace, monospace;
+
+  /* Semantic defaults = light */
+  --background: var(--holive-white);
+  --foreground: var(--holive-black);
+  --surface: #f7f4fb;
+  --muted: #6b6570;
+  --border: #e4dcef;
+  --accent: var(--holive-gold);
+  --brand: var(--holive-purple);
+}
+
+.theme-light {
+  --background: var(--holive-white);
+  --foreground: var(--holive-black);
+  --surface: #f7f4fb;
+  --muted: #6b6570;
+  --border: #e4dcef;
+  --accent: var(--holive-gold);
+  --brand: var(--holive-purple);
+  --holive-purple: #330072;
+  --holive-gold: #c9a84c;
+}
+
+.theme-dark {
+  --background: var(--holive-black);
+  --foreground: #ededed;
+  --surface: var(--holive-ink);
+  --muted: #a39eab;
+  --border: #2a2433;
+  --accent: var(--holive-gold-bright);
+  --brand: var(--holive-purple-bright);
+  --holive-purple: #5a2a9e;
+  --holive-gold: #d4bc6e;
+}
+
+/*
+  Tailwind @theme mapping stays in globals.css (or a later pass)
+  so this file only owns raw brand variables and avoids merge conflicts.
+  Example bridge:
+    --color-brand: var(--brand);
+    --font-display: var(--font-holive-display);
+*/

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Holi mark">
+  <title>Holi mark</title>
+  <defs>
+    <filter id="crayon" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#crayon)">
+    <path
+      d="M34 40c10-22 50-22 58 4"
+      fill="none"
+      stroke="#C9A84C"
+      stroke-width="4"
+      stroke-linecap="round"
+    />
+    <path
+      d="M64 28
+         c24-1 40 16 42 40
+         c2 24-10 44-30 52
+         c-10 4-22 4-32 0
+         c-22-8-34-30-32-52
+         c2-24 20-39 52-40z"
+      fill="#330072"
+      stroke="#101820"
+      stroke-width="2.8"
+    />
+    <ellipse cx="66" cy="72" rx="18" ry="20" fill="#FFFFFF" stroke="#101820" stroke-width="2.2"/>
+    <circle cx="68" cy="74" r="11" fill="#C9A84C"/>
+    <circle cx="69" cy="75" r="6" fill="#101820"/>
+    <circle cx="64" cy="69" r="2.5" fill="#FFFFFF"/>
+  </g>
+</svg>
