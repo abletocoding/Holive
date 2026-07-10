@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local auth/deploy temp
+.gh-auth-*.txt
+.wrangler-auth-*.txt
+.env.local
+
