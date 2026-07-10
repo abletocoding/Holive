@@ -46,3 +46,8 @@ next-env.d.ts
 .wrangler-auth-*.txt
 .env.local
 
+
+.open-next/
+.wrangler/
+.supabase-auth-*.txt
+
