@@ -226,7 +226,7 @@
     "title": "Neural Pulse",
     "subtitle": "Watch the sequence. Replay the signal.",
     "coach": "Holi coaches — you sync the nodes.",
-    "teaser": "Enter the arena for a full-bleed neural sync — binaural beats, zen pad, Guitar Hero scale.",
+    "teaser": "Eight depths. Binaural beds. Singing-bowl nodes. Enter the arena and earn your pulse certificate.",
     "enterArena": "Enter arena",
     "exitArena": "Exit",
     "start": "Sync",
@@ -240,6 +240,23 @@
     "watch": "Watch the pulse…",
     "yourTurn": "Your turn — replay the signal",
     "levelUp": "Signal locked. Going deeper…",
+    "levelCleared": "Depth cleared",
+    "victory": "Master pulse locked",
+    "paused": "Paused",
+    "pause": "Pause",
+    "resume": "Resume",
+    "nextLevel": "Next depth",
+    "selectLevel": "Choose your depth",
+    "selectBlurb": "Each depth adds tempo, nodes, and noise. Clear to unlock the next.",
+    "levelsBtn": "Depths",
+    "locked": "Locked",
+    "best": "Best",
+    "unlocked": "Unlocked",
+    "streak": "Streak",
+    "insightLabel": "Neural insight",
+    "copied": "Copied",
+    "copyCert": "Copy certificate",
+    "rewardsOwned": "Rewards earned",
     "node": "Node {n}",
     "reduced": "Motion reduced — playable; audio still optional via mute.",
     "fullscreen": "Fullscreen",
@@ -248,9 +265,72 @@
     "mute": "Mute",
     "unmute": "Unmute / audio",
     "volume": "Volume",
-    "binauralHint": "Binaural {beat} Hz (theta) · carrier {carrier} Hz — calm focus",
+    "binauralHint": "Binaural {beat} Hz · carrier {carrier} Hz",
     "mantraLabel": "Mantra",
-    "bowlHint": "Each node sings a bowl hit — headphones recommended"
+    "bowlHint": "Each node sings a bowl hit — headphones recommended",
+    "levels": {
+      "seed": {
+        "name": "Seed",
+        "tag": "Calm start"
+      },
+      "sprout": {
+        "name": "Sprout",
+        "tag": "Trails on"
+      },
+      "root": {
+        "name": "Root",
+        "tag": "Soft drift"
+      },
+      "stem": {
+        "name": "Stem",
+        "tag": "5 nodes"
+      },
+      "mesh": {
+        "name": "Mesh",
+        "tag": "Distractors"
+      },
+      "orbit": {
+        "name": "Orbit",
+        "tag": "Moving ring"
+      },
+      "constellation": {
+        "name": "Constellation",
+        "tag": "Deep weave"
+      },
+      "master": {
+        "name": "Master Pulse",
+        "tag": "Final depth"
+      }
+    },
+    "rewards": {
+      "unlockCode": {
+        "title": "Sync code",
+        "blurb": "A small unlock — proof you held the signal."
+      },
+      "badge": {
+        "title": "Pulse badge",
+        "blurb": "Digital badge for clearing mid-depths."
+      },
+      "mantraCard": {
+        "title": "Mantra card",
+        "blurb": "A Holive mantra stamped to your run."
+      },
+      "certificate": {
+        "title": "Pulse certificate",
+        "blurb": "Shareable certificado de pulso — you finished the mesh."
+      }
+    },
+    "lead": {
+      "eyebrow": "Soft sync",
+      "blurb": "Optional: leave your email and the goal you are syncing toward. Holi keeps it useful — no hard wall.",
+      "email": "Email",
+      "objective": "What are you syncing toward?",
+      "submit": "Plant signal",
+      "sending": "Sending…",
+      "thanks": "Signal planted. Holi will tend it.",
+      "skip": "Maybe later",
+      "error": "Could not send — try again or skip."
+    }
   },
   "Widgets": {
     "neural": {

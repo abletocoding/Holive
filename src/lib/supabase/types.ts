@@ -23,6 +23,14 @@ export type GameScoreInsert = {
   locale?: string | null;
 };
 
+export type NeuralPulseLeadInsert = {
+  email: string;
+  objective: string;
+  score?: number | null;
+  level?: number | null;
+  locale?: string | null;
+};
+
 export type LeadRow = LeadInsert & {
   id: string;
   created_at: string;
@@ -34,6 +42,11 @@ export type CourseWaitlistRow = CourseWaitlistInsert & {
 };
 
 export type GameScoreRow = GameScoreInsert & {
+  id: string;
+  created_at: string;
+};
+
+export type NeuralPulseLeadRow = NeuralPulseLeadInsert & {
   id: string;
   created_at: string;
 };
@@ -58,6 +71,12 @@ export type Database = {
         Row: GameScoreRow;
         Insert: GameScoreInsert;
         Update: Partial<GameScoreInsert>;
+        Relationships: [];
+      };
+      neural_pulse_leads: {
+        Row: NeuralPulseLeadRow;
+        Insert: NeuralPulseLeadInsert;
+        Update: Partial<NeuralPulseLeadInsert>;
         Relationships: [];
       };
     };

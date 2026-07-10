@@ -3,6 +3,7 @@ import type {
   CourseWaitlistInsert,
   GameScoreInsert,
   LeadInsert,
+  NeuralPulseLeadInsert,
 } from "./types";
 
 /** Untyped client — table shapes live in `./types` and form payloads. */
@@ -42,4 +43,10 @@ export async function insertGameScore(payload: GameScoreInsert) {
   const supabase = createBrowserClient();
   if (!supabase) return { data: null, error: new Error("missing_supabase") };
   return supabase.from("game_scores").insert(payload);
+}
+
+export async function insertNeuralPulseLead(payload: NeuralPulseLeadInsert) {
+  const supabase = createBrowserClient();
+  if (!supabase) return { data: null, error: new Error("missing_supabase") };
+  return supabase.from("neural_pulse_leads").insert(payload);
 }

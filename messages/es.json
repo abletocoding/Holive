@@ -226,7 +226,7 @@
     "title": "Pulso Neural",
     "subtitle": "Observa la secuencia. Repite la señal.",
     "coach": "Holi entrena — tú sincronizas los nodos.",
-    "teaser": "Entra a la arena a pantalla completa — beats binaurales, pad zen, escala Guitar Hero.",
+    "teaser": "Ocho profundidades. Camas binaurales. Nodos de cuenco. Entra a la arena y gana tu certificado de pulso.",
     "enterArena": "Entrar a la arena",
     "exitArena": "Salir",
     "start": "Sincronizar",
@@ -240,6 +240,23 @@
     "watch": "Observa el pulso…",
     "yourTurn": "Tu turno — repite la señal",
     "levelUp": "Señal fijada. Más profundo…",
+    "levelCleared": "Profundidad superada",
+    "victory": "Pulso maestro fijado",
+    "paused": "Pausa",
+    "pause": "Pausar",
+    "resume": "Continuar",
+    "nextLevel": "Siguiente profundidad",
+    "selectLevel": "Elige tu profundidad",
+    "selectBlurb": "Cada profundidad suma tempo, nodos y ruido. Supérala para desbloquear la siguiente.",
+    "levelsBtn": "Profundidades",
+    "locked": "Bloqueado",
+    "best": "Mejor",
+    "unlocked": "Desbloqueado",
+    "streak": "Racha",
+    "insightLabel": "Insight neural",
+    "copied": "Copiado",
+    "copyCert": "Copiar certificado",
+    "rewardsOwned": "Recompensas",
     "node": "Nodo {n}",
     "reduced": "Movimiento reducido — jugable; el audio sigue opcional con silencio.",
     "fullscreen": "Pantalla completa",
@@ -248,9 +265,72 @@
     "mute": "Silenciar",
     "unmute": "Sonido / audio",
     "volume": "Volumen",
-    "binauralHint": "Binaural {beat} Hz (theta) · portadora {carrier} Hz — foco calmado",
+    "binauralHint": "Binaural {beat} Hz · portadora {carrier} Hz",
     "mantraLabel": "Mantra",
-    "bowlHint": "Cada nodo suena como cuenco — mejor con auriculares"
+    "bowlHint": "Cada nodo suena como cuenco — mejor con auriculares",
+    "levels": {
+      "seed": {
+        "name": "Semilla",
+        "tag": "Inicio calmo"
+      },
+      "sprout": {
+        "name": "Germen",
+        "tag": "Con estelas"
+      },
+      "root": {
+        "name": "Raíz",
+        "tag": "Deriva suave"
+      },
+      "stem": {
+        "name": "Tallo",
+        "tag": "5 nodos"
+      },
+      "mesh": {
+        "name": "Malla",
+        "tag": "Distractores"
+      },
+      "orbit": {
+        "name": "Órbita",
+        "tag": "Anillo móvil"
+      },
+      "constellation": {
+        "name": "Constelación",
+        "tag": "Tejido profundo"
+      },
+      "master": {
+        "name": "Pulso Maestro",
+        "tag": "Profundidad final"
+      }
+    },
+    "rewards": {
+      "unlockCode": {
+        "title": "Código sync",
+        "blurb": "Un desbloqueo pequeño — prueba de que sostuviste la señal."
+      },
+      "badge": {
+        "title": "Insignia de pulso",
+        "blurb": "Badge digital por superar las profundidades medias."
+      },
+      "mantraCard": {
+        "title": "Tarjeta mantra",
+        "blurb": "Un mantra Holive sellado a tu corrida."
+      },
+      "certificate": {
+        "title": "Certificado de pulso",
+        "blurb": "Certificado compartible — completaste la malla."
+      }
+    },
+    "lead": {
+      "eyebrow": "Sync suave",
+      "blurb": "Opcional: deja tu email y el objetivo hacia el que sincronizas. Holi lo guarda útil — sin muro duro.",
+      "email": "Email",
+      "objective": "¿Hacia qué estás sincronizando?",
+      "submit": "Sembrar señal",
+      "sending": "Enviando…",
+      "thanks": "Señal sembrada. Holi la cuida.",
+      "skip": "Quizá luego",
+      "error": "No se pudo enviar — reintenta o salta."
+    }
   },
   "Widgets": {
     "neural": {

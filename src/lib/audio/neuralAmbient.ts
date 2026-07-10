@@ -1,17 +1,98 @@
 /**
- * Neural ambient bed via Web Audio API.
+ * Neural ambient beds via Web Audio API.
  *
- * Binaural beats: carrier 220 Hz L / 226 Hz R → 6 Hz difference
- * (theta band, calm focus). Soft zen pad (filtered noise + low drone)
- * sits underneath. Start only after a user gesture (resume AudioContext).
+ * Multiple zen/ambient beds + binaural variants per world.
+ * Singing-bowl hits on node taps. Start only after a user gesture.
  */
 
-const CARRIER_HZ = 220;
-const BEAT_HZ = 6; // theta — calm focus
+import type { AudioBedId } from "@/lib/game/levels";
+
 const DEFAULT_VOLUME = 0.35;
 
 export type NeuralAmbientOptions = {
   volume?: number;
+  bed?: AudioBedId;
+};
+
+type BedConfig = {
+  carrierHz: number;
+  beatHz: number;
+  band: string;
+  intent: string;
+  padGain: number;
+  binauralGain: number;
+  droneHz: number[];
+  noiseLp: number;
+  noiseGain: number;
+};
+
+const BEDS: Record<AudioBedId, BedConfig> = {
+  seed: {
+    carrierHz: 220,
+    beatHz: 6,
+    band: "theta",
+    intent: "calm focus",
+    padGain: 0.55,
+    binauralGain: 0.42,
+    droneHz: [55, 82.5, 110],
+    noiseLp: 480,
+    noiseGain: 0.16,
+  },
+  root: {
+    carrierHz: 196,
+    beatHz: 10,
+    band: "alpha",
+    intent: "relaxed alertness",
+    padGain: 0.58,
+    binauralGain: 0.4,
+    droneHz: [49, 73.5, 98],
+    noiseLp: 420,
+    noiseGain: 0.14,
+  },
+  mesh: {
+    carrierHz: 233,
+    beatHz: 5,
+    band: "theta",
+    intent: "deep weave",
+    padGain: 0.5,
+    binauralGain: 0.48,
+    droneHz: [58, 87, 116],
+    noiseLp: 560,
+    noiseGain: 0.2,
+  },
+  orbit: {
+    carrierHz: 246,
+    beatHz: 7,
+    band: "theta+",
+    intent: "orbital focus",
+    padGain: 0.52,
+    binauralGain: 0.45,
+    droneHz: [61.5, 92, 123],
+    noiseLp: 520,
+    noiseGain: 0.17,
+  },
+  deep: {
+    carrierHz: 180,
+    beatHz: 4,
+    band: "delta-edge",
+    intent: "deep sync",
+    padGain: 0.62,
+    binauralGain: 0.38,
+    droneHz: [45, 67.5, 90],
+    noiseLp: 360,
+    noiseGain: 0.12,
+  },
+  master: {
+    carrierHz: 261,
+    beatHz: 8,
+    band: "theta-alpha",
+    intent: "master pulse",
+    padGain: 0.48,
+    binauralGain: 0.5,
+    droneHz: [65, 98, 130],
+    noiseLp: 640,
+    noiseGain: 0.18,
+  },
 };
 
 export class NeuralAmbient {
@@ -19,10 +100,12 @@ export class NeuralAmbient {
   private master: GainNode | null = null;
   private binauralGain: GainNode | null = null;
   private padGain: GainNode | null = null;
-  private nodes: AudioNode[] = [];
+  private bedNodes: AudioNode[] = [];
+  private sharedNodes: AudioNode[] = [];
   private started = false;
   private muted = false;
   private volume = DEFAULT_VOLUME;
+  private bed: AudioBedId = "seed";
 
   get isRunning() {
     return this.started && this.ctx?.state === "running";
@@ -36,10 +119,25 @@ export class NeuralAmbient {
     return this.volume;
   }
 
+  get currentBed() {
+    return this.bed;
+  }
+
+  get bedMeta() {
+    const c = BEDS[this.bed];
+    return {
+      carrierHz: c.carrierHz,
+      beatHz: c.beatHz,
+      band: c.band,
+      intent: c.intent,
+    };
+  }
+
   /** Must be called from a user gesture. */
   async start(opts?: NeuralAmbientOptions) {
     if (typeof window === "undefined") return;
     if (opts?.volume != null) this.volume = clamp(opts.volume, 0, 1);
+    if (opts?.bed) this.bed = opts.bed;
 
     if (!this.ctx) {
       const AC =
@@ -50,8 +148,10 @@ export class NeuralAmbient {
           }
         ).webkitAudioContext;
       this.ctx = new AC();
-      this.buildGraph(this.ctx);
+      this.buildMaster(this.ctx);
     }
+
+    this.rebuildBed(this.ctx!);
 
     if (this.ctx.state === "suspended") {
       await this.ctx.resume();
@@ -59,6 +159,14 @@ export class NeuralAmbient {
 
     this.applyVolume();
     this.started = true;
+  }
+
+  async setBed(bed: AudioBedId) {
+    if (this.bed === bed && this.bedNodes.length) return;
+    this.bed = bed;
+    if (!this.ctx || !this.started) return;
+    this.rebuildBed(this.ctx);
+    this.applyVolume();
   }
 
   setVolume(v: number) {
@@ -88,17 +196,15 @@ export class NeuralAmbient {
   }
 
   dispose() {
-    for (const n of this.nodes) {
+    this.teardownBed();
+    for (const n of this.sharedNodes) {
       try {
         n.disconnect();
-        if ("stop" in n && typeof (n as OscillatorNode).stop === "function") {
-          (n as OscillatorNode).stop();
-        }
       } catch {
         /* already stopped */
       }
     }
-    this.nodes = [];
+    this.sharedNodes = [];
     this.master = null;
     this.binauralGain = null;
     this.padGain = null;
@@ -120,7 +226,6 @@ export class NeuralAmbient {
 
   /**
    * Singing-bowl / cuenco hit — inharmonic partials with exponential decay.
-   * Call on each node tap (or flash). Safe if audio not started yet.
    */
   playBowlHit(nodeIndex = 0) {
     if (!this.ctx || this.muted || !this.started) return;
@@ -129,9 +234,7 @@ export class NeuralAmbient {
     const dest = this.master;
     if (!dest) return;
 
-    // Slight pitch shift per node so each circle has its own bowl voice
-    const base = 185 + (nodeIndex % 4) * 28;
-    // Tibetan-bowl-like inharmonic ratios (not equal temperament)
+    const base = 185 + (nodeIndex % 6) * 24;
     const partials: { ratio: number; gain: number; decay: number }[] = [
       { ratio: 1, gain: 0.42, decay: 1.8 },
       { ratio: 1.52, gain: 0.28, decay: 1.45 },
@@ -155,7 +258,6 @@ export class NeuralAmbient {
       g.gain.exponentialRampToValueAtTime(p.gain, now + 0.012);
       g.gain.exponentialRampToValueAtTime(0.0001, now + p.decay);
 
-      // Soft lowpass so highs bloom then settle (bowl body)
       const filter = ctx.createBiquadFilter();
       filter.type = "lowpass";
       filter.frequency.setValueAtTime(4200, now);
@@ -169,7 +271,6 @@ export class NeuralAmbient {
       osc.stop(now + p.decay + 0.05);
     }
 
-    // Brief strike transient (felt as the mallet tap)
     const noiseLen = Math.floor(ctx.sampleRate * 0.04);
     const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
     const data = buf.getChannelData(0);
@@ -183,7 +284,7 @@ export class NeuralAmbient {
     ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
     const nf = ctx.createBiquadFilter();
     nf.type = "bandpass";
-    nf.frequency.value = 1800 + nodeIndex * 120;
+    nf.frequency.value = 1800 + nodeIndex * 100;
     nf.Q.value = 1.2;
     noise.connect(nf);
     nf.connect(ng);
@@ -191,7 +292,29 @@ export class NeuralAmbient {
     noise.start(now);
   }
 
-  private buildGraph(ctx: AudioContext) {
+  /** Soft chime on level clear / streak. */
+  playChime() {
+    if (!this.ctx || this.muted || !this.started || !this.master) return;
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const freqs = [392, 523.25, 659.25];
+    for (let i = 0; i < freqs.length; i++) {
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.value = freqs[i]!;
+      const g = ctx.createGain();
+      const t0 = now + i * 0.08;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.9);
+      osc.connect(g);
+      g.connect(this.master);
+      osc.start(t0);
+      osc.stop(t0 + 1);
+    }
+  }
+
+  private buildMaster(ctx: AudioContext) {
     const master = ctx.createGain();
     master.gain.value = 0;
     master.connect(ctx.destination);
@@ -207,21 +330,58 @@ export class NeuralAmbient {
     padGain.connect(master);
     this.padGain = padGain;
 
-    // --- Binaural: two slightly detuned carriers, hard-panned L/R ---
-    this.addTone(ctx, CARRIER_HZ, -1, binauralGain, "sine");
-    this.addTone(ctx, CARRIER_HZ + BEAT_HZ, 1, binauralGain, "sine");
+    this.sharedNodes.push(master, binauralGain, padGain);
+  }
 
-    // Soft harmonic shimmer (very quiet)
-    this.addTone(ctx, CARRIER_HZ * 2, -0.6, binauralGain, "sine", 0.08);
-    this.addTone(ctx, (CARRIER_HZ + BEAT_HZ) * 2, 0.6, binauralGain, "sine", 0.08);
+  private teardownBed() {
+    for (const n of this.bedNodes) {
+      try {
+        n.disconnect();
+        if ("stop" in n && typeof (n as OscillatorNode).stop === "function") {
+          (n as OscillatorNode).stop();
+        }
+      } catch {
+        /* already stopped */
+      }
+    }
+    this.bedNodes = [];
+  }
 
-    // --- Zen pad: low drone + filtered noise ---
-    this.addTone(ctx, 55, 0, padGain, "sine", 0.35);
-    this.addTone(ctx, 82.5, -0.3, padGain, "triangle", 0.12);
-    this.addTone(ctx, 110, 0.3, padGain, "sine", 0.1);
-    this.addNoisePad(ctx, padGain);
+  private rebuildBed(ctx: AudioContext) {
+    if (!this.binauralGain || !this.padGain) return;
+    this.teardownBed();
 
-    this.nodes.push(master, binauralGain, padGain);
+    const cfg = BEDS[this.bed];
+    this.binauralGain.gain.value = cfg.binauralGain;
+    this.padGain.gain.value = cfg.padGain;
+
+    this.addTone(ctx, cfg.carrierHz, -1, this.binauralGain, "sine");
+    this.addTone(ctx, cfg.carrierHz + cfg.beatHz, 1, this.binauralGain, "sine");
+    this.addTone(ctx, cfg.carrierHz * 2, -0.6, this.binauralGain, "sine", 0.08);
+    this.addTone(
+      ctx,
+      (cfg.carrierHz + cfg.beatHz) * 2,
+      0.6,
+      this.binauralGain,
+      "sine",
+      0.08,
+    );
+
+    const pans = [0, -0.3, 0.3];
+    const gains = [0.35, 0.12, 0.1];
+    const types: OscillatorType[] = ["sine", "triangle", "sine"];
+    cfg.droneHz.forEach((hz, i) => {
+      this.addTone(
+        ctx,
+        hz,
+        pans[i] ?? 0,
+        this.padGain!,
+        types[i] ?? "sine",
+        gains[i] ?? 0.1,
+      );
+    });
+
+    this.addNoisePad(ctx, this.padGain, cfg.noiseLp, cfg.noiseGain);
   }
 
   private addTone(
@@ -247,16 +407,20 @@ export class NeuralAmbient {
     panner.connect(dest);
     osc.start();
 
-    this.nodes.push(osc, g, panner);
+    this.bedNodes.push(osc, g, panner);
   }
 
-  private addNoisePad(ctx: AudioContext, dest: AudioNode) {
+  private addNoisePad(
+    ctx: AudioContext,
+    dest: AudioNode,
+    lpHz: number,
+    gainVal: number,
+  ) {
     const bufferSize = 2 * ctx.sampleRate;
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     let last = 0;
     for (let i = 0; i < bufferSize; i++) {
-      // Brown-ish noise (softer than white)
       const white = Math.random() * 2 - 1;
       last = (last + 0.02 * white) / 1.02;
       data[i] = last * 3.5;
@@ -268,18 +432,18 @@ export class NeuralAmbient {
 
     const filter = ctx.createBiquadFilter();
     filter.type = "lowpass";
-    filter.frequency.value = 480;
+    filter.frequency.value = lpHz;
     filter.Q.value = 0.7;
 
     const g = ctx.createGain();
-    g.gain.value = 0.18;
+    g.gain.value = gainVal;
 
     src.connect(filter);
     filter.connect(g);
     g.connect(dest);
     src.start();
 
-    this.nodes.push(src, filter, g);
+    this.bedNodes.push(src, filter, g);
   }
 }
 
@@ -287,10 +451,20 @@ function clamp(n: number, min: number, max: number) {
   return Math.min(max, Math.max(min, n));
 }
 
-/** Documented beat params for UI / comments. */
+/** Default bed meta for UI before audio starts. */
 export const BINAURAL_META = {
-  carrierHz: CARRIER_HZ,
-  beatHz: BEAT_HZ,
-  band: "theta",
-  intent: "calm focus",
+  carrierHz: BEDS.seed.carrierHz,
+  beatHz: BEDS.seed.beatHz,
+  band: BEDS.seed.band,
+  intent: BEDS.seed.intent,
 } as const;
+
+export function bedMeta(id: AudioBedId) {
+  const c = BEDS[id];
+  return {
+    carrierHz: c.carrierHz,
+    beatHz: c.beatHz,
+    band: c.band,
+    intent: c.intent,
+  };
+}

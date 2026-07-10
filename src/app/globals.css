@@ -281,6 +281,30 @@ html.has-brand-cursor [role="button"] {
     );
 }
 
+@keyframes neuralPulseRing {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+.neural-pulse-ring {
+  animation: neuralPulseRing 0.55s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neural-wave,
+  .neural-wave--delay,
+  .neural-pulse-ring,
+  .neural-shaking {
+    animation: none !important;
+  }
+}
+
 @keyframes holiBob {
   0%,
   100% {

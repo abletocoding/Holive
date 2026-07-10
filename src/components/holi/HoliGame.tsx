@@ -3,54 +3,51 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { HoliMascot } from "@/components/holi/HoliMascot";
+import { NeuralBoard } from "@/components/holi/neural/NeuralBoard";
+import { NeuralEffects } from "@/components/holi/neural/NeuralEffects";
+import { LeadCapture } from "@/components/holi/neural/LeadCapture";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useFullscreen } from "@/hooks/useFullscreen";
+import { NeuralAmbient, bedMeta } from "@/lib/audio/neuralAmbient";
+import { BUSINESS_MANTRAS, mantraForLocale } from "@/lib/game/mantras";
 import {
-  BINAURAL_META,
-  NeuralAmbient,
-} from "@/lib/audio/neuralAmbient";
+  FINAL_LEVEL_ID,
+  LEVELS,
+  getLevel,
+  randomNode,
+  type LevelDef,
+} from "@/lib/game/levels";
+import { insightForLevel, insightText } from "@/lib/game/insights";
 import {
-  BUSINESS_MANTRAS,
-  mantraForLocale,
-} from "@/lib/game/mantras";
+  mintReward,
+  shareableCertificate,
+  type Reward,
+} from "@/lib/game/rewards";
+import {
+  addReward,
+  loadProgress,
+  markRunComplete,
+  recordScore,
+  saveProgress,
+  unlockLevel,
+  type PulseProgress,
+} from "@/lib/game/progress";
 
-const STORAGE_KEY = "holive-neural-highscore";
-const NODE_COUNT = 4;
-const NODE_COLORS = [
-  "var(--holive-purple)",
-  "var(--holive-gold)",
-  "var(--holive-purple-bright)",
-  "var(--holive-gold-bright)",
-] as const;
-
-type Phase = "idle" | "watch" | "input" | "wrong" | "levelup";
-
-function loadHighScore() {
-  if (typeof window === "undefined") return 0;
-  try {
-    return Number(localStorage.getItem(STORAGE_KEY) || 0) || 0;
-  } catch {
-    return 0;
-  }
-}
-
-function saveHighScore(score: number) {
-  try {
-    localStorage.setItem(STORAGE_KEY, String(score));
-  } catch {
-    /* ignore */
-  }
-}
-
-function randomNode() {
-  return Math.floor(Math.random() * NODE_COUNT);
-}
+type Phase =
+  | "hub"
+  | "idle"
+  | "watch"
+  | "input"
+  | "wrong"
+  | "levelup"
+  | "cleared"
+  | "victory"
+  | "paused";
 
 /**
- * Neural Pulse — Simon-like pattern memory in an immersive arena.
- * Holi is coach/avatar only; mechanic is purple/gold neural nodes.
- * Audio: binaural + zen pad + singing-bowl hits on each node.
+ * Neural Pulse — multi-level pattern memory arena.
+ * Holi coaches; purple/gold nodes; binaural beds + singing bowl.
  */
 export function HoliGame() {
   const t = useTranslations("HoliGame");
@@ -58,17 +55,33 @@ export function HoliGame() {
   const reduced = usePrefersReducedMotion();
 
   const [arena, setArena] = useState(false);
-  const [highScore, setHighScore] = useState(0);
-  const [level, setLevel] = useState(0);
+  const [progress, setProgress] = useState<PulseProgress>(() => ({
+    unlockedLevel: 1,
+    highScore: 0,
+    levelBest: {},
+    rewards: [],
+    completedRun: false,
+    deepProgress: false,
+  }));
+  const [levelId, setLevelId] = useState(1);
   const [score, setScore] = useState(0);
-  const [phase, setPhase] = useState<Phase>("idle");
+  const [seqLen, setSeqLen] = useState(0);
+  const [phase, setPhase] = useState<Phase>("hub");
   const [lit, setLit] = useState<number | null>(null);
+  const [distractor, setDistractor] = useState<number | null>(null);
   const [coach, setCoach] = useState<"idle" | "cheer" | "oops">("idle");
   const [audioOn, setAudioOn] = useState(false);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(0.35);
   const [fsDenied, setFsDenied] = useState(false);
   const [mantraIdx, setMantraIdx] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [pulse, setPulse] = useState(0);
+  const [goldBurst, setGoldBurst] = useState(0);
+  const [shake, setShake] = useState(0);
+  const [reward, setReward] = useState<Reward | null>(null);
+  const [showLead, setShowLead] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<NeuralAmbient | null>(null);
@@ -76,13 +89,21 @@ export function HoliGame() {
   const inputIdxRef = useRef(0);
   const busyRef = useRef(false);
   const submittedRef = useRef(false);
+  const pausePhaseRef = useRef<Phase>("idle");
+  const scoreRef = useRef(0);
+  const abortWatchRef = useRef(false);
 
+  const level: LevelDef = getLevel(levelId);
   const { active: isFs, supported: fsSupported, toggle: toggleFs, exit: exitFs } =
     useFullscreen(stageRef);
 
   useEffect(() => {
-    setHighScore(loadHighScore());
+    setProgress(loadProgress());
   }, []);
+
+  useEffect(() => {
+    scoreRef.current = score;
+  }, [score]);
 
   useEffect(() => {
     return () => {
@@ -91,7 +112,6 @@ export function HoliGame() {
     };
   }, []);
 
-  // Rotate mantras while arena is open
   useEffect(() => {
     if (!arena) return;
     const id = window.setInterval(() => {
@@ -109,12 +129,15 @@ export function HoliGame() {
     };
   }, [arena]);
 
-  const ensureAudio = useCallback(async () => {
-    if (!audioRef.current) audioRef.current = new NeuralAmbient();
-    await audioRef.current.start({ volume });
-    audioRef.current.setMuted(muted);
-    setAudioOn(true);
-  }, [muted, volume]);
+  const ensureAudio = useCallback(
+    async (bed = level.audioBed) => {
+      if (!audioRef.current) audioRef.current = new NeuralAmbient();
+      await audioRef.current.start({ volume, bed });
+      audioRef.current.setMuted(muted);
+      setAudioOn(true);
+    },
+    [level.audioBed, muted, volume],
+  );
 
   const stopAudio = useCallback(() => {
     audioRef.current?.stop();
@@ -126,25 +149,49 @@ export function HoliGame() {
     audioRef.current?.playBowlHit(idx);
   }, []);
 
+  const flashFx = useCallback((intensity = 0.7) => {
+    setPulse(intensity);
+    window.setTimeout(() => setPulse(0), 180);
+  }, []);
+
   const flashNode = useCallback(
-    async (idx: number, ms = 420) => {
+    async (idx: number, ms: number, gap: number) => {
+      if (abortWatchRef.current) return;
       setLit(idx);
       bowlHit(idx);
+      flashFx(0.55);
       await new Promise((r) => setTimeout(r, ms));
       setLit(null);
-      await new Promise((r) => setTimeout(r, 140));
+      await new Promise((r) => setTimeout(r, gap));
     },
-    [bowlHit],
+    [bowlHit, flashFx],
   );
 
   const playSequence = useCallback(
-    async (seq: number[]) => {
+    async (seq: number[], def: LevelDef) => {
       busyRef.current = true;
+      abortWatchRef.current = false;
       setPhase("watch");
       setCoach("idle");
-      await new Promise((r) => setTimeout(r, 350));
-      for (const n of seq) {
-        await flashNode(n, Math.max(280, 480 - seq.length * 18));
+      await new Promise((r) => setTimeout(r, 320));
+      for (let i = 0; i < seq.length; i++) {
+        if (abortWatchRef.current) {
+          busyRef.current = false;
+          return;
+        }
+        const n = seq[i]!;
+        await flashNode(n, def.flashMs, def.gapMs);
+        if (def.distractors && Math.random() < 0.35) {
+          let fake = randomNode(def.nodes);
+          while (fake === n) fake = randomNode(def.nodes);
+          setDistractor(fake);
+          await new Promise((r) => setTimeout(r, Math.max(80, def.flashMs * 0.35)));
+          setDistractor(null);
+        }
+      }
+      if (abortWatchRef.current) {
+        busyRef.current = false;
+        return;
       }
       inputIdxRef.current = 0;
       setPhase("input");
@@ -154,44 +201,60 @@ export function HoliGame() {
   );
 
   const startRound = useCallback(
-    (nextLevel: number, baseSeq?: number[]) => {
+    (def: LevelDef, nextLen: number, baseSeq?: number[]) => {
       const seq = [...(baseSeq ?? sequenceRef.current)];
-      while (seq.length < nextLevel) {
-        seq.push(randomNode());
+      while (seq.length < nextLen) {
+        seq.push(randomNode(def.nodes));
       }
+      // trim if restarting shorter
+      if (seq.length > nextLen) seq.length = nextLen;
       sequenceRef.current = seq;
-      setLevel(nextLevel);
+      setSeqLen(seq.length);
       setMantraIdx((i) => (i + 1) % BUSINESS_MANTRAS.length);
-      void playSequence(seq);
+      void playSequence(seq, def);
     },
     [playSequence],
   );
 
-  const start = useCallback(async () => {
-    sequenceRef.current = [];
-    inputIdxRef.current = 0;
-    submittedRef.current = false;
-    setScore(0);
-    setLevel(0);
-    setCoach("idle");
-    setMantraIdx(Math.floor(Math.random() * BUSINESS_MANTRAS.length));
-    try {
-      await ensureAudio();
-    } catch {
-      /* autoplay / AudioContext denied — game still playable */
-    }
-    startRound(1, []);
-  }, [ensureAudio, startRound]);
+  const startLevel = useCallback(
+    async (id: number) => {
+      const def = getLevel(id);
+      sequenceRef.current = [];
+      inputIdxRef.current = 0;
+      submittedRef.current = false;
+      abortWatchRef.current = false;
+      setLevelId(id);
+      setScore(0);
+      setStreak(0);
+      setReward(null);
+      setShowLead(false);
+      setCopied(false);
+      setCoach("idle");
+      setMantraIdx(Math.floor(Math.random() * BUSINESS_MANTRAS.length));
+      try {
+        await ensureAudio(def.audioBed);
+        await audioRef.current?.setBed(def.audioBed);
+      } catch {
+        /* autoplay denied */
+      }
+      setPhase("idle");
+      // brief beat then auto-start
+      window.setTimeout(() => {
+        startRound(def, def.startLen, []);
+      }, 80);
+    },
+    [ensureAudio, startRound],
+  );
 
-  const endGame = useCallback(
+  const onMiss = useCallback(
     (finalScore: number) => {
       setPhase("wrong");
       setCoach("oops");
-      const best = Math.max(loadHighScore(), finalScore);
-      saveHighScore(best);
-      setHighScore(best);
-      stopAudio();
-
+      setStreak(0);
+      setShake(0.85);
+      window.setTimeout(() => setShake(0), 400);
+      const next = recordScore(progress, levelId, finalScore);
+      setProgress(next);
       if (!submittedRef.current && finalScore > 0) {
         submittedRef.current = true;
         const supabase = createBrowserClient();
@@ -199,61 +262,133 @@ export function HoliGame() {
           void supabase.from("game_scores").insert({
             score: finalScore,
             locale,
-            player_name: "Neural",
+            player_name: `Neural-L${levelId}`,
           });
         }
       }
     },
-    [locale, stopAudio],
+    [locale, levelId, progress],
+  );
+
+  const onLevelCleared = useCallback(
+    (finalScore: number) => {
+      audioRef.current?.playChime();
+      setGoldBurst((n) => n + 1);
+      setPulse(1);
+      window.setTimeout(() => setPulse(0), 400);
+      setCoach("cheer");
+      setPhase("cleared");
+
+      let next = unlockLevel(progress, levelId + 1);
+      next = recordScore(next, levelId, finalScore);
+
+      const minted = mintReward({
+        level: levelId,
+        score: finalScore,
+        clearedAll: levelId >= FINAL_LEVEL_ID,
+      });
+      if (minted) {
+        next = addReward(next, minted);
+        setReward(minted);
+      }
+
+      if (levelId >= FINAL_LEVEL_ID) {
+        next = markRunComplete(next);
+        setPhase("victory");
+        setShowLead(true);
+      } else if (next.deepProgress && levelId >= 4) {
+        setShowLead(true);
+      }
+
+      setProgress(next);
+      saveProgress(next);
+    },
+    [levelId, progress],
   );
 
   const onNode = useCallback(
     async (idx: number) => {
       if (busyRef.current || phase !== "input") return;
       busyRef.current = true;
-      await flashNode(idx, 220);
+      const def = getLevel(levelId);
+      await flashNode(idx, Math.max(160, def.flashMs * 0.55), def.gapMs * 0.5);
 
       const expected = sequenceRef.current[inputIdxRef.current];
       if (idx !== expected) {
         busyRef.current = false;
-        endGame(score);
+        onMiss(scoreRef.current);
         return;
       }
 
       inputIdxRef.current += 1;
       if (inputIdxRef.current >= sequenceRef.current.length) {
-        const gained = sequenceRef.current.length * 10;
-        const nextScore = score + gained;
+        const gained = Math.round(
+          sequenceRef.current.length * 10 * def.scoreMult,
+        );
+        const nextScore = scoreRef.current + gained;
         setScore(nextScore);
+        scoreRef.current = nextScore;
+        setStreak((s) => {
+          const n = s + 1;
+          if (n >= 2) setGoldBurst((g) => g + 1);
+          return n;
+        });
+
+        if (sequenceRef.current.length >= def.clearLen) {
+          busyRef.current = false;
+          onLevelCleared(nextScore);
+          return;
+        }
+
         setPhase("levelup");
         setCoach("cheer");
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 480));
         busyRef.current = false;
-        startRound(sequenceRef.current.length + 1);
+        startRound(def, sequenceRef.current.length + 1);
         return;
       }
 
       busyRef.current = false;
     },
-    [endGame, flashNode, phase, score, startRound],
+    [flashNode, levelId, onLevelCleared, onMiss, phase, startRound],
   );
 
   const enterArena = useCallback(() => {
     setArena(true);
     setFsDenied(false);
+    setPhase("hub");
     setMantraIdx(Math.floor(Math.random() * BUSINESS_MANTRAS.length));
   }, []);
 
   const leaveArena = useCallback(async () => {
+    abortWatchRef.current = true;
     await exitFs();
     stopAudio();
     setArena(false);
-    setPhase("idle");
+    setPhase("hub");
     setLit(null);
+    setDistractor(null);
     setCoach("idle");
     busyRef.current = false;
     sequenceRef.current = [];
   }, [exitFs, stopAudio]);
+
+  const pause = useCallback(() => {
+    if (phase === "watch" || phase === "input" || phase === "levelup") {
+      pausePhaseRef.current = phase;
+      abortWatchRef.current = true;
+      setPhase("paused");
+      busyRef.current = false;
+      setLit(null);
+      setDistractor(null);
+    }
+  }, [phase]);
+
+  const resume = useCallback(() => {
+    if (phase !== "paused") return;
+    const def = getLevel(levelId);
+    void playSequence(sequenceRef.current, def);
+  }, [levelId, phase, playSequence]);
 
   const onToggleFs = useCallback(async () => {
     const ok = await toggleFs();
@@ -291,12 +426,22 @@ export function HoliGame() {
     if (!arena) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" && !isFs) {
-        void leaveArena();
+        if (phase === "paused") resume();
+        else if (phase === "watch" || phase === "input") pause();
+        else void leaveArena();
+      }
+      if (e.key === "p" || e.key === "P") {
+        if (phase === "paused") resume();
+        else pause();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [arena, isFs, leaveArena]);
+  }, [arena, isFs, leaveArena, pause, phase, resume]);
+
+  const meta = audioOn && audioRef.current ? audioRef.current.bedMeta : bedMeta(level.audioBed);
+  const mantra = mantraForLocale(BUSINESS_MANTRAS[mantraIdx]!, locale);
+  const insight = insightText(insightForLevel(levelId), locale);
 
   const statusLabel =
     phase === "watch"
@@ -307,10 +452,18 @@ export function HoliGame() {
           ? t("gameOver")
           : phase === "levelup"
             ? t("levelUp")
-            : t("subtitle");
+            : phase === "cleared"
+              ? t("levelCleared")
+              : phase === "victory"
+                ? t("victory")
+                : phase === "paused"
+                  ? t("paused")
+                  : phase === "hub"
+                    ? t("selectLevel")
+                    : t("subtitle");
 
-  const playing = phase === "watch" || phase === "input" || phase === "levelup";
-  const mantra = mantraForLocale(BUSINESS_MANTRAS[mantraIdx]!, locale);
+  const playing =
+    phase === "watch" || phase === "input" || phase === "levelup";
 
   if (!arena) {
     return (
@@ -324,7 +477,8 @@ export function HoliGame() {
             </h3>
             <p className="mt-2 max-w-md text-sm text-white/65">{t("teaser")}</p>
             <p className="font-mono-code mt-3 text-[0.65rem] tracking-[0.2em] text-[var(--holive-gold)]/80">
-              {t("highScore")}: {highScore}
+              {t("highScore")}: {progress.highScore} · {t("unlocked")}:{" "}
+              {progress.unlockedLevel}/{LEVELS.length}
             </p>
           </div>
           <button
@@ -347,17 +501,31 @@ export function HoliGame() {
       ref={stageRef}
       role="application"
       aria-label={t("title")}
-      className="fixed inset-0 z-[var(--z-overlay-game)] flex min-h-[100dvh] w-full flex-col bg-[#05030a] text-[var(--holive-white)] select-none"
+      className={`neural-shake-target fixed inset-0 z-[var(--z-overlay-game)] flex min-h-[100dvh] w-full flex-col bg-[#05030a] text-[var(--holive-white)] select-none ${shake > 0 ? "neural-shaking" : ""}`}
     >
-      <NeuralBackdrop reduced={reduced} />
+      <NeuralBackdrop reduced={reduced} parallax={!reduced} />
+      <NeuralEffects
+        reduced={reduced}
+        pulse={pulse}
+        goldBurst={goldBurst}
+        shake={shake}
+      />
 
       <header className="relative z-20 flex shrink-0 items-start justify-between gap-3 px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <HoliMascot
-            pose={coach === "cheer" ? "celebrate" : coach === "oops" ? "think" : "guide"}
-            className={`h-10 w-8 shrink-0 transition-transform sm:h-12 sm:w-9 ${
+            pose={
               coach === "cheer"
-                ? "scale-110"
+                ? "celebrate"
+                : coach === "oops"
+                  ? "think"
+                  : phase === "hub"
+                    ? "wave"
+                    : "guide"
+            }
+            className={`h-10 w-8 shrink-0 transition-transform sm:h-12 sm:w-9 ${
+              coach === "cheer" && !reduced
+                ? "scale-110 holi-bob"
                 : coach === "oops"
                   ? "opacity-70"
                   : ""
@@ -368,7 +536,9 @@ export function HoliGame() {
               {t("title")}
             </h2>
             <p className="truncate text-[0.65rem] text-white/50 sm:text-xs">
-              {t("coach")}
+              {phase === "hub"
+                ? t("coach")
+                : t(`levels.${level.key}.name` as "levels.seed.name")}
             </p>
           </div>
         </div>
@@ -378,16 +548,25 @@ export function HoliGame() {
             {t("score")}: {score}
           </div>
           <div>
-            {t("level")}: {Math.max(level, 1)}
+            {t("level")}: {levelId}
+            {seqLen > 0 ? ` · ${seqLen}/${level.clearLen}` : ""}
           </div>
           <div className="text-[var(--holive-gold)]">
-            {t("highScore")}: {highScore}
+            {t("highScore")}: {progress.highScore}
           </div>
+          {streak >= 2 && (
+            <div className="text-[var(--holive-gold-bright)]">
+              {t("streak")}: {streak}
+            </div>
+          )}
         </div>
       </header>
 
       <div className="relative z-20 flex flex-wrap items-center justify-center gap-2 px-3 pb-2 sm:gap-3 sm:px-5">
-        <ControlBtn onClick={() => void onToggleFs()} label={isFs ? t("exitFullscreen") : t("fullscreen")} />
+        <ControlBtn
+          onClick={() => void onToggleFs()}
+          label={isFs ? t("exitFullscreen") : t("fullscreen")}
+        />
         <ControlBtn
           onClick={() => void onToggleMute()}
           label={muted || !audioOn ? t("unmute") : t("mute")}
@@ -408,6 +587,27 @@ export function HoliGame() {
             aria-label={t("volume")}
           />
         </label>
+        {playing && <ControlBtn onClick={pause} label={t("pause")} />}
+        {phase === "paused" && <ControlBtn onClick={resume} label={t("resume")} />}
+        {(playing || phase === "paused" || phase === "wrong") && (
+          <ControlBtn
+            onClick={() => {
+              abortWatchRef.current = true;
+              void startLevel(levelId);
+            }}
+            label={t("restart")}
+          />
+        )}
+        <ControlBtn
+          onClick={() => {
+            abortWatchRef.current = true;
+            stopAudio();
+            setPhase("hub");
+            setLit(null);
+            busyRef.current = false;
+          }}
+          label={t("levelsBtn")}
+        />
         <ControlBtn onClick={() => void leaveArena()} label={t("exitArena")} />
       </div>
 
@@ -421,89 +621,181 @@ export function HoliGame() {
         {statusLabel}
       </p>
 
-      {/* Rotating business mantras */}
-      <div
-        key={mantraIdx}
-        className="relative z-20 mx-auto max-w-lg px-5 pb-2 text-center animate-[fadeIn_0.6s_ease]"
-        aria-live="polite"
-      >
-        <p className="font-mono-code text-[0.55rem] tracking-[0.28em] text-white/35 uppercase">
-          {t("mantraLabel")}
-        </p>
-        <p className="mt-1 text-sm leading-snug text-[color-mix(in_srgb,var(--holive-gold)_85%,white)] sm:text-base">
-          “{mantra}”
-        </p>
-      </div>
+      {phase !== "hub" && (
+        <div
+          key={mantraIdx}
+          className="relative z-20 mx-auto max-w-lg px-5 pb-2 text-center animate-[fadeIn_0.6s_ease]"
+          aria-live="polite"
+        >
+          <p className="font-mono-code text-[0.55rem] tracking-[0.28em] text-white/35 uppercase">
+            {t("mantraLabel")}
+          </p>
+          <p className="mt-1 text-sm leading-snug text-[color-mix(in_srgb,var(--holive-gold)_85%,white)] sm:text-base">
+            “{mantra}”
+          </p>
+        </div>
+      )}
 
-      {audioOn && !muted && (
+      {audioOn && !muted && phase !== "hub" && (
         <p className="relative z-20 px-4 pb-1 text-center text-[0.6rem] tracking-wide text-white/35">
           {t("binauralHint", {
-            beat: BINAURAL_META.beatHz,
-            carrier: BINAURAL_META.carrierHz,
+            beat: meta.beatHz,
+            carrier: meta.carrierHz,
           })}
         </p>
       )}
 
       <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 sm:px-8">
-        <div
-          className={`relative grid w-full max-w-[min(92vw,28rem)] grid-cols-2 gap-4 sm:gap-6 landscape:max-w-[min(70vh,32rem)] landscape:gap-3`}
-        >
-          {Array.from({ length: NODE_COUNT }, (_, i) => {
-            const isLit = lit === i;
-            return (
-              <button
-                key={i}
-                type="button"
-                disabled={phase !== "input"}
-                aria-label={t("node", { n: i + 1 })}
-                onClick={() => void onNode(i)}
-                className="focus-ring aspect-square min-h-[22vw] max-h-[38vh] w-full rounded-full border-2 transition active:scale-[0.98] disabled:cursor-default landscape:min-h-[18vh] landscape:max-h-[36vh] sm:min-h-0"
-                style={{
-                  background: isLit
-                    ? NODE_COLORS[i]
-                    : "color-mix(in srgb, #1a003d 80%, black)",
-                  borderColor: isLit
-                    ? "rgba(255,255,255,0.55)"
-                    : "rgba(201,168,76,0.28)",
-                  boxShadow: isLit
-                    ? `0 0 36px ${NODE_COLORS[i]}, inset 0 0 24px rgba(255,255,255,0.15)`
-                    : reduced
-                      ? "inset 0 0 18px rgba(90,42,158,0.25)"
-                      : "inset 0 0 22px rgba(90,42,158,0.3), 0 0 24px rgba(90,42,158,0.12)",
-                  transform: isLit && !reduced ? "scale(1.05)" : "scale(1)",
-                }}
-              >
-                <span
-                  className="mx-auto block h-2.5 w-2.5 rounded-full sm:h-3 sm:w-3"
-                  style={{
-                    background: isLit
-                      ? "rgba(255,255,255,0.9)"
-                      : "rgba(201,168,76,0.35)",
-                  }}
-                />
-              </button>
-            );
-          })}
-        </div>
+        {phase === "hub" ? (
+          <LevelSelect
+            progress={progress}
+            onPick={(id) => void startLevel(id)}
+            t={t}
+          />
+        ) : (
+          <NeuralBoard
+            level={level}
+            lit={lit}
+            distractor={distractor}
+            phase={phase}
+            reduced={reduced}
+            streak={streak}
+            onNode={(i) => void onNode(i)}
+            disabled={phase !== "input"}
+            nodeLabel={(n) => t("node", { n })}
+          />
+        )}
 
-        {(phase === "idle" || phase === "wrong") && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black/55 px-5 text-center backdrop-blur-[2px]">
+        {(phase === "wrong" ||
+          phase === "cleared" ||
+          phase === "victory" ||
+          phase === "paused") && (
+          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center overflow-y-auto bg-black/60 px-5 py-8 text-center backdrop-blur-[2px]">
             <HoliMascot
-              pose={phase === "wrong" ? "think" : "wave"}
+              pose={
+                phase === "wrong"
+                  ? "think"
+                  : phase === "paused"
+                    ? "guide"
+                    : "celebrate"
+              }
               className="mb-3 h-14 w-11 opacity-90"
             />
             <p className="font-display text-2xl text-[var(--holive-gold)] sm:text-3xl">
-              {phase === "wrong" ? t("gameOver") : t("title")}
+              {phase === "wrong"
+                ? t("gameOver")
+                : phase === "paused"
+                  ? t("paused")
+                  : phase === "victory"
+                    ? t("victory")
+                    : t("levelCleared")}
             </p>
-            <p className="mt-3 max-w-sm text-sm text-white/70">{t("tap")}</p>
-            <p className="mt-2 max-w-xs text-xs text-white/45">{t("audioNote")}</p>
-            <button
-              type="button"
-              className="focus-ring mt-6 min-h-12 min-w-[10rem] bg-[var(--holive-gold)] px-8 py-3 text-sm font-semibold text-[var(--holive-black)]"
-              onClick={() => void start()}
-            >
-              {phase === "wrong" ? t("restart") : t("start")}
-            </button>
+
+            {(phase === "cleared" || phase === "victory") && (
+              <div className="mt-4 max-w-md">
+                <p className="font-mono-code text-[0.55rem] tracking-[0.24em] text-white/40 uppercase">
+                  {t("insightLabel")}
+                </p>
+                <p className="mt-1 text-base font-medium text-[var(--holive-gold)]">
+                  {insight.title}
+                </p>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">
+                  {insight.body}
+                </p>
+              </div>
+            )}
+
+            {reward && (phase === "cleared" || phase === "victory") && (
+              <div className="mt-5 max-w-sm rounded border border-[var(--holive-gold)]/35 bg-black/40 px-4 py-3">
+                <p className="font-mono-code text-[0.55rem] tracking-[0.24em] text-[var(--holive-gold)]/70 uppercase">
+                  {t(`rewards.${reward.key}.title` as "rewards.certificate.title")}
+                </p>
+                <p className="mt-1 font-mono-code text-sm tracking-wider text-[var(--holive-gold)]">
+                  {reward.code}
+                </p>
+                <p className="mt-1 text-xs text-white/55">
+                  {t(`rewards.${reward.key}.blurb` as "rewards.certificate.blurb")}
+                </p>
+                {reward.kind === "certificate" && (
+                  <button
+                    type="button"
+                    className="focus-ring mt-3 text-xs text-white/70 underline decoration-[var(--holive-gold)]/50"
+                    onClick={async () => {
+                      const text = shareableCertificate({
+                        code: reward.code,
+                        score,
+                        level: levelId,
+                        locale,
+                      });
+                      try {
+                        await navigator.clipboard.writeText(text);
+                        setCopied(true);
+                      } catch {
+                        /* ignore */
+                      }
+                    }}
+                  >
+                    {copied ? t("copied") : t("copyCert")}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {showLead &&
+              (phase === "cleared" || phase === "victory") &&
+              (progress.deepProgress || progress.completedRun) && (
+                <LeadCapture
+                  score={score}
+                  level={levelId}
+                  onDone={() => setShowLead(false)}
+                  onSkip={() => setShowLead(false)}
+                />
+              )}
+
+            {phase === "wrong" && (
+              <p className="mt-3 max-w-sm text-sm text-white/70">{t("tap")}</p>
+            )}
+
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {phase === "paused" && (
+                <button
+                  type="button"
+                  className="focus-ring min-h-12 min-w-[8rem] bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold text-[var(--holive-black)]"
+                  onClick={resume}
+                >
+                  {t("resume")}
+                </button>
+              )}
+              {phase === "wrong" && (
+                <button
+                  type="button"
+                  className="focus-ring min-h-12 min-w-[8rem] bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold text-[var(--holive-black)]"
+                  onClick={() => void startLevel(levelId)}
+                >
+                  {t("restart")}
+                </button>
+              )}
+              {(phase === "cleared" || phase === "victory") &&
+                levelId < FINAL_LEVEL_ID && (
+                  <button
+                    type="button"
+                    className="focus-ring min-h-12 min-w-[8rem] bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold text-[var(--holive-black)]"
+                    onClick={() => void startLevel(levelId + 1)}
+                  >
+                    {t("nextLevel")}
+                  </button>
+                )}
+              <button
+                type="button"
+                className="focus-ring min-h-12 border border-white/25 px-5 py-3 text-sm text-white/80"
+                onClick={() => {
+                  setPhase("hub");
+                  setShowLead(false);
+                }}
+              >
+                {t("levelsBtn")}
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -513,8 +805,61 @@ export function HoliGame() {
           aria-hidden
           className="pointer-events-none absolute bottom-3 left-3 z-20 opacity-50 sm:bottom-5 sm:left-5"
         >
-          <HoliMascot pose="celebrate" className="h-10 w-8 sm:h-12 sm:w-9" />
+          <HoliMascot
+            pose="celebrate"
+            className={`h-10 w-8 sm:h-12 sm:w-9 ${reduced ? "" : "holi-bob"}`}
+          />
         </div>
+      )}
+    </div>
+  );
+}
+
+function LevelSelect({
+  progress,
+  onPick,
+  t,
+}: {
+  progress: PulseProgress;
+  onPick: (id: number) => void;
+  t: ReturnType<typeof useTranslations<"HoliGame">>;
+}) {
+  return (
+    <div className="relative z-20 w-full max-w-lg px-1">
+      <p className="mb-4 text-center text-sm text-white/65">{t("selectBlurb")}</p>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {LEVELS.map((lv) => {
+          const locked = lv.id > progress.unlockedLevel;
+          const best = progress.levelBest[String(lv.id)];
+          return (
+            <button
+              key={lv.id}
+              type="button"
+              disabled={locked}
+              onClick={() => onPick(lv.id)}
+              className="focus-ring flex min-h-[5.5rem] flex-col items-center justify-center gap-1 border border-white/15 bg-black/45 px-2 py-3 text-center transition enabled:hover:border-[var(--holive-gold)]/50 disabled:opacity-35"
+            >
+              <span className="font-mono-code text-[0.6rem] tracking-[0.2em] text-white/40">
+                {String(lv.id).padStart(2, "0")}
+              </span>
+              <span className="font-display text-sm text-[var(--holive-gold)]">
+                {t(`levels.${lv.key}.name` as "levels.seed.name")}
+              </span>
+              <span className="text-[0.6rem] text-white/45">
+                {locked
+                  ? t("locked")
+                  : best != null
+                    ? `${t("best")}: ${best}`
+                    : t(`levels.${lv.key}.tag` as "levels.seed.tag")}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      {progress.rewards.length > 0 && (
+        <p className="mt-4 text-center font-mono-code text-[0.6rem] text-[var(--holive-gold)]/70">
+          {t("rewardsOwned")}: {progress.rewards.length}
+        </p>
       )}
     </div>
   );
@@ -541,15 +886,32 @@ function ControlBtn({
 function NeuralBackdrop({
   reduced,
   soft = false,
+  parallax = false,
 }: {
   reduced: boolean;
   soft?: boolean;
+  parallax?: boolean;
 }) {
+  const [off, setOff] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    if (!parallax || reduced) return;
+    const onMove = (e: PointerEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 12;
+      const y = (e.clientY / window.innerHeight - 0.5) * 10;
+      setOff({ x, y });
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [parallax, reduced]);
+
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
-        className="absolute inset-0"
+        className="absolute inset-[-8%]"
         style={{
+          transform: parallax && !reduced ? `translate(${off.x}px, ${off.y}px)` : undefined,
+          transition: "transform 0.4s ease-out",
           background: soft
             ? "radial-gradient(ellipse at 30% 20%, rgba(90,42,158,0.35), transparent 50%), radial-gradient(ellipse at 75% 80%, rgba(201,168,76,0.12), transparent 45%), #07060a"
             : "radial-gradient(ellipse at 25% 15%, rgba(90,42,158,0.45), transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(201,168,76,0.14), transparent 50%), radial-gradient(ellipse at 50% 100%, rgba(51,0,114,0.35), transparent 40%), #05030a",
@@ -557,7 +919,13 @@ function NeuralBackdrop({
       />
       {!reduced && (
         <>
-          <div className="neural-wave absolute -left-1/4 top-[10%] h-[40%] w-[150%] opacity-30" />
+          <div
+            className="neural-wave absolute -left-1/4 top-[10%] h-[40%] w-[150%] opacity-30"
+            style={{
+              transform:
+                parallax ? `translate(${off.x * 0.4}px, ${off.y * 0.3}px)` : undefined,
+            }}
+          />
           <div className="neural-wave neural-wave--delay absolute -left-1/4 top-[45%] h-[35%] w-[150%] opacity-20" />
           <div className="neural-code absolute inset-0 opacity-[0.07]" />
         </>
@@ -568,6 +936,10 @@ function NeuralBackdrop({
           backgroundImage:
             "linear-gradient(rgba(0,255,65,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,0.08) 1px, transparent 1px)",
           backgroundSize: "48px 48px",
+          transform:
+            parallax && !reduced
+              ? `translate(${off.x * -0.25}px, ${off.y * -0.2}px)`
+              : undefined,
         }}
       />
     </div>
