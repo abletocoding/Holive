@@ -43,9 +43,12 @@ Personality: loyal, curious, a little mischievous — purity with play.
 
 | File | Format | Notes |
 |------|--------|-------|
-| `public/brand/holi.svg` | SVG | Production doodle (paths + crayon-like strokes) |
-| `public/brand/holi.png` | PNG | Raster reference / game sprite source |
+| `public/brand/holi.svg` | SVG | Canonical doodle (paths + crayon filter) |
+| `src/components/holi/HoliMascot.tsx` | React SVG | **Production UI** — inline poses (idle/wave/think/celebrate/guide/peek) matching the canonical doodle |
 | `public/brand/holi-mark.svg` | SVG | Bust / head-only for tiny UI |
+| `public/brand/holi.png` | PNG | Raster reference only — do not use as primary UI |
+
+**Do not** ship mismatched AI pose PNGs in the UI. Prefer the React SVG component so Holi stays transparent, tightly cropped, and on-brand.
 
 ---
 

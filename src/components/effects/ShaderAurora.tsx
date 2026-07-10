@@ -36,12 +36,16 @@ export function ShaderAurora({ className = "" }: Props) {
       uniform float u_t;
       uniform vec2 u_res;
       uniform float u_scroll;
+      uniform vec2 u_ptr;
       void main(){
         vec2 uv = gl_FragCoord.xy / u_res;
         uv.x *= u_res.x / u_res.y;
         float t = u_t * 0.15 + u_scroll * 0.4;
+        vec2 ptr = u_ptr;
+        ptr.x *= u_res.x / u_res.y;
         float n = sin(uv.x*3.2+t)*cos(uv.y*2.8-t*0.7);
         n += sin((uv.x+uv.y)*4.1 - t*1.2)*0.5;
+        n += 0.35 * exp(-dot(uv-ptr, uv-ptr) * 4.5);
         vec3 purple = vec3(0.20, 0.0, 0.45);
         vec3 gold = vec3(0.79, 0.66, 0.30);
         vec3 black = vec3(0.04, 0.02, 0.08);
@@ -80,9 +84,11 @@ export function ShaderAurora({ className = "" }: Props) {
     const uT = gl.getUniformLocation(prog, "u_t");
     const uRes = gl.getUniformLocation(prog, "u_res");
     const uScroll = gl.getUniformLocation(prog, "u_scroll");
+    const uPtr = gl.getUniformLocation(prog, "u_ptr");
 
     let raf = 0;
     let scroll = 0;
+    const ptr = { x: 0.55, y: 0.45, tx: 0.55, ty: 0.45 };
     const start = performance.now();
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
@@ -103,14 +109,23 @@ export function ShaderAurora({ className = "" }: Props) {
       scroll = max > 0 ? window.scrollY / max : 0;
     };
 
+    const onPointer = (e: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      ptr.tx = (e.clientX - rect.left) / Math.max(1, rect.width);
+      ptr.ty = 1 - (e.clientY - rect.top) / Math.max(1, rect.height);
+    };
+
     resize();
     onScroll();
 
     const tick = () => {
+      ptr.x += (ptr.tx - ptr.x) * 0.06;
+      ptr.y += (ptr.ty - ptr.y) * 0.06;
       const t = (performance.now() - start) / 1000;
       gl.uniform1f(uT, t);
       gl.uniform2f(uRes, canvas.width, canvas.height);
       gl.uniform1f(uScroll, scroll);
+      gl.uniform2f(uPtr, ptr.x, ptr.y);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       raf = requestAnimationFrame(tick);
     };
@@ -118,10 +133,12 @@ export function ShaderAurora({ className = "" }: Props) {
 
     window.addEventListener("resize", resize);
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("pointermove", onPointer, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("pointermove", onPointer);
     };
   }, [reduced]);
 

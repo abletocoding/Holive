@@ -5,6 +5,7 @@ import { Float } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import type { Mesh } from "three";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { useIsCoarsePointer } from "@/hooks/useIsCoarsePointer";
 
 function SacredMark() {
   const ring = useRef<Mesh>(null);
@@ -55,14 +56,15 @@ function SacredMark() {
 
 export function HeroScene() {
   const reduced = usePrefersReducedMotion();
+  const coarse = useIsCoarsePointer();
 
-  if (reduced) {
+  if (reduced || coarse) {
     return (
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 flex items-center justify-end pr-[8%] opacity-40"
+        className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-40 md:justify-end md:pr-[8%]"
       >
-        <div className="h-40 w-40 rounded-full border border-[var(--holive-gold)]/50 shadow-[var(--glow-gold)] md:h-56 md:w-56" />
+        <div className="h-36 w-36 rounded-full border border-[var(--holive-gold)]/50 shadow-[var(--glow-gold)] sm:h-40 sm:w-40 md:h-56 md:w-56" />
       </div>
     );
   }

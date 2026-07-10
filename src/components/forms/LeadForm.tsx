@@ -56,6 +56,8 @@ export function LeadForm() {
 
     setStatus("success");
     form.reset();
+    const { fireGoldDust } = await import("@/components/effects/GoldDust");
+    fireGoldDust();
   }
 
   return (

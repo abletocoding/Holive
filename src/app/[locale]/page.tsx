@@ -8,6 +8,7 @@ import { Process } from "@/components/sections/Process";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { ShowcaseStrip } from "@/components/sections/ShowcaseStrip";
+import { PortalSection } from "@/components/effects/PortalSection";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -21,12 +22,20 @@ export default async function HomePage({ params }: Props) {
     <>
       <Hero />
       <main id="main">
-        <Manifesto />
+        <PortalSection>
+          <Manifesto />
+        </PortalSection>
         <ShowcaseStrip />
-        <Services />
-        <Digital />
+        <PortalSection>
+          <Services />
+        </PortalSection>
+        <PortalSection>
+          <Digital />
+        </PortalSection>
         <Courses />
-        <Process />
+        <PortalSection>
+          <Process />
+        </PortalSection>
         <Contact />
       </main>
       <Footer />

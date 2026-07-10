@@ -58,7 +58,7 @@ Her core verbs: **sembrar / cosechar** — plant processes, harvest time; plant 
 - Matrix green stays in the **environment**, never on Holi’s body
 - Poses: wave, think, celebrate, guide (+ idle SVG)
 
-Assets: `public/brand/holi/` (PNG poses) and `public/brand/holi.svg` (canonical doodle).
+Assets: `public/brand/holi.svg` (canonical doodle) and `HoliMascot` React SVG poses. Legacy PNGs under `public/brand/holi/` are reference-only.
 
 ---
 

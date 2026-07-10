@@ -29,7 +29,12 @@ export function PageHero({
 }: Props) {
   return (
     <>
-      <header className="page-hero border-b border-[var(--border)]">
+      <header
+        className="page-hero border-b border-[var(--border)]"
+        style={{
+          paddingTop: "max(6.5rem, calc(env(safe-area-inset-top) + 5rem))",
+        }}
+      >
         {ambient === "particles" && (
           <div className="pointer-events-none absolute inset-0 opacity-60">
             <ParticleField density="low" />
@@ -41,7 +46,7 @@ export function PageHero({
               <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
                 {eyebrow}
               </p>
-              <h1 className="font-display mt-3 text-[clamp(1.9rem,4.5vw,3.25rem)] font-semibold leading-tight">
+              <h1 className="font-display mt-3 text-[clamp(1.75rem,5.5vw,3.25rem)] font-semibold leading-tight">
                 {title}
               </h1>
               {intro && (
@@ -54,7 +59,13 @@ export function PageHero({
           </div>
         </div>
       </header>
-      <main id="main" className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-20">
+      <main
+        id="main"
+        className="mx-auto max-w-6xl px-5 py-12 md:px-8 md:py-20"
+        style={{
+          paddingBottom: "max(3rem, env(safe-area-inset-bottom))",
+        }}
+      >
         {children}
       </main>
     </>

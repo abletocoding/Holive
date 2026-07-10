@@ -46,11 +46,17 @@ export function SiteHeader() {
           : "border-b border-transparent bg-[color-mix(in_srgb,var(--background)_72%,transparent)]"
       }`}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+      <div
+        className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6"
+        style={{
+          paddingTop: "max(0.75rem, env(safe-area-inset-top))",
+        }}
+      >
         <Link
           href="/"
           className="focus-ring flex items-center gap-2.5"
           aria-label="Holive"
+          data-holive-logo
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -59,6 +65,7 @@ export function SiteHeader() {
             width={36}
             height={36}
             className="h-8 w-8 shrink-0"
+            data-holive-logo
           />
           <span className="font-display text-sm font-semibold tracking-[0.28em] text-[var(--foreground)]">
             HOLIVE

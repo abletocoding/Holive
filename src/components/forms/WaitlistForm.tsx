@@ -41,6 +41,8 @@ export function WaitlistForm() {
 
     setStatus("success");
     form.reset();
+    const { fireGoldDust } = await import("@/components/effects/GoldDust");
+    fireGoldDust();
   }
 
   return (
