@@ -536,6 +536,26 @@ html.has-brand-cursor [role="button"] {
   margin-top: 1rem;
 }
 
+/* Mantra waterfall */
+@keyframes mantraFall {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+.mantra-fall {
+  animation: mantraFall 42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mantra-fall {
+    animation: none;
+  }
+}
+
 /* Immersive mobile type / touch targets */
 @media (max-width: 430px) {
   .section-pad {

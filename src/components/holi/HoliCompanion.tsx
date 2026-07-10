@@ -9,7 +9,11 @@ type Props = {
   messages: string[];
 };
 
-/** Fixed scroll companion — Holi peeks, follows pointer subtly, reacts on progress. */
+/**
+ * Fixed scroll companion — soft presence only.
+ * Hidden near footer / contact so it never covers CTAs.
+ * Comics live in dedicated Holi Stories sections — not here.
+ */
 export function HoliCompanion({ messages }: Props) {
   const reduced = usePrefersReducedMotion();
   const coarse = useIsCoarsePointer();
@@ -19,6 +23,7 @@ export function HoliCompanion({ messages }: Props) {
   const [pose, setPose] = useState<HoliPose>("wave");
   const [dismissed, setDismissed] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [parked, setParked] = useState(false);
 
   useEffect(() => {
     if (dismissed) return;
@@ -28,9 +33,17 @@ export function HoliCompanion({ messages }: Props) {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const p = max > 0 ? y / max : 0;
 
-      // Early peek from edge before full companion
-      setPeek(y > 120 && y <= 320);
-      setVisible(y > 320);
+      // Park near footer / contact so CTAs stay clickable
+      const footer = document.getElementById("contact") ?? document.querySelector("footer");
+      let nearEnd = p > 0.88;
+      if (footer) {
+        const rect = footer.getBoundingClientRect();
+        nearEnd = rect.top < window.innerHeight * 0.72;
+      }
+      setParked(nearEnd);
+
+      setPeek(!nearEnd && y > 120 && y <= 320);
+      setVisible(!nearEnd && y > 320);
 
       if (p < 0.25) {
         setIdx(0);
@@ -53,26 +66,26 @@ export function HoliCompanion({ messages }: Props) {
   }, [dismissed, messages.length]);
 
   useEffect(() => {
-    if (dismissed || reduced || coarse) return;
+    if (dismissed || reduced || coarse || parked) return;
     const onMove = (e: PointerEvent) => {
-      const nx = (e.clientX / window.innerWidth - 0.5) * 12;
-      const ny = (e.clientY / window.innerHeight - 0.5) * 8;
+      const nx = (e.clientX / window.innerWidth - 0.5) * 8;
+      const ny = (e.clientY / window.innerHeight - 0.5) * 5;
       setOffset({ x: nx, y: ny });
     };
     window.addEventListener("pointermove", onMove, { passive: true });
     return () => window.removeEventListener("pointermove", onMove);
-  }, [dismissed, reduced, coarse]);
+  }, [dismissed, reduced, coarse, parked]);
 
-  if (dismissed || messages.length === 0) return null;
+  if (dismissed || messages.length === 0 || parked) return null;
 
   if (peek && !visible) {
     return (
       <div
-        className="pointer-events-none fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] right-0 z-40 translate-x-[35%] sm:translate-x-[30%]"
+        className="pointer-events-none fixed bottom-[max(0.5rem,env(safe-area-inset-bottom))] right-0 z-[var(--z-chrome-companion)] translate-x-[40%] sm:translate-x-[35%]"
         aria-hidden
       >
         <div className="holi-peek-in">
-          <HoliMascot pose="peek" animated={!reduced} className="h-14 w-11 opacity-90" />
+          <HoliMascot pose="peek" animated={!reduced} className="h-12 w-9 opacity-80" />
         </div>
       </div>
     );
@@ -82,7 +95,7 @@ export function HoliCompanion({ messages }: Props) {
 
   return (
     <div
-      className="pointer-events-none fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-3 z-40 flex max-w-[11rem] flex-col items-end gap-2 sm:bottom-6 sm:right-5 sm:max-w-[13rem]"
+      className="pointer-events-none fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-3 z-[var(--z-chrome-companion)] flex max-w-[10.5rem] flex-col items-end gap-1.5 sm:bottom-6 sm:right-5 sm:max-w-[12rem]"
       style={
         coarse
           ? undefined
@@ -93,7 +106,7 @@ export function HoliCompanion({ messages }: Props) {
       }
     >
       <div
-        className="pointer-events-auto rounded border border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] px-2.5 py-2 text-[0.7rem] leading-snug shadow-lg backdrop-blur-sm animate-[fadeIn_0.4s_ease]"
+        className="pointer-events-auto rounded border border-[var(--border)] bg-[color-mix(in_srgb,var(--surface)_94%,transparent)] px-2.5 py-2 text-[0.68rem] leading-snug shadow-lg backdrop-blur-sm animate-[fadeIn_0.4s_ease]"
         role="status"
       >
         <p className="font-mono-code mb-0.5 text-[0.5rem] tracking-[0.22em] text-[var(--holive-gold)]">
@@ -104,12 +117,14 @@ export function HoliCompanion({ messages }: Props) {
           type="button"
           className="focus-ring mt-1 block min-h-8 min-w-8 text-[0.55rem] tracking-wide text-[color-mix(in_srgb,var(--foreground)_45%,transparent)] hover:text-[var(--holive-gold)]"
           onClick={() => setDismissed(true)}
+          aria-label="Dismiss"
         >
           ×
         </button>
       </div>
-      <div className="pointer-events-auto holi-bob">
-        <HoliMascot pose={pose} animated className="h-12 w-9 opacity-95 sm:h-14 sm:w-11" />
+      {/* Mascot never steals clicks from page CTAs */}
+      <div className="pointer-events-none holi-bob" aria-hidden>
+        <HoliMascot pose={pose} animated className="h-11 w-8 opacity-90 sm:h-12 sm:w-9" />
       </div>
     </div>
   );

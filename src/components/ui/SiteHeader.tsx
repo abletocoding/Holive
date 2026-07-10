@@ -9,6 +9,7 @@ const links = [
   { href: "/services", key: "services" as const },
   { href: "/digital", key: "digital" as const },
   { href: "/courses", key: "courses" as const },
+  { href: "/historias", key: "stories" as const },
   { href: "/blog", key: "blog" as const },
   { href: "/about", key: "about" as const },
   { href: "/contact", key: "contact" as const },
@@ -40,7 +41,7 @@ export function SiteHeader() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-[background,border-color,box-shadow] duration-300 ${
+      className={`fixed inset-x-0 top-0 z-[var(--z-chrome-header)] backdrop-blur-md transition-[background,border-color,box-shadow] duration-300 ${
         scrolled
           ? "border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_88%,transparent)] shadow-[0_8px_32px_rgba(16,24,32,0.12)]"
           : "border-b border-transparent bg-[color-mix(in_srgb,var(--background)_72%,transparent)]"

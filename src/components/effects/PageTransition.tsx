@@ -26,7 +26,7 @@ export function PageTransition() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-[100] overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-[var(--z-overlay-transition)] overflow-hidden"
       aria-hidden
     >
       <div className="portal-wipe absolute inset-0 bg-[var(--holive-purple)]" />

@@ -11,6 +11,7 @@
     "digital": "Digitalization",
     "courses": "Courses",
     "blog": "Blog",
+    "stories": "Stories",
     "about": "About",
     "process": "Process",
     "contact": "Contact",
@@ -73,6 +74,11 @@
       "title": "Tell us your next move",
       "body": "One message is enough. We reply with clarity — no noise.",
       "holiTip": "Say the real friction. We build from honesty."
+    },
+    "historias": {
+      "eyebrow": "Holi Stories",
+      "title": "Comic strips from the ecosystem",
+      "intro": "Crayon strips with business proverbs — plant, harvest, and leave comfort without losing soul."
     }
   },
   "Holi": {
@@ -302,6 +308,185 @@
     },
     "terminal": {
       "title": "holive://process"
+    }
+  },
+  "HoliStories": {
+    "eyebrow": "Holi Stories",
+    "title": "Comic strips from the ecosystem",
+    "intro": "Holi doesn’t float over your work — she tells short strips with business morals. Plant. Harvest. Stay useful.",
+    "seeAll": "See all comic strips",
+    "episodes": {
+      "seed": {
+        "number": "Episode 01",
+        "title": "The seed and the clock",
+        "moral": "Plant process, harvest time.",
+        "panels": {
+          "0": "Holi plants one small process.",
+          "1": "The clock still ticks — chaos drops.",
+          "2": "Harvest: hours freed to serve better."
+        }
+      },
+      "comfort": {
+        "number": "Episode 02",
+        "title": "Leaving comfort",
+        "moral": "Leaving comfort is not abandoning soul.",
+        "panels": {
+          "0": "Everything works… halfway, by hand.",
+          "1": "Holi points to the digital warehouse door.",
+          "2": "Same craft. Better system. Same loyalty."
+        }
+      },
+      "useful": {
+        "number": "Episode 03",
+        "title": "Theater vs usefulness",
+        "moral": "If it doesn’t help you serve, it isn’t strategy.",
+        "panels": {
+          "0": "Lights, slides, applause…",
+          "1": "Holi asks: does this serve your client?",
+          "2": "Useful stays. Noise leaves."
+        }
+      },
+      "ecosystem": {
+        "number": "Episode 04",
+        "title": "One weak node",
+        "moral": "Business is an ecosystem — one weak node softens the mesh.",
+        "panels": {
+          "0": "Strong brand, soft ops.",
+          "1": "Holi pulls the thread — everything moves.",
+          "2": "Balance the nodes. Pulse returns."
+        }
+      },
+      "patience": {
+        "number": "Episode 05",
+        "title": "Funnel season",
+        "moral": "Patience with systems; urgency with clarity.",
+        "panels": {
+          "0": "They want fruit now.",
+          "1": "Holi waters the funnel calmly.",
+          "2": "Clarity first. Then harvest."
+        }
+      },
+      "loyalty": {
+        "number": "Episode 06",
+        "title": "The open table",
+        "moral": "Loyalty is planted in every delivery.",
+        "panels": {
+          "0": "A client returns with doubt.",
+          "1": "Holi serves clarity, not theater.",
+          "2": "Trust harvested. Table ready."
+        }
+      }
+    }
+  },
+  "Experience": {
+    "glyphEye": {
+      "eyebrow": "Vision",
+      "title": "The eye that pays attention",
+      "refran": "Ignore the client and you work blind.",
+      "hint": "Move the pointer · the glyph eye follows"
+    },
+    "kinetic": {
+      "eyebrow": "Typography tunnel",
+      "title": "Words that pull you inward",
+      "refran": "Clarity advances when noise stays behind.",
+      "line1": "PLANT WITH INTENTION",
+      "line2": "HARVEST WITH PATIENCE",
+      "line3": "SYSTEMS OVER NOISE",
+      "line4": "LOYALTY IN EVERY DELIVERY",
+      "line5": "CODE THAT BREATHES"
+    },
+    "seed": {
+      "eyebrow": "Living metaphor",
+      "title": "From seed to olive",
+      "refran": "There is no harvest without the courage to plant.",
+      "plant": "Plant the next step",
+      "again": "Plant again",
+      "stages": {
+        "0": {
+          "label": "Seed",
+          "text": "One clear idea. One small process. Start here."
+        },
+        "1": {
+          "label": "Sprout",
+          "text": "Habit appears: document, measure, repeat."
+        },
+        "2": {
+          "label": "Sapling",
+          "text": "The system holds — it no longer lives only in memory."
+        },
+        "3": {
+          "label": "Olive",
+          "text": "Harvest: time, loyalty, and a business that breathes."
+        }
+      }
+    },
+    "diptych": {
+      "eyebrow": "Diptych",
+      "title": "Comfort zone · Living warehouse",
+      "refran": "Leaving comfort isn’t betraying the craft — it’s expanding it.",
+      "comfort": {
+        "label": "Panel A",
+        "title": "Comfort zone",
+        "text": "Everything by hand, everything known. It works… until growth asks for rhythm.",
+        "aside": "Comfort guards the past. Systems guard tomorrow."
+      },
+      "warehouse": {
+        "label": "Panel B",
+        "title": "Living warehouse",
+        "text": "Flows, channels, and code carry the weight — the craft stays human.",
+        "aside": "The warehouse doesn’t replace the soul — it frees it to serve."
+      }
+    },
+    "ecosystem": {
+      "eyebrow": "Constellation",
+      "title": "Living ecosystem",
+      "refran": "Tug one node and you’ll see if the mesh is alive.",
+      "hint": "Drag a node · release and it returns home",
+      "hintTouch": "Touch and drag a node",
+      "nodes": {
+        "core": "Core",
+        "brand": "Brand",
+        "ops": "Ops",
+        "code": "Code",
+        "content": "Content",
+        "clients": "Clients"
+      },
+      "blurbs": {
+        "core": "The Holive core beats when brand and systems share one pulse.",
+        "brand": "Brand is a loyal signal while channels multiply.",
+        "ops": "Operations are roots — without them the canopy falls.",
+        "code": "Living code holds the vision when no one is watching.",
+        "content": "Content is the climate of the ecosystem — rhythm, not noise.",
+        "clients": "Clients are the sun: without attention, nothing grows."
+      }
+    },
+    "mantra": {
+      "eyebrow": "Waterfall",
+      "title": "Craft mantras",
+      "refran": "Repeat what is useful until it becomes reflex.",
+      "items": {
+        "0": "Plant process, harvest time.",
+        "1": "Usefulness before theater.",
+        "2": "One well-tended channel beats ten abandoned ones.",
+        "3": "Loyalty is measured in deliveries, not slogans.",
+        "4": "Digitize the repeatable; humanize the decisive.",
+        "5": "Patience with systems; urgency with clarity.",
+        "6": "The business returns what you plant.",
+        "7": "Leave comfort; keep the soul."
+      }
+    },
+    "mirror": {
+      "eyebrow": "Mirror",
+      "title": "What you plant returns",
+      "refran": "The business returns — amplified — what you planted.",
+      "above": {
+        "label": "Plant",
+        "text": "Clarity · Care · Systems"
+      },
+      "below": {
+        "label": "Harvest",
+        "text": "Time · Loyalty · Life"
+      }
     }
   }
 }

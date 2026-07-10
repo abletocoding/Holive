@@ -42,6 +42,19 @@
   --border: #e4dcef;
   --accent: var(--holive-gold);
   --brand: var(--holive-purple);
+
+  /* Stacking ladder — keep overlays from colliding */
+  --z-base: 0;
+  --z-section-bg: 1;
+  --z-section-content: 2;
+  --z-chrome-progress: 30;
+  --z-chrome-companion: 35;
+  --z-chrome-header: 50;
+  --z-overlay-cursor: 90;
+  --z-overlay-burst: 95;
+  --z-overlay-toast: 96;
+  --z-overlay-game: 80;
+  --z-overlay-transition: 100;
 }
 
 .theme-light {

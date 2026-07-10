@@ -347,7 +347,7 @@ export function HoliGame() {
       ref={stageRef}
       role="application"
       aria-label={t("title")}
-      className="fixed inset-0 z-[80] flex min-h-[100dvh] w-full flex-col bg-[#05030a] text-[var(--holive-white)] select-none"
+      className="fixed inset-0 z-[var(--z-overlay-game)] flex min-h-[100dvh] w-full flex-col bg-[#05030a] text-[var(--holive-white)] select-none"
     >
       <NeuralBackdrop reduced={reduced} />
 

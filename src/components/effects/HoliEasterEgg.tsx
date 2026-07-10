@@ -72,7 +72,7 @@ export function HoliEasterEgg() {
 
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 top-[max(4.5rem,env(safe-area-inset-top))] z-[96] flex justify-center px-4"
+      className="pointer-events-none fixed inset-x-0 top-[max(4.5rem,env(safe-area-inset-top))] z-[var(--z-overlay-toast)] flex justify-center px-4"
       role="status"
     >
       <div className="flex items-end gap-3 rounded border border-[var(--holive-gold)]/40 bg-[color-mix(in_srgb,var(--holive-black)_88%,transparent)] px-4 py-3 shadow-[var(--glow-gold)] backdrop-blur-md animate-[fadeIn_0.4s_ease]">

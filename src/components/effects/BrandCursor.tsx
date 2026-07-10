@@ -120,7 +120,7 @@ export function BrandCursor() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[90] mix-blend-screen"
+      className="pointer-events-none fixed inset-0 z-[var(--z-overlay-cursor)] mix-blend-screen"
     />
   );
 }

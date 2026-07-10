@@ -8,6 +8,7 @@ import { Process } from "@/components/sections/Process";
 import { Contact } from "@/components/sections/Contact";
 import { Footer } from "@/components/sections/Footer";
 import { ShowcaseStrip } from "@/components/sections/ShowcaseStrip";
+import { HomeExperience } from "@/components/sections/HomeExperience";
 import { PortalSection } from "@/components/effects/PortalSection";
 
 type Props = {
@@ -36,6 +37,9 @@ export default async function HomePage({ params }: Props) {
         <PortalSection>
           <Process />
         </PortalSection>
+
+        <HomeExperience />
+
         <Contact />
       </main>
       <Footer />

@@ -115,7 +115,7 @@ export function TouchAurora({ className = "" }: Props) {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className={`absolute inset-0 h-full w-full ${className}`}
+      className={`pointer-events-none absolute inset-0 h-full w-full ${className}`}
     />
   );
 }

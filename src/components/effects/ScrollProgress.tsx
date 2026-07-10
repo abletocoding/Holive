@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HoliMascot } from "@/components/holi/HoliMascot";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
-/** Fixed neural scroll path — gold/purple arc with Holi riding progress. */
+/**
+ * Compact scroll ring — top-right under header so it never collides
+ * with Holi companion (bottom-right) or footer CTAs.
+ * Ring only (no second Holi mascot).
+ */
 export function ScrollProgress() {
   const reduced = usePrefersReducedMotion();
   const [p, setP] = useState(0);
@@ -15,7 +18,7 @@ export function ScrollProgress() {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const next = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
       setP(next);
-      setShow(window.scrollY > 80);
+      setShow(window.scrollY > 100);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -24,37 +27,36 @@ export function ScrollProgress() {
 
   if (!show) return null;
 
-  const angle = -90 + p * 360;
-  const r = 18;
+  const r = 14;
   const circ = 2 * Math.PI * r;
   const dash = circ * p;
 
   return (
     <div
-      className="pointer-events-none fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-40 sm:left-5"
+      className="pointer-events-none fixed right-3 top-[max(4.75rem,calc(env(safe-area-inset-top)+3.75rem))] z-[var(--z-chrome-progress)] sm:right-5"
       aria-hidden
     >
-      <div className="relative h-14 w-14 sm:h-16 sm:w-16">
-        <svg viewBox="0 0 48 48" className="h-full w-full -rotate-90">
+      <div className="relative h-10 w-10 opacity-80 sm:h-11 sm:w-11">
+        <svg viewBox="0 0 40 40" className="h-full w-full -rotate-90">
           <circle
-            cx="24"
-            cy="24"
+            cx="20"
+            cy="20"
             r={r}
             fill="none"
-            stroke="color-mix(in srgb, var(--holive-purple) 35%, transparent)"
-            strokeWidth="2.5"
+            stroke="color-mix(in srgb, var(--holive-purple) 30%, transparent)"
+            strokeWidth="2"
           />
           <circle
-            cx="24"
-            cy="24"
+            cx="20"
+            cy="20"
             r={r}
             fill="none"
             stroke="url(#holi-progress-grad)"
-            strokeWidth="2.5"
+            strokeWidth="2"
             strokeLinecap="round"
             strokeDasharray={`${dash} ${circ}`}
             style={{
-              transition: reduced ? undefined : "stroke-dasharray 0.15s linear",
+              transition: reduced ? undefined : "stroke-dasharray 0.12s linear",
             }}
           />
           <defs>
@@ -64,20 +66,9 @@ export function ScrollProgress() {
             </linearGradient>
           </defs>
         </svg>
-        <div
-          className="absolute left-1/2 top-1/2 h-7 w-5 -translate-x-1/2 -translate-y-1/2 sm:h-8 sm:w-6"
-          style={
-            reduced
-              ? undefined
-              : { transform: `translate(-50%, -50%) rotate(${angle * 0.08}deg)` }
-          }
-        >
-          <HoliMascot
-            pose={p > 0.85 ? "celebrate" : p > 0.4 ? "guide" : "idle"}
-            animated={!reduced}
-            className="h-full w-full"
-          />
-        </div>
+        <span className="font-mono-code absolute inset-0 flex items-center justify-center text-[0.5rem] tracking-tight text-[var(--holive-gold)]">
+          {Math.round(p * 100)}
+        </span>
       </div>
     </div>
   );

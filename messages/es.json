@@ -11,6 +11,7 @@
     "digital": "Digitalización",
     "courses": "Cursos",
     "blog": "Blog",
+    "stories": "Historias",
     "about": "Filosofía",
     "process": "Proceso",
     "contact": "Contacto",
@@ -73,6 +74,11 @@
       "title": "Cuéntanos tu siguiente movimiento",
       "body": "Un mensaje basta. Respondemos con claridad — sin ruido.",
       "holiTip": "Di la fricción real. Construimos desde la honestidad."
+    },
+    "historias": {
+      "eyebrow": "Historias de Holi",
+      "title": "Historietas del ecosistema",
+      "intro": "Tiras de crayón con refranes empresariales — sembrar, cosechar y dejar la zona cómoda sin perder el alma."
     }
   },
   "Holi": {
@@ -302,6 +308,185 @@
     },
     "terminal": {
       "title": "holive://proceso"
+    }
+  },
+  "HoliStories": {
+    "eyebrow": "Historias de Holi",
+    "title": "Historietas del ecosistema",
+    "intro": "Holi no flota sobre tu trabajo: cuenta tiras cortas con moral empresarial. Sembrar. Cosechar. Ser útil.",
+    "seeAll": "Ver todas las historietas",
+    "episodes": {
+      "seed": {
+        "number": "Episodio 01",
+        "title": "La semilla y el reloj",
+        "moral": "Quien siembra proceso cosecha tiempo.",
+        "panels": {
+          "0": "Holi planta un proceso pequeño.",
+          "1": "El reloj sigue, pero el caos baja.",
+          "2": "Cosecha: horas libres para servir mejor."
+        }
+      },
+      "comfort": {
+        "number": "Episodio 02",
+        "title": "Fuera de la zona cómoda",
+        "moral": "Dejar lo cómodo no es abandonar el alma.",
+        "panels": {
+          "0": "Todo funciona… a medias y a mano.",
+          "1": "Holi señala la puerta del almacén digital.",
+          "2": "Mismo oficio. Mejor sistema. Misma lealtad."
+        }
+      },
+      "useful": {
+        "number": "Episodio 03",
+        "title": "Teatro vs utilidad",
+        "moral": "Si no ayuda a servir, no es estrategia.",
+        "panels": {
+          "0": "Luces, slides, aplausos…",
+          "1": "Holi pregunta: ¿sirve a tu cliente?",
+          "2": "Se queda lo útil. Se va el ruido."
+        }
+      },
+      "ecosystem": {
+        "number": "Episodio 04",
+        "title": "Un nodo débil",
+        "moral": "El negocio es un ecosistema: un nodo flojo debilita la malla.",
+        "panels": {
+          "0": "Marca fuerte, ops flojas.",
+          "1": "Holi tira del hilo: todo se mueve.",
+          "2": "Equilibra nodos. El pulso vuelve."
+        }
+      },
+      "patience": {
+        "number": "Episodio 05",
+        "title": "Temporada de embudos",
+        "moral": "Paciencia con el sistema; urgencia con la claridad.",
+        "panels": {
+          "0": "Quieren frutos ya.",
+          "1": "Holi riega el embudo con calma.",
+          "2": "Claridad primero. Luego la cosecha."
+        }
+      },
+      "loyalty": {
+        "number": "Episodio 06",
+        "title": "La mesa abierta",
+        "moral": "La lealtad se siembra en cada entrega.",
+        "panels": {
+          "0": "Un cliente vuelve con duda.",
+          "1": "Holi sirve claridad, no teatro.",
+          "2": "Confianza cosechada. Mesa lista."
+        }
+      }
+    }
+  },
+  "Experience": {
+    "glyphEye": {
+      "eyebrow": "Visión",
+      "title": "El ojo que atiende",
+      "refran": "Quien no mira al cliente, trabaja a ciegas.",
+      "hint": "Mueve el cursor · el ojo de glifos te sigue"
+    },
+    "kinetic": {
+      "eyebrow": "Túnel tipográfico",
+      "title": "Palabras que empujan hacia adentro",
+      "refran": "La claridad avanza cuando el ruido se queda atrás.",
+      "line1": "SEMBRAR CON INTENCIÓN",
+      "line2": "COSECHAR CON PACIENCIA",
+      "line3": "SISTEMAS SOBRE RUIDO",
+      "line4": "LEALTAD EN CADA ENTREGA",
+      "line5": "CÓDIGO QUE RESPIRA"
+    },
+    "seed": {
+      "eyebrow": "Metáfora viva",
+      "title": "De semilla a olivo",
+      "refran": "No hay cosecha sin la valentía de plantar.",
+      "plant": "Sembrar el siguiente paso",
+      "again": "Volver a sembrar",
+      "stages": {
+        "0": {
+          "label": "Semilla",
+          "text": "Una idea clara. Un proceso pequeño. Empieza aquí."
+        },
+        "1": {
+          "label": "Brote",
+          "text": "Aparece el hábito: documentar, medir, repetir."
+        },
+        "2": {
+          "label": "Retoño",
+          "text": "El sistema sostiene — ya no depende solo de memoria."
+        },
+        "3": {
+          "label": "Olivo",
+          "text": "Cosecha: tiempo, lealtad y un negocio que respira."
+        }
+      }
+    },
+    "diptych": {
+      "eyebrow": "Díptico",
+      "title": "Zona cómoda · Almacén vivo",
+      "refran": "Salir de lo cómodo no es traicionar el oficio — es ampliarlo.",
+      "comfort": {
+        "label": "Panel A",
+        "title": "Zona cómoda",
+        "text": "Todo a mano, todo conocido. Funciona… hasta que el crecimiento pide ritmo.",
+        "aside": "La comodidad cuida el pasado. El sistema cuida el mañana."
+      },
+      "warehouse": {
+        "label": "Panel B",
+        "title": "Almacén vivo",
+        "text": "Flujos, canales y código que cargan el peso — el oficio sigue humano.",
+        "aside": "El almacén no reemplaza el alma: la libera para servir."
+      }
+    },
+    "ecosystem": {
+      "eyebrow": "Constelación",
+      "title": "Ecosistema vivo",
+      "refran": "Tira de un nodo y verás si la malla está viva.",
+      "hint": "Arrastra un nodo · suelta y vuelve al centro",
+      "hintTouch": "Toca y arrastra un nodo",
+      "nodes": {
+        "core": "Núcleo",
+        "brand": "Marca",
+        "ops": "Ops",
+        "code": "Código",
+        "content": "Contenido",
+        "clients": "Clientes"
+      },
+      "blurbs": {
+        "core": "El núcleo Holive late cuando marca y sistemas comparten un pulso.",
+        "brand": "La marca es señal leal mientras los canales se multiplican.",
+        "ops": "Las operaciones son raíces: sin ellas, la copa se cae.",
+        "code": "El código vivo sostiene la visión cuando nadie está mirando.",
+        "content": "El contenido es el clima del ecosistema — ritmo, no ruido.",
+        "clients": "Los clientes son el sol: sin atención, nada crece."
+      }
+    },
+    "mantra": {
+      "eyebrow": "Cascada",
+      "title": "Mantras del oficio",
+      "refran": "Repite lo útil hasta que se vuelva reflejo.",
+      "items": {
+        "0": "Sembrar proceso, cosechar tiempo.",
+        "1": "Utilidad antes que teatro.",
+        "2": "Un canal bien cuidado vence a diez abandonados.",
+        "3": "La lealtad se mide en entregas, no en eslóganes.",
+        "4": "Digitaliza lo repetible; humaniza lo decisivo.",
+        "5": "Paciencia con el sistema; urgencia con la claridad.",
+        "6": "El negocio te devuelve lo que siembras.",
+        "7": "Deja la zona cómoda; conserva el alma."
+      }
+    },
+    "mirror": {
+      "eyebrow": "Espejo",
+      "title": "Lo que siembras vuelve",
+      "refran": "El negocio te devuelve — amplificado — lo que plantaste.",
+      "above": {
+        "label": "Siembra",
+        "text": "Claridad · Cuidado · Sistemas"
+      },
+      "below": {
+        "label": "Cosecha",
+        "text": "Tiempo · Lealtad · Vida"
+      }
     }
   }
 }
