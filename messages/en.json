@@ -161,6 +161,9 @@
     "title": "Neural Pulse",
     "subtitle": "Watch the sequence. Replay the signal.",
     "coach": "Holi coaches — you sync the nodes.",
+    "teaser": "Enter the arena for a full-bleed neural sync — binaural beats, zen pad, Guitar Hero scale.",
+    "enterArena": "Enter arena",
+    "exitArena": "Exit",
     "start": "Sync",
     "restart": "Resync",
     "score": "Score",
@@ -168,11 +171,19 @@
     "highScore": "Best",
     "gameOver": "Signal lost",
     "tap": "Memorize purple & gold pulses, then tap them back.",
+    "audioNote": "Starting sync enables binaural beats + ambient pad (headphones recommended).",
     "watch": "Watch the pulse…",
     "yourTurn": "Your turn — replay the signal",
     "levelUp": "Signal locked. Going deeper…",
     "node": "Node {n}",
-    "reduced": "Motion reduced — high score still saved."
+    "reduced": "Motion reduced — playable; audio still optional via mute.",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit fullscreen",
+    "fullscreenDenied": "Fullscreen unavailable — arena mode still fills the screen.",
+    "mute": "Mute",
+    "unmute": "Unmute / audio",
+    "volume": "Volume",
+    "binauralHint": "Binaural {beat} Hz (theta) · carrier {carrier} Hz — calm focus"
   },
   "Widgets": {
     "neural": {

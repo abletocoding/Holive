@@ -83,10 +83,10 @@ export function Footer() {
           className="mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-[var(--holive-gold)] to-transparent opacity-60"
         />
 
-        {/* Hidden until user scrolls to the very bottom */}
+        {/* Hidden until user scrolls to the very bottom — expands to immersive arena */}
         <div ref={sentinelRef} className="mt-10 min-h-[2rem]">
           {unlocked ? (
-            <div className="doodle-border-sketch animate-[fadeIn_0.6s_ease] p-3 md:p-4">
+            <div className="animate-[fadeIn_0.6s_ease] -mx-5 md:-mx-8">
               <HoliGame />
             </div>
           ) : (

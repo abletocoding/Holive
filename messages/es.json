@@ -161,6 +161,9 @@
     "title": "Pulso Neural",
     "subtitle": "Observa la secuencia. Repite la señal.",
     "coach": "Holi entrena — tú sincronizas los nodos.",
+    "teaser": "Entra a la arena a pantalla completa — beats binaurales, pad zen, escala Guitar Hero.",
+    "enterArena": "Entrar a la arena",
+    "exitArena": "Salir",
     "start": "Sincronizar",
     "restart": "Otra señal",
     "score": "Puntos",
@@ -168,11 +171,19 @@
     "highScore": "Récord",
     "gameOver": "Señal perdida",
     "tap": "Memoriza los pulsos púrpura y oro, luego repítelos.",
+    "audioNote": "Al sincronizar se activan beats binaurales + pad ambiental (mejor con auriculares).",
     "watch": "Observa el pulso…",
     "yourTurn": "Tu turno — repite la señal",
     "levelUp": "Señal fijada. Más profundo…",
     "node": "Nodo {n}",
-    "reduced": "Movimiento reducido — el récord se guarda igual."
+    "reduced": "Movimiento reducido — jugable; el audio sigue opcional con silencio.",
+    "fullscreen": "Pantalla completa",
+    "exitFullscreen": "Salir de pantalla completa",
+    "fullscreenDenied": "Pantalla completa no disponible — la arena igual llena la pantalla.",
+    "mute": "Silenciar",
+    "unmute": "Sonido / audio",
+    "volume": "Volumen",
+    "binauralHint": "Binaural {beat} Hz (theta) · portadora {carrier} Hz — foco calmado"
   },
   "Widgets": {
     "neural": {
