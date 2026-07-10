@@ -68,9 +68,21 @@ export function NeuralBoard({
   useEffect(() => {
     if (reduced || (!level.drift && !level.orbit && !level.moving)) return;
     let raf = 0;
+    let last = 0;
     const start = performance.now();
+    const mobile =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 768px), (pointer: coarse)").matches;
+    const frameBudget = mobile ? 33 : 16;
     const tick = (now: number) => {
-      setT((now - start) / 1000);
+      if (document.hidden) {
+        raf = requestAnimationFrame(tick);
+        return;
+      }
+      if (now - last >= frameBudget) {
+        last = now;
+        setT((now - start) / 1000);
+      }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -93,7 +105,7 @@ export function NeuralBoard({
   const base = baseLayout(level.nodes);
 
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[min(92vw,28rem)] landscape:max-w-[min(70vh,32rem)]">
+    <div className="relative mx-auto my-auto aspect-square w-full max-w-[min(88vw,26rem)] shrink-0 landscape:max-w-[min(62vh,28rem)]">
       {/* soft orbit guide */}
       {level.orbit && !reduced && (
         <div

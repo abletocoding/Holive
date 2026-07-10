@@ -1,13 +1,15 @@
 /**
  * Neural ambient beds via Web Audio API.
  *
- * Multiple zen/ambient beds + binaural variants per world.
- * Singing-bowl hits on node taps. Start only after a user gesture.
+ * Distinct zen/ambient beds + binaural variants per depth.
+ * Smooth crossfade on bed change. Singing-bowl hits on node taps.
+ * Start only after a user gesture.
  */
 
 import type { AudioBedId } from "@/lib/game/levels";
 
 const DEFAULT_VOLUME = 0.35;
+const CROSSFADE_SEC = 0.85;
 
 export type NeuralAmbientOptions = {
   volume?: number;
@@ -24,6 +26,8 @@ type BedConfig = {
   droneHz: number[];
   noiseLp: number;
   noiseGain: number;
+  lfoHz?: number;
+  lfoDepth?: number;
 };
 
 const BEDS: Record<AudioBedId, BedConfig> = {
@@ -37,6 +41,21 @@ const BEDS: Record<AudioBedId, BedConfig> = {
     droneHz: [55, 82.5, 110],
     noiseLp: 480,
     noiseGain: 0.16,
+    lfoHz: 0.08,
+    lfoDepth: 0.04,
+  },
+  sprout: {
+    carrierHz: 208,
+    beatHz: 7.5,
+    band: "theta+",
+    intent: "gentle lift",
+    padGain: 0.52,
+    binauralGain: 0.4,
+    droneHz: [52, 78, 104, 156],
+    noiseLp: 520,
+    noiseGain: 0.15,
+    lfoHz: 0.12,
+    lfoDepth: 0.05,
   },
   root: {
     carrierHz: 196,
@@ -48,28 +67,47 @@ const BEDS: Record<AudioBedId, BedConfig> = {
     droneHz: [49, 73.5, 98],
     noiseLp: 420,
     noiseGain: 0.14,
+    lfoHz: 0.06,
+    lfoDepth: 0.03,
+  },
+  stem: {
+    carrierHz: 233,
+    beatHz: 9,
+    band: "alpha-",
+    intent: "rising stem",
+    padGain: 0.54,
+    binauralGain: 0.44,
+    droneHz: [58, 87, 116, 174],
+    noiseLp: 500,
+    noiseGain: 0.17,
+    lfoHz: 0.1,
+    lfoDepth: 0.06,
   },
   mesh: {
-    carrierHz: 233,
+    carrierHz: 246,
     beatHz: 5,
     band: "theta",
     intent: "deep weave",
     padGain: 0.5,
     binauralGain: 0.48,
-    droneHz: [58, 87, 116],
+    droneHz: [61.5, 92, 123],
     noiseLp: 560,
     noiseGain: 0.2,
+    lfoHz: 0.15,
+    lfoDepth: 0.07,
   },
   orbit: {
-    carrierHz: 246,
+    carrierHz: 261,
     beatHz: 7,
     band: "theta+",
     intent: "orbital focus",
     padGain: 0.52,
     binauralGain: 0.45,
-    droneHz: [61.5, 92, 123],
-    noiseLp: 520,
+    droneHz: [65, 98, 130],
+    noiseLp: 540,
     noiseGain: 0.17,
+    lfoHz: 0.18,
+    lfoDepth: 0.08,
   },
   deep: {
     carrierHz: 180,
@@ -81,31 +119,38 @@ const BEDS: Record<AudioBedId, BedConfig> = {
     droneHz: [45, 67.5, 90],
     noiseLp: 360,
     noiseGain: 0.12,
+    lfoHz: 0.05,
+    lfoDepth: 0.04,
   },
   master: {
-    carrierHz: 261,
+    carrierHz: 277,
     beatHz: 8,
     band: "theta-alpha",
     intent: "master pulse",
     padGain: 0.48,
     binauralGain: 0.5,
-    droneHz: [65, 98, 130],
+    droneHz: [69, 104, 138, 207],
     noiseLp: 640,
     noiseGain: 0.18,
+    lfoHz: 0.22,
+    lfoDepth: 0.09,
   },
 };
 
 export class NeuralAmbient {
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
-  private binauralGain: GainNode | null = null;
-  private padGain: GainNode | null = null;
+  private bedBus: GainNode | null = null;
+  private activeBedGain: GainNode | null = null;
   private bedNodes: AudioNode[] = [];
+  private fadingNodes: AudioNode[] = [];
   private sharedNodes: AudioNode[] = [];
   private started = false;
   private muted = false;
   private volume = DEFAULT_VOLUME;
   private bed: AudioBedId = "seed";
+  private crossfadeTimer: ReturnType<typeof setTimeout> | null = null;
+  private visibilityHandler: (() => void) | null = null;
 
   get isRunning() {
     return this.started && this.ctx?.state === "running";
@@ -149,11 +194,14 @@ export class NeuralAmbient {
         ).webkitAudioContext;
       this.ctx = new AC();
       this.buildMaster(this.ctx);
+      this.bindVisibility();
     }
 
-    this.rebuildBed(this.ctx!);
+    if (!this.activeBedGain || this.bedNodes.length === 0) {
+      this.spawnBed(this.ctx!, this.bed, 0);
+    }
 
-    if (this.ctx.state === "suspended") {
+    if (this.ctx.state === "suspended" && !this.muted) {
       await this.ctx.resume();
     }
 
@@ -163,9 +211,11 @@ export class NeuralAmbient {
 
   async setBed(bed: AudioBedId) {
     if (this.bed === bed && this.bedNodes.length) return;
+    const prev = this.bed;
     this.bed = bed;
-    if (!this.ctx || !this.started) return;
-    this.rebuildBed(this.ctx);
+    if (!this.ctx || !this.started || !this.bedBus) return;
+    if (prev === bed) return;
+    this.crossfadeTo(this.ctx, bed);
     this.applyVolume();
   }
 
@@ -177,11 +227,28 @@ export class NeuralAmbient {
   setMuted(muted: boolean) {
     this.muted = muted;
     this.applyVolume();
+    if (!this.ctx) return;
+    if (muted) {
+      void this.ctx.suspend().catch(() => undefined);
+    } else if (this.started) {
+      void this.ctx.resume().catch(() => undefined);
+    }
   }
 
   toggleMute() {
     this.setMuted(!this.muted);
     return this.muted;
+  }
+
+  /** Pause processing when arena exits or tab hides. */
+  pauseGraph() {
+    if (!this.ctx) return;
+    void this.ctx.suspend().catch(() => undefined);
+  }
+
+  resumeGraph() {
+    if (!this.ctx || this.muted || !this.started) return;
+    void this.ctx.resume().catch(() => undefined);
   }
 
   stop() {
@@ -196,7 +263,16 @@ export class NeuralAmbient {
   }
 
   dispose() {
-    this.teardownBed();
+    if (this.crossfadeTimer) {
+      clearTimeout(this.crossfadeTimer);
+      this.crossfadeTimer = null;
+    }
+    this.unbindVisibility();
+    this.teardownBed(this.bedNodes);
+    this.teardownBed(this.fadingNodes);
+    this.bedNodes = [];
+    this.fadingNodes = [];
+    this.activeBedGain = null;
     for (const n of this.sharedNodes) {
       try {
         n.disconnect();
@@ -206,8 +282,7 @@ export class NeuralAmbient {
     }
     this.sharedNodes = [];
     this.master = null;
-    this.binauralGain = null;
-    this.padGain = null;
+    this.bedBus = null;
     if (this.ctx) {
       void this.ctx.close().catch(() => undefined);
       this.ctx = null;
@@ -215,13 +290,31 @@ export class NeuralAmbient {
     this.started = false;
   }
 
+  private bindVisibility() {
+    if (typeof document === "undefined" || this.visibilityHandler) return;
+    this.visibilityHandler = () => {
+      if (document.hidden) this.pauseGraph();
+      else this.resumeGraph();
+    };
+    document.addEventListener("visibilitychange", this.visibilityHandler);
+  }
+
+  private unbindVisibility() {
+    if (!this.visibilityHandler) return;
+    document.removeEventListener("visibilitychange", this.visibilityHandler);
+    this.visibilityHandler = null;
+  }
+
   private applyVolume() {
     if (!this.master || !this.ctx) return;
     const target = this.muted ? 0 : this.volume;
     const now = this.ctx.currentTime;
     this.master.gain.cancelScheduledValues(now);
-    this.master.gain.setValueAtTime(this.master.gain.value, now);
-    this.master.gain.linearRampToValueAtTime(target, now + 0.12);
+    this.master.gain.setValueAtTime(Math.max(0.0001, this.master.gain.value), now);
+    this.master.gain.linearRampToValueAtTime(Math.max(0.0001, target) * (target === 0 ? 0 : 1), now + 0.12);
+    if (target === 0) {
+      this.master.gain.linearRampToValueAtTime(0, now + 0.12);
+    }
   }
 
   /**
@@ -297,20 +390,43 @@ export class NeuralAmbient {
     if (!this.ctx || this.muted || !this.started || !this.master) return;
     const ctx = this.ctx;
     const now = ctx.currentTime;
-    const freqs = [392, 523.25, 659.25];
+    const freqs = [392, 523.25, 659.25, 784];
     for (let i = 0; i < freqs.length; i++) {
       const osc = ctx.createOscillator();
       osc.type = "sine";
       osc.frequency.value = freqs[i]!;
       const g = ctx.createGain();
-      const t0 = now + i * 0.08;
+      const t0 = now + i * 0.07;
       g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.9);
+      g.gain.exponentialRampToValueAtTime(0.16, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.1);
       osc.connect(g);
       g.connect(this.master);
       osc.start(t0);
-      osc.stop(t0 + 1);
+      osc.stop(t0 + 1.2);
+    }
+  }
+
+  /** Richer celebrate flourish for victory / clear. */
+  playCelebrate() {
+    if (!this.ctx || this.muted || !this.started || !this.master) return;
+    this.playChime();
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const sparkle = [1046.5, 1318.5, 1568];
+    for (let i = 0; i < sparkle.length; i++) {
+      const osc = ctx.createOscillator();
+      osc.type = "triangle";
+      osc.frequency.value = sparkle[i]!;
+      const g = ctx.createGain();
+      const t0 = now + 0.25 + i * 0.05;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.08, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.55);
+      osc.connect(g);
+      g.connect(this.master);
+      osc.start(t0);
+      osc.stop(t0 + 0.6);
     }
   }
 
@@ -320,21 +436,16 @@ export class NeuralAmbient {
     master.connect(ctx.destination);
     this.master = master;
 
-    const binauralGain = ctx.createGain();
-    binauralGain.gain.value = 0.45;
-    binauralGain.connect(master);
-    this.binauralGain = binauralGain;
+    const bedBus = ctx.createGain();
+    bedBus.gain.value = 1;
+    bedBus.connect(master);
+    this.bedBus = bedBus;
 
-    const padGain = ctx.createGain();
-    padGain.gain.value = 0.55;
-    padGain.connect(master);
-    this.padGain = padGain;
-
-    this.sharedNodes.push(master, binauralGain, padGain);
+    this.sharedNodes.push(master, bedBus);
   }
 
-  private teardownBed() {
-    for (const n of this.bedNodes) {
+  private teardownBed(nodes: AudioNode[]) {
+    for (const n of nodes) {
       try {
         n.disconnect();
         if ("stop" in n && typeof (n as OscillatorNode).stop === "function") {
@@ -344,44 +455,93 @@ export class NeuralAmbient {
         /* already stopped */
       }
     }
-    this.bedNodes = [];
   }
 
-  private rebuildBed(ctx: AudioContext) {
-    if (!this.binauralGain || !this.padGain) return;
-    this.teardownBed();
+  private crossfadeTo(ctx: AudioContext, bed: AudioBedId) {
+    if (this.crossfadeTimer) {
+      clearTimeout(this.crossfadeTimer);
+      this.crossfadeTimer = null;
+    }
 
-    const cfg = BEDS[this.bed];
-    this.binauralGain.gain.value = cfg.binauralGain;
-    this.padGain.gain.value = cfg.padGain;
+    const now = ctx.currentTime;
+    const oldGain = this.activeBedGain;
+    const oldNodes = this.bedNodes;
 
-    this.addTone(ctx, cfg.carrierHz, -1, this.binauralGain, "sine");
-    this.addTone(ctx, cfg.carrierHz + cfg.beatHz, 1, this.binauralGain, "sine");
-    this.addTone(ctx, cfg.carrierHz * 2, -0.6, this.binauralGain, "sine", 0.08);
+    // Move old into fading set
+    this.fadingNodes.push(...oldNodes);
+    if (oldGain) {
+      oldGain.gain.cancelScheduledValues(now);
+      oldGain.gain.setValueAtTime(Math.max(0.0001, oldGain.gain.value), now);
+      oldGain.gain.linearRampToValueAtTime(0.0001, now + CROSSFADE_SEC);
+    }
+
+    this.spawnBed(ctx, bed, CROSSFADE_SEC);
+
+    this.crossfadeTimer = setTimeout(() => {
+      this.teardownBed(this.fadingNodes);
+      this.fadingNodes = [];
+      this.crossfadeTimer = null;
+    }, CROSSFADE_SEC * 1000 + 80);
+  }
+
+  private spawnBed(ctx: AudioContext, bed: AudioBedId, fadeInSec: number) {
+    if (!this.bedBus) return;
+    const cfg = BEDS[bed];
+    const bedGain = ctx.createGain();
+    const now = ctx.currentTime;
+    if (fadeInSec > 0) {
+      bedGain.gain.setValueAtTime(0.0001, now);
+      bedGain.gain.linearRampToValueAtTime(1, now + fadeInSec);
+    } else {
+      bedGain.gain.value = 1;
+    }
+    bedGain.connect(this.bedBus);
+
+    const nodes: AudioNode[] = [bedGain];
+    const binauralGain = ctx.createGain();
+    binauralGain.gain.value = cfg.binauralGain;
+    binauralGain.connect(bedGain);
+    nodes.push(binauralGain);
+
+    const padGain = ctx.createGain();
+    padGain.gain.value = cfg.padGain;
+    padGain.connect(bedGain);
+    nodes.push(padGain);
+
+    this.addTone(ctx, cfg.carrierHz, -1, binauralGain, "sine", 0.22, nodes);
+    this.addTone(ctx, cfg.carrierHz + cfg.beatHz, 1, binauralGain, "sine", 0.22, nodes);
+    this.addTone(ctx, cfg.carrierHz * 2, -0.6, binauralGain, "sine", 0.08, nodes);
     this.addTone(
       ctx,
       (cfg.carrierHz + cfg.beatHz) * 2,
       0.6,
-      this.binauralGain,
+      binauralGain,
       "sine",
       0.08,
+      nodes,
     );
 
-    const pans = [0, -0.3, 0.3];
-    const gains = [0.35, 0.12, 0.1];
-    const types: OscillatorType[] = ["sine", "triangle", "sine"];
+    const pans = [0, -0.35, 0.35, 0.15];
+    const gains = [0.35, 0.12, 0.1, 0.07];
+    const types: OscillatorType[] = ["sine", "triangle", "sine", "sine"];
     cfg.droneHz.forEach((hz, i) => {
       this.addTone(
         ctx,
         hz,
         pans[i] ?? 0,
-        this.padGain!,
+        padGain,
         types[i] ?? "sine",
         gains[i] ?? 0.1,
+        nodes,
+        cfg.lfoHz,
+        cfg.lfoDepth,
       );
     });
 
-    this.addNoisePad(ctx, this.padGain, cfg.noiseLp, cfg.noiseGain);
+    this.addNoisePad(ctx, padGain, cfg.noiseLp, cfg.noiseGain, nodes);
+
+    this.activeBedGain = bedGain;
+    this.bedNodes = nodes;
   }
 
   private addTone(
@@ -391,6 +551,9 @@ export class NeuralAmbient {
     dest: AudioNode,
     type: OscillatorType,
     gain = 0.22,
+    bucket: AudioNode[],
+    lfoHz?: number,
+    lfoDepth?: number,
   ) {
     const osc = ctx.createOscillator();
     osc.type = type;
@@ -402,12 +565,24 @@ export class NeuralAmbient {
     const panner = ctx.createStereoPanner();
     panner.pan.value = pan;
 
+    if (lfoHz && lfoDepth) {
+      const lfo = ctx.createOscillator();
+      lfo.type = "sine";
+      lfo.frequency.value = lfoHz;
+      const lfoG = ctx.createGain();
+      lfoG.gain.value = freq * lfoDepth;
+      lfo.connect(lfoG);
+      lfoG.connect(osc.frequency);
+      lfo.start();
+      bucket.push(lfo, lfoG);
+    }
+
     osc.connect(g);
     g.connect(panner);
     panner.connect(dest);
     osc.start();
 
-    this.bedNodes.push(osc, g, panner);
+    bucket.push(osc, g, panner);
   }
 
   private addNoisePad(
@@ -415,6 +590,7 @@ export class NeuralAmbient {
     dest: AudioNode,
     lpHz: number,
     gainVal: number,
+    bucket: AudioNode[],
   ) {
     const bufferSize = 2 * ctx.sampleRate;
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -443,7 +619,7 @@ export class NeuralAmbient {
     g.connect(dest);
     src.start();
 
-    this.bedNodes.push(src, filter, g);
+    bucket.push(src, filter, g);
   }
 }
 

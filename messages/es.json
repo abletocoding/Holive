@@ -330,7 +330,9 @@
       "thanks": "Señal sembrada. Holi la cuida.",
       "skip": "Quizá luego",
       "error": "No se pudo enviar — reintenta o salta."
-    }
+    },
+    "celebrateHint": "Holi celebra — tu señal se sostuvo.",
+    "certEyebrow": "Certificado presentado"
   },
   "Widgets": {
     "neural": {

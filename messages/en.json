@@ -330,7 +330,9 @@
       "thanks": "Signal planted. Holi will tend it.",
       "skip": "Maybe later",
       "error": "Could not send — try again or skip."
-    }
+    },
+    "celebrateHint": "Holi celebrates — your signal held.",
+    "certEyebrow": "Presented certificate"
   },
   "Widgets": {
     "neural": {

@@ -296,11 +296,115 @@ html.has-brand-cursor [role="button"] {
   animation: neuralPulseRing 0.55s ease-out forwards;
 }
 
+/* Neural Pulse — celebrate + per-level motifs */
+@keyframes neuralCelebrateIn {
+  0% { opacity: 0; transform: translate3d(0, 18px, 0) scale(0.96); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+.neural-celebrate-in {
+  animation: neuralCelebrateIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes neuralHoliPop {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.neural-holi-pop {
+  animation: neuralHoliPop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes neuralCertReveal {
+  0% { opacity: 0; transform: translate3d(0, 12px, 0) rotateX(8deg); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) rotateX(0); }
+}
+.neural-cert-reveal {
+  animation: neuralCertReveal 0.7s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-style: preserve-3d;
+}
+.neural-cert-rays {
+  background:
+    conic-gradient(from 0deg at 50% 40%, transparent 0deg, rgba(201,168,76,0.18) 20deg, transparent 40deg, transparent 80deg, rgba(155,109,255,0.14) 100deg, transparent 120deg, transparent 180deg, rgba(201,168,76,0.12) 200deg, transparent 220deg, transparent 280deg, rgba(155,109,255,0.1) 300deg, transparent 320deg);
+  animation: neuralRaySpin 18s linear infinite;
+  filter: blur(2px);
+}
+@keyframes neuralRaySpin {
+  to { transform: rotate(360deg); }
+}
+.neural-gold-dust {
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 20%, rgba(201,168,76,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 28% 65%, rgba(201,168,76,0.45), transparent),
+    radial-gradient(1px 1px at 48% 30%, rgba(255,230,160,0.55), transparent),
+    radial-gradient(1.5px 1.5px at 72% 55%, rgba(201,168,76,0.5), transparent),
+    radial-gradient(1px 1px at 88% 25%, rgba(155,109,255,0.4), transparent),
+    radial-gradient(1.5px 1.5px at 60% 80%, rgba(201,168,76,0.35), transparent);
+  background-size: 100% 100%;
+  animation: neuralDustDrift 7s ease-in-out infinite alternate;
+  opacity: 0.7;
+}
+@keyframes neuralDustDrift {
+  from { transform: translate3d(0, 0, 0); opacity: 0.45; }
+  to { transform: translate3d(0, -12px, 0); opacity: 0.85; }
+}
+.neural-motif-seed { }
+.neural-motif-sprout {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(155,109,255,0.05) 18px, rgba(155,109,255,0.05) 19px),
+    repeating-linear-gradient(90deg, transparent, transparent 32px, rgba(201,168,76,0.04) 32px, rgba(201,168,76,0.04) 33px);
+}
+.neural-motif-root {
+  background-image:
+    radial-gradient(ellipse at 50% 100%, rgba(90,42,158,0.12), transparent 55%),
+    repeating-linear-gradient(0deg, transparent, transparent 22px, rgba(90,42,158,0.05) 22px, rgba(90,42,158,0.05) 23px);
+}
+.neural-motif-stem {
+  background-image:
+    linear-gradient(180deg, transparent 0%, rgba(155,109,255,0.04) 50%, transparent 100%),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201,168,76,0.04) 40px, rgba(201,168,76,0.04) 41px);
+}
+.neural-motif-mesh {
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 10px, rgba(0,255,65,0.04) 10px, rgba(0,255,65,0.04) 11px),
+    repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(155,109,255,0.04) 10px, rgba(155,109,255,0.04) 11px);
+}
+.neural-motif-orbit {
+  background-image:
+    radial-gradient(circle at 50% 50%, transparent 28%, rgba(201,168,76,0.06) 29%, transparent 31%),
+    radial-gradient(circle at 50% 50%, transparent 42%, rgba(155,109,255,0.05) 43%, transparent 45%);
+}
+.neural-motif-constellation {
+  background-image:
+    radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.35), transparent),
+    radial-gradient(1px 1px at 70% 20%, rgba(201,168,76,0.45), transparent),
+    radial-gradient(1px 1px at 40% 70%, rgba(155,109,255,0.4), transparent),
+    radial-gradient(1px 1px at 85% 60%, rgba(255,255,255,0.25), transparent),
+    radial-gradient(1px 1px at 55% 40%, rgba(201,168,76,0.3), transparent);
+}
+.neural-motif-master {
+  background-image:
+    radial-gradient(ellipse at 50% 40%, rgba(201,168,76,0.08), transparent 50%),
+    repeating-linear-gradient(45deg, transparent, transparent 24px, rgba(201,168,76,0.03) 24px, rgba(201,168,76,0.03) 25px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .neural-celebrate-in,
+  .neural-holi-pop,
+  .neural-cert-reveal,
+  .neural-cert-rays,
+  .neural-gold-dust {
+    animation: none !important;
+  }
+}
+
+
 @media (prefers-reduced-motion: reduce) {
   .neural-wave,
   .neural-wave--delay,
   .neural-pulse-ring,
-  .neural-shaking {
+  .neural-shaking,
+  .neural-celebrate-in,
+  .neural-holi-pop,
+  .neural-cert-reveal,
+  .neural-cert-rays,
+  .neural-gold-dust {
     animation: none !important;
   }
 }

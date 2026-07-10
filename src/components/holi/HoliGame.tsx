@@ -6,6 +6,7 @@ import { HoliMascot } from "@/components/holi/HoliMascot";
 import { NeuralBoard } from "@/components/holi/neural/NeuralBoard";
 import { NeuralEffects } from "@/components/holi/neural/NeuralEffects";
 import { LeadCapture } from "@/components/holi/neural/LeadCapture";
+import { CelebrateOverlay } from "@/components/holi/neural/CelebrateOverlay";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useFullscreen } from "@/hooks/useFullscreen";
@@ -33,6 +34,7 @@ import {
   unlockLevel,
   type PulseProgress,
 } from "@/lib/game/progress";
+import { themeForLevel } from "@/lib/game/levelThemes";
 
 type Phase =
   | "hub"
@@ -94,6 +96,7 @@ export function HoliGame() {
   const abortWatchRef = useRef(false);
 
   const level: LevelDef = getLevel(levelId);
+  const theme = themeForLevel(levelId);
   const { active: isFs, supported: fsSupported, toggle: toggleFs, exit: exitFs } =
     useFullscreen(stageRef);
 
@@ -272,7 +275,7 @@ export function HoliGame() {
 
   const onLevelCleared = useCallback(
     (finalScore: number) => {
-      audioRef.current?.playChime();
+      audioRef.current?.playCelebrate();
       setGoldBurst((n) => n + 1);
       setPulse(1);
       window.setTimeout(() => setPulse(0), 400);
@@ -401,6 +404,7 @@ export function HoliGame() {
       try {
         await ensureAudio();
         setMuted(false);
+        audioRef.current?.setMuted(false);
       } catch {
         /* ignore */
       }
@@ -468,7 +472,7 @@ export function HoliGame() {
   if (!arena) {
     return (
       <div className="relative w-full overflow-hidden rounded-none border border-[color-mix(in_srgb,var(--holive-purple)_35%,transparent)] bg-[linear-gradient(165deg,#0c0618_0%,#07060a_55%,#12081f_100%)]">
-        <NeuralBackdrop reduced={reduced} soft />
+        <NeuralBackdrop reduced={reduced} soft theme={themeForLevel(1)} />
         <div className="relative z-10 flex flex-col items-center gap-4 px-5 py-10 text-center sm:px-8 sm:py-12">
           <HoliMascot pose="guide" className="h-16 w-12 opacity-90" />
           <div>
@@ -501,17 +505,26 @@ export function HoliGame() {
       ref={stageRef}
       role="application"
       aria-label={t("title")}
-      className={`neural-shake-target fixed inset-0 z-[var(--z-overlay-game)] flex min-h-[100dvh] w-full flex-col bg-[#05030a] text-[var(--holive-white)] select-none ${shake > 0 ? "neural-shaking" : ""}`}
+      className={`neural-shake-target fixed inset-0 z-[var(--z-overlay-game)] grid min-h-[100dvh] w-full grid-rows-[auto_auto_minmax(0,1fr)] bg-[#05030a] text-[var(--holive-white)] select-none ${shake > 0 ? "neural-shaking" : ""}`}
     >
-      <NeuralBackdrop reduced={reduced} parallax={!reduced} />
+      <NeuralBackdrop
+        reduced={reduced}
+        parallax={!reduced}
+        theme={theme}
+        levelId={phase === "hub" ? 0 : levelId}
+      />
       <NeuralEffects
         reduced={reduced}
         pulse={pulse}
         goldBurst={goldBurst}
         shake={shake}
+        theme={theme}
+        celebrate={phase === "cleared" || phase === "victory"}
+        ambient={phase !== "hub" && phase !== "paused"}
       />
 
-      <header className="relative z-20 flex shrink-0 items-start justify-between gap-3 px-3 pb-2 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5">
+      <div className="relative z-20 flex flex-col gap-1.5 px-3 pt-[max(0.65rem,env(safe-area-inset-top))] sm:px-5">
+      <header className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <HoliMascot
             pose={
@@ -562,7 +575,7 @@ export function HoliGame() {
         </div>
       </header>
 
-      <div className="relative z-20 flex flex-wrap items-center justify-center gap-2 px-3 pb-2 sm:gap-3 sm:px-5">
+      <div className="flex flex-wrap items-center justify-center gap-1.5 pb-1 sm:gap-2">
         <ControlBtn
           onClick={() => void onToggleFs()}
           label={isFs ? t("exitFullscreen") : t("fullscreen")}
@@ -610,21 +623,23 @@ export function HoliGame() {
         />
         <ControlBtn onClick={() => void leaveArena()} label={t("exitArena")} />
       </div>
+      </div>
 
+      <div className="relative z-20 flex flex-col items-center gap-1 px-3">
       {(fsDenied || !fsSupported) && (
-        <p className="relative z-20 px-4 text-center text-[0.65rem] text-white/40">
+        <p className="px-2 text-center text-[0.65rem] text-white/40">
           {t("fullscreenDenied")}
         </p>
       )}
 
-      <p className="font-mono-code relative z-20 px-4 py-1 text-center text-[0.7rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--holive-gold)_75%,white)] sm:text-xs">
+      <p className="font-mono-code px-2 py-0.5 text-center text-[0.7rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--holive-gold)_75%,white)] sm:text-xs">
         {statusLabel}
       </p>
 
       {phase !== "hub" && (
         <div
           key={mantraIdx}
-          className="relative z-20 mx-auto max-w-lg px-5 pb-2 text-center animate-[fadeIn_0.6s_ease]"
+          className="mx-auto max-w-lg px-3 pb-1 text-center animate-[fadeIn_0.6s_ease]"
           aria-live="polite"
         >
           <p className="font-mono-code text-[0.55rem] tracking-[0.28em] text-white/35 uppercase">
@@ -637,15 +652,16 @@ export function HoliGame() {
       )}
 
       {audioOn && !muted && phase !== "hub" && (
-        <p className="relative z-20 px-4 pb-1 text-center text-[0.6rem] tracking-wide text-white/35">
+        <p className="px-2 pb-0.5 text-center text-[0.6rem] tracking-wide text-white/35">
           {t("binauralHint", {
             beat: meta.beatHz,
             carrier: meta.carrierHz,
           })}
         </p>
       )}
+      </div>
 
-      <div className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2 sm:px-8">
+      <div className="relative z-10 flex min-h-0 items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-1 sm:px-8">
         {phase === "hub" ? (
           <LevelSelect
             progress={progress}
@@ -670,133 +686,76 @@ export function HoliGame() {
           phase === "cleared" ||
           phase === "victory" ||
           phase === "paused") && (
-          <div className="absolute inset-0 z-30 flex flex-col items-center justify-center overflow-y-auto bg-black/60 px-5 py-8 text-center backdrop-blur-[2px]">
-            <HoliMascot
-              pose={
-                phase === "wrong"
-                  ? "think"
-                  : phase === "paused"
-                    ? "guide"
-                    : "celebrate"
+          <CelebrateOverlay
+            phase={phase as "wrong" | "cleared" | "victory" | "paused"}
+            reduced={reduced}
+            insight={insight}
+            reward={reward}
+            score={score}
+            levelId={levelId}
+            locale={locale}
+            copied={copied}
+            showLead={
+              !!(
+                showLead &&
+                (phase === "cleared" || phase === "victory") &&
+                (progress.deepProgress || progress.completedRun)
+              )
+            }
+            leadSlot={
+              <LeadCapture
+                score={score}
+                level={levelId}
+                onDone={() => setShowLead(false)}
+                onSkip={() => setShowLead(false)}
+              />
+            }
+            labels={{
+              gameOver: t("gameOver"),
+              paused: t("paused"),
+              victory: t("victory"),
+              levelCleared: t("levelCleared"),
+              insightLabel: t("insightLabel"),
+              rewardTitle: reward
+                ? t(`rewards.${reward.key}.title` as "rewards.certificate.title")
+                : "",
+              rewardBlurb: reward
+                ? t(`rewards.${reward.key}.blurb` as "rewards.certificate.blurb")
+                : "",
+              copyCert: t("copyCert"),
+              copied: t("copied"),
+              tap: t("tap"),
+              resume: t("resume"),
+              restart: t("restart"),
+              nextLevel: t("nextLevel"),
+              levelsBtn: t("levelsBtn"),
+              celebrateHint: t("celebrateHint"),
+              certEyebrow: t("certEyebrow"),
+            }}
+            canNext={levelId < FINAL_LEVEL_ID}
+            onResume={resume}
+            onRestart={() => void startLevel(levelId)}
+            onNext={() => void startLevel(levelId + 1)}
+            onHub={() => {
+              setPhase("hub");
+              setShowLead(false);
+            }}
+            onCopyCert={async () => {
+              if (!reward) return;
+              const text = shareableCertificate({
+                code: reward.code,
+                score,
+                level: levelId,
+                locale,
+              });
+              try {
+                await navigator.clipboard.writeText(text);
+                setCopied(true);
+              } catch {
+                /* ignore */
               }
-              className="mb-3 h-14 w-11 opacity-90"
-            />
-            <p className="font-display text-2xl text-[var(--holive-gold)] sm:text-3xl">
-              {phase === "wrong"
-                ? t("gameOver")
-                : phase === "paused"
-                  ? t("paused")
-                  : phase === "victory"
-                    ? t("victory")
-                    : t("levelCleared")}
-            </p>
-
-            {(phase === "cleared" || phase === "victory") && (
-              <div className="mt-4 max-w-md">
-                <p className="font-mono-code text-[0.55rem] tracking-[0.24em] text-white/40 uppercase">
-                  {t("insightLabel")}
-                </p>
-                <p className="mt-1 text-base font-medium text-[var(--holive-gold)]">
-                  {insight.title}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-white/70">
-                  {insight.body}
-                </p>
-              </div>
-            )}
-
-            {reward && (phase === "cleared" || phase === "victory") && (
-              <div className="mt-5 max-w-sm rounded border border-[var(--holive-gold)]/35 bg-black/40 px-4 py-3">
-                <p className="font-mono-code text-[0.55rem] tracking-[0.24em] text-[var(--holive-gold)]/70 uppercase">
-                  {t(`rewards.${reward.key}.title` as "rewards.certificate.title")}
-                </p>
-                <p className="mt-1 font-mono-code text-sm tracking-wider text-[var(--holive-gold)]">
-                  {reward.code}
-                </p>
-                <p className="mt-1 text-xs text-white/55">
-                  {t(`rewards.${reward.key}.blurb` as "rewards.certificate.blurb")}
-                </p>
-                {reward.kind === "certificate" && (
-                  <button
-                    type="button"
-                    className="focus-ring mt-3 text-xs text-white/70 underline decoration-[var(--holive-gold)]/50"
-                    onClick={async () => {
-                      const text = shareableCertificate({
-                        code: reward.code,
-                        score,
-                        level: levelId,
-                        locale,
-                      });
-                      try {
-                        await navigator.clipboard.writeText(text);
-                        setCopied(true);
-                      } catch {
-                        /* ignore */
-                      }
-                    }}
-                  >
-                    {copied ? t("copied") : t("copyCert")}
-                  </button>
-                )}
-              </div>
-            )}
-
-            {showLead &&
-              (phase === "cleared" || phase === "victory") &&
-              (progress.deepProgress || progress.completedRun) && (
-                <LeadCapture
-                  score={score}
-                  level={levelId}
-                  onDone={() => setShowLead(false)}
-                  onSkip={() => setShowLead(false)}
-                />
-              )}
-
-            {phase === "wrong" && (
-              <p className="mt-3 max-w-sm text-sm text-white/70">{t("tap")}</p>
-            )}
-
-            <div className="mt-6 flex flex-wrap justify-center gap-3">
-              {phase === "paused" && (
-                <button
-                  type="button"
-                  className="focus-ring min-h-12 min-w-[8rem] bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold text-[var(--holive-black)]"
-                  onClick={resume}
-                >
-                  {t("resume")}
-                </button>
-              )}
-              {phase === "wrong" && (
-                <button
-                  type="button"
-                  className="focus-ring min-h-12 min-w-[8rem] bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold text-[var(--holive-black)]"
-                  onClick={() => void startLevel(levelId)}
-                >
-                  {t("restart")}
-                </button>
-              )}
-              {(phase === "cleared" || phase === "victory") &&
-                levelId < FINAL_LEVEL_ID && (
-                  <button
-                    type="button"
-                    className="focus-ring min-h-12 min-w-[8rem] bg-[var(--holive-gold)] px-6 py-3 text-sm font-semibold text-[var(--holive-black)]"
-                    onClick={() => void startLevel(levelId + 1)}
-                  >
-                    {t("nextLevel")}
-                  </button>
-                )}
-              <button
-                type="button"
-                className="focus-ring min-h-12 border border-white/25 px-5 py-3 text-sm text-white/80"
-                onClick={() => {
-                  setPhase("hub");
-                  setShowLead(false);
-                }}
-              >
-                {t("levelsBtn")}
-              </button>
-            </div>
-          </div>
+            }}
+          />
         )}
       </div>
 
@@ -887,34 +846,53 @@ function NeuralBackdrop({
   reduced,
   soft = false,
   parallax = false,
+  theme,
+  levelId = 0,
 }: {
   reduced: boolean;
   soft?: boolean;
   parallax?: boolean;
+  theme?: ReturnType<typeof themeForLevel>;
+  levelId?: number;
 }) {
   const [off, setOff] = useState({ x: 0, y: 0 });
+  const t = theme ?? themeForLevel(Math.max(1, levelId || 1));
 
   useEffect(() => {
     if (!parallax || reduced) return;
+    let raf = 0;
+    let latest = { x: 0, y: 0 };
     const onMove = (e: PointerEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 12;
-      const y = (e.clientY / window.innerHeight - 0.5) * 10;
-      setOff({ x, y });
+      latest = {
+        x: (e.clientX / window.innerWidth - 0.5) * 10,
+        y: (e.clientY / window.innerHeight - 0.5) * 8,
+      };
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        setOff(latest);
+        raf = 0;
+      });
     };
     window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [parallax, reduced]);
+
+  const motif = levelId > 0 ? t.motif : "seed";
 
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
-        className="absolute inset-[-8%]"
+        className="absolute inset-[-8%] will-change-transform"
         style={{
-          transform: parallax && !reduced ? `translate(${off.x}px, ${off.y}px)` : undefined,
-          transition: "transform 0.4s ease-out",
-          background: soft
-            ? "radial-gradient(ellipse at 30% 20%, rgba(90,42,158,0.35), transparent 50%), radial-gradient(ellipse at 75% 80%, rgba(201,168,76,0.12), transparent 45%), #07060a"
-            : "radial-gradient(ellipse at 25% 15%, rgba(90,42,158,0.45), transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(201,168,76,0.14), transparent 50%), radial-gradient(ellipse at 50% 100%, rgba(51,0,114,0.35), transparent 40%), #05030a",
+          transform:
+            parallax && !reduced
+              ? `translate3d(${off.x}px, ${off.y}px, 0)`
+              : undefined,
+          transition: "transform 0.45s ease-out, background 0.8s ease",
+          background: soft ? t.softGradient : t.gradient,
         }}
       />
       {!reduced && (
@@ -922,24 +900,41 @@ function NeuralBackdrop({
           <div
             className="neural-wave absolute -left-1/4 top-[10%] h-[40%] w-[150%] opacity-30"
             style={{
-              transform:
-                parallax ? `translate(${off.x * 0.4}px, ${off.y * 0.3}px)` : undefined,
+              background: `radial-gradient(ellipse at center, ${t.waveA} 0%, transparent 70%)`,
+              transform: parallax
+                ? `translate3d(${off.x * 0.35}px, ${off.y * 0.25}px, 0)`
+                : undefined,
             }}
           />
-          <div className="neural-wave neural-wave--delay absolute -left-1/4 top-[45%] h-[35%] w-[150%] opacity-20" />
-          <div className="neural-code absolute inset-0 opacity-[0.07]" />
+          <div
+            className="neural-wave neural-wave--delay absolute -left-1/4 top-[45%] h-[35%] w-[150%] opacity-20"
+            style={{
+              background: `radial-gradient(ellipse at center, ${t.waveB} 0%, transparent 70%)`,
+            }}
+          />
+          <div
+            className={`neural-code absolute inset-0 neural-motif-${motif}`}
+            style={{ opacity: t.codeOpacity }}
+          />
         </>
       )}
       <div
-        className="absolute inset-0 opacity-[0.12]"
+        className="absolute inset-0"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(0,255,65,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,65,0.08) 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
+          opacity: t.gridOpacity,
+          backgroundImage: `linear-gradient(${t.gridColor} 1px, transparent 1px), linear-gradient(90deg, ${t.gridColor} 1px, transparent 1px)`,
+          backgroundSize: motif === "orbit" ? "56px 56px" : motif === "mesh" ? "36px 36px" : "48px 48px",
           transform:
             parallax && !reduced
-              ? `translate(${off.x * -0.25}px, ${off.y * -0.2}px)`
+              ? `translate3d(${off.x * -0.2}px, ${off.y * -0.15}px, 0)`
               : undefined,
+          willChange: parallax ? "transform" : undefined,
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(ellipse at center, transparent 40%, ${t.vignette} 100%)`,
         }}
       />
     </div>

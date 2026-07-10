@@ -59,7 +59,7 @@ export function LeadCapture({ score, level, onDone, onSkip }: Props) {
   }
 
   return (
-    <div className="mt-5 w-full max-w-sm text-left">
+    <div className="w-full text-left">
       <p className="font-mono-code text-[0.55rem] tracking-[0.28em] text-white/40 uppercase">
         {t("eyebrow")}
       </p>
