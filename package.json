@@ -8,8 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "preview": "opennextjs-cloudflare build && node scripts/fix-opennext-next-env.mjs && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && node scripts/fix-opennext-next-env.mjs && opennextjs-cloudflare deploy",
-    "deploy:only": "node scripts/fix-opennext-next-env.mjs && opennextjs-cloudflare deploy",
+    "deploy": "opennextjs-cloudflare build && node scripts/fix-opennext-next-env.mjs && node scripts/cf-deploy.mjs",
+    "deploy:only": "node scripts/fix-opennext-next-env.mjs && node scripts/cf-deploy.mjs",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
