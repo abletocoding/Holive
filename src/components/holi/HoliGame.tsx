@@ -6,30 +6,16 @@ import { HoliMascot } from "@/components/holi/HoliMascot";
 import { createBrowserClient } from "@/lib/supabase/client";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
-const STORAGE_KEY = "holive-holi-highscore";
-const GRAVITY = 0.55;
-const JUMP = -9.2;
-const GROUND_Y = 118;
-const GAME_W = 320;
-const GAME_H = 160;
+const STORAGE_KEY = "holive-neural-highscore";
+const NODE_COUNT = 4;
+const NODE_COLORS = [
+  "var(--holive-purple)",
+  "var(--holive-gold)",
+  "var(--holive-purple-bright)",
+  "var(--holive-gold-bright)",
+] as const;
 
-type Coin = { x: number; y: number; taken: boolean; id: number };
-type Hazard = { x: number; w: number; id: number };
-
-type Snapshot = {
-  running: boolean;
-  over: boolean;
-  score: number;
-  y: number;
-  coins: Coin[];
-  hazards: Hazard[];
-};
-
-type Internal = Snapshot & {
-  vy: number;
-  distance: number;
-  nextId: number;
-};
+type Phase = "idle" | "watch" | "input" | "wrong" | "levelup";
 
 function loadHighScore() {
   if (typeof window === "undefined") return 0;
@@ -48,165 +34,133 @@ function saveHighScore(score: number) {
   }
 }
 
-function createInternal(): Internal {
-  return {
-    running: false,
-    over: false,
-    score: 0,
-    y: GROUND_Y,
-    vy: 0,
-    distance: 0,
-    nextId: 3,
-    coins: [
-      { id: 1, x: 180, y: 90, taken: false },
-      { id: 2, x: 260, y: 70, taken: false },
-    ],
-    hazards: [{ id: 0, x: 300, w: 28 }],
-  };
+function randomNode() {
+  return Math.floor(Math.random() * NODE_COUNT);
 }
 
-function toSnapshot(s: Internal): Snapshot {
-  return {
-    running: s.running,
-    over: s.over,
-    score: s.score,
-    y: s.y,
-    coins: s.coins.map((c) => ({ ...c })),
-    hazards: s.hazards.map((h) => ({ ...h })),
-  };
-}
-
+/**
+ * Neural Pulse — Simon-like pattern memory.
+ * Holi is coach/avatar only; mechanic is purple/gold neural nodes.
+ */
 export function HoliGame() {
   const t = useTranslations("HoliGame");
   const locale = useLocale();
   const reduced = usePrefersReducedMotion();
   const [highScore, setHighScore] = useState(0);
-  const [snap, setSnap] = useState<Snapshot>(() => toSnapshot(createInternal()));
-  const stateRef = useRef<Internal>(createInternal());
-  const rafRef = useRef(0);
+  const [level, setLevel] = useState(0);
+  const [score, setScore] = useState(0);
+  const [phase, setPhase] = useState<Phase>("idle");
+  const [lit, setLit] = useState<number | null>(null);
+  const [coach, setCoach] = useState<"idle" | "cheer" | "oops">("idle");
+
+  const sequenceRef = useRef<number[]>([]);
+  const inputIdxRef = useRef(0);
+  const busyRef = useRef(false);
   const submittedRef = useRef(false);
 
   useEffect(() => {
     setHighScore(loadHighScore());
   }, []);
 
-  const jump = useCallback(() => {
-    const s = stateRef.current;
-    if (!s.running || s.over) return;
-    if (s.y >= GROUND_Y - 1) {
-      s.vy = JUMP;
-    }
+  const flashNode = useCallback(async (idx: number, ms = 420) => {
+    setLit(idx);
+    await new Promise((r) => setTimeout(r, ms));
+    setLit(null);
+    await new Promise((r) => setTimeout(r, 140));
   }, []);
+
+  const playSequence = useCallback(
+    async (seq: number[]) => {
+      busyRef.current = true;
+      setPhase("watch");
+      setCoach("idle");
+      await new Promise((r) => setTimeout(r, 350));
+      for (const n of seq) {
+        await flashNode(n, Math.max(280, 480 - seq.length * 18));
+      }
+      inputIdxRef.current = 0;
+      setPhase("input");
+      busyRef.current = false;
+    },
+    [flashNode],
+  );
+
+  const startRound = useCallback(
+    (nextLevel: number, baseSeq?: number[]) => {
+      const seq = [...(baseSeq ?? sequenceRef.current)];
+      while (seq.length < nextLevel) {
+        seq.push(randomNode());
+      }
+      sequenceRef.current = seq;
+      setLevel(nextLevel);
+      void playSequence(seq);
+    },
+    [playSequence],
+  );
 
   const start = useCallback(() => {
-    stateRef.current = { ...createInternal(), running: true };
+    sequenceRef.current = [];
+    inputIdxRef.current = 0;
     submittedRef.current = false;
-    setSnap(toSnapshot(stateRef.current));
-  }, []);
+    setScore(0);
+    setLevel(0);
+    setCoach("idle");
+    startRound(1, []);
+  }, [startRound]);
 
-  useEffect(() => {
-    if (reduced) return;
+  const endGame = useCallback(
+    (finalScore: number) => {
+      setPhase("wrong");
+      setCoach("oops");
+      const best = Math.max(loadHighScore(), finalScore);
+      saveHighScore(best);
+      setHighScore(best);
 
-    let frame = 0;
-
-    function tick() {
-      const s = stateRef.current;
-      if (s.running && !s.over) {
-        s.distance += 1;
-        s.vy += GRAVITY;
-        s.y += s.vy;
-        if (s.y > GROUND_Y) {
-          s.y = GROUND_Y;
-          s.vy = 0;
-        }
-
-        const speed = 3.2 + Math.min(s.distance / 400, 2.5);
-
-        for (const c of s.coins) {
-          c.x -= speed;
-          if (
-            !c.taken &&
-            Math.abs(c.x - 48) < 18 &&
-            Math.abs(c.y - (s.y - 20)) < 22
-          ) {
-            c.taken = true;
-            s.score += 10;
-          }
-        }
-        s.coins = s.coins.filter((c) => c.x > -20 && !c.taken);
-        if (s.coins.length < 2) {
-          s.coins.push({
-            id: s.nextId++,
-            x: GAME_W + Math.random() * 80,
-            y: 55 + Math.random() * 50,
-            taken: false,
+      if (!submittedRef.current && finalScore > 0) {
+        submittedRef.current = true;
+        const supabase = createBrowserClient();
+        if (supabase) {
+          void supabase.from("game_scores").insert({
+            score: finalScore,
+            locale,
+            player_name: "Neural",
           });
         }
+      }
+    },
+    [locale],
+  );
 
-        for (const h of s.hazards) {
-          h.x -= speed;
-        }
-        s.hazards = s.hazards.filter((h) => h.x + h.w > -10);
-        if (s.hazards.length < 1) {
-          s.hazards.push({
-            id: s.nextId++,
-            x: GAME_W + 40 + Math.random() * 120,
-            w: 22 + Math.random() * 18,
-          });
-        }
+  const onNode = useCallback(
+    async (idx: number) => {
+      if (busyRef.current || phase !== "input") return;
+      busyRef.current = true;
+      await flashNode(idx, 220);
 
-        for (const h of s.hazards) {
-          if (s.y >= GROUND_Y - 2 && h.x < 58 && h.x + h.w > 36) {
-            s.over = true;
-            s.running = false;
-            const best = Math.max(loadHighScore(), s.score);
-            saveHighScore(best);
-            setHighScore(best);
-
-            if (!submittedRef.current && s.score > 0) {
-              submittedRef.current = true;
-              const supabase = createBrowserClient();
-              if (supabase) {
-                void supabase.from("game_scores").insert({
-                  score: s.score,
-                  locale,
-                  player_name: "Holi",
-                });
-              }
-            }
-          }
-        }
-
-        if (s.distance % 30 === 0) {
-          s.score += 1;
-        }
-
-        frame += 1;
-        if (frame % 2 === 0 || s.over) {
-          setSnap(toSnapshot(s));
-        }
+      const expected = sequenceRef.current[inputIdxRef.current];
+      if (idx !== expected) {
+        busyRef.current = false;
+        endGame(score);
+        return;
       }
 
-      rafRef.current = requestAnimationFrame(tick);
-    }
-
-    rafRef.current = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafRef.current);
-  }, [locale, reduced]);
-
-  useEffect(() => {
-    function onKey(e: KeyboardEvent) {
-      if (e.code === "Space" || e.code === "ArrowUp") {
-        const tag = (e.target as HTMLElement | null)?.tagName;
-        if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-        e.preventDefault();
-        if (!stateRef.current.running) start();
-        else jump();
+      inputIdxRef.current += 1;
+      if (inputIdxRef.current >= sequenceRef.current.length) {
+        const gained = sequenceRef.current.length * 10;
+        const nextScore = score + gained;
+        setScore(nextScore);
+        setPhase("levelup");
+        setCoach("cheer");
+        await new Promise((r) => setTimeout(r, 500));
+        busyRef.current = false;
+        startRound(sequenceRef.current.length + 1);
+        return;
       }
-    }
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [jump, start]);
+
+      busyRef.current = false;
+    },
+    [endGame, flashNode, phase, score, startRound],
+  );
 
   if (reduced) {
     return (
@@ -216,24 +170,48 @@ export function HoliGame() {
         <p className="mt-1 text-sm opacity-70">
           {t("highScore")}: {highScore}
         </p>
+        <p className="mt-2 text-xs opacity-55">{t("reduced")}</p>
       </div>
     );
   }
 
-  const bottomPct = 10 + ((GAME_H - snap.y) / GAME_H) * 45;
+  const statusLabel =
+    phase === "watch"
+      ? t("watch")
+      : phase === "input"
+        ? t("yourTurn")
+        : phase === "wrong"
+          ? t("gameOver")
+          : phase === "levelup"
+            ? t("levelUp")
+            : t("subtitle");
 
   return (
     <div className="mx-auto w-full max-w-md">
       <div className="mb-3 flex items-end justify-between gap-3">
-        <div>
-          <h3 className="font-display text-xl font-semibold">{t("title")}</h3>
-          <p className="mt-1 text-xs text-[color-mix(in_srgb,var(--foreground)_65%,transparent)]">
-            {t("subtitle")}
-          </p>
+        <div className="flex items-start gap-3">
+          <HoliMascot
+            className={`h-12 w-10 shrink-0 transition-transform ${
+              coach === "cheer"
+                ? "scale-110"
+                : coach === "oops"
+                  ? "opacity-70"
+                  : ""
+            }`}
+          />
+          <div>
+            <h3 className="font-display text-xl font-semibold">{t("title")}</h3>
+            <p className="mt-1 text-xs text-[color-mix(in_srgb,var(--foreground)_65%,transparent)]">
+              {t("coach")}
+            </p>
+          </div>
         </div>
         <div className="font-mono-code text-right text-[0.7rem] tracking-wide">
           <div>
-            {t("score")}: {snap.score}
+            {t("score")}: {score}
+          </div>
+          <div>
+            {t("level")}: {Math.max(level, 1)}
           </div>
           <div className="text-[var(--holive-gold)]">
             {t("highScore")}: {highScore}
@@ -244,75 +222,71 @@ export function HoliGame() {
       <div
         role="application"
         aria-label={t("title")}
-        tabIndex={0}
-        onClick={() => {
-          if (!snap.running) start();
-          else jump();
-        }}
-        onKeyDown={(e) => {
-          if (e.key === " " || e.key === "Enter") {
-            e.preventDefault();
-            if (!snap.running) start();
-            else jump();
-          }
-        }}
-        className="focus-ring relative cursor-pointer overflow-hidden border border-[var(--border)] bg-[linear-gradient(180deg,#12081f_0%,#07060a_70%)] select-none"
-        style={{ aspectRatio: `${GAME_W}/${GAME_H}` }}
+        className="relative overflow-hidden border border-[var(--border)] bg-[linear-gradient(180deg,#12081f_0%,#07060a_70%)] select-none"
       >
-        <div
-          className="absolute inset-x-0 bottom-0 h-[18%] border-t border-[var(--holive-purple)]/40"
-          style={{
-            background:
-              "repeating-linear-gradient(90deg, transparent, transparent 12px, rgba(155,109,255,0.12) 12px, rgba(155,109,255,0.12) 13px)",
-          }}
-        />
-
-        <div
-          className="absolute left-[11%] w-[14%]"
-          style={{ bottom: `${bottomPct}%` }}
-        >
-          <HoliMascot className="h-auto w-full drop-shadow-[0_0_12px_rgba(224,195,90,0.35)]" />
+        <div className="pointer-events-none absolute inset-0 opacity-40">
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 20% 30%, rgba(155,109,255,0.25), transparent 45%), radial-gradient(circle at 80% 70%, rgba(224,195,90,0.15), transparent 40%)",
+            }}
+          />
         </div>
 
-        {snap.coins.map((c) => (
-          <span
-            key={c.id}
-            className="absolute h-2.5 w-2.5 rounded-full bg-[var(--holive-gold)] shadow-[0_0_10px_rgba(224,195,90,0.8)]"
-            style={{
-              left: `${(c.x / GAME_W) * 100}%`,
-              top: `${(c.y / GAME_H) * 100}%`,
-            }}
-          />
-        ))}
+        <p className="font-mono-code relative z-10 px-4 pt-3 text-center text-[0.65rem] tracking-[0.2em] text-[color-mix(in_srgb,var(--holive-white)_55%,transparent)]">
+          {statusLabel}
+        </p>
 
-        {snap.hazards.map((h) => (
-          <span
-            key={h.id}
-            className="absolute bottom-[18%] bg-[var(--holive-purple)]/80"
-            style={{
-              left: `${(h.x / GAME_W) * 100}%`,
-              width: `${(h.w / GAME_W) * 100}%`,
-              height: "12%",
-              boxShadow: "0 0 12px rgba(155,109,255,0.5)",
-            }}
-          />
-        ))}
+        <div className="relative z-10 grid grid-cols-2 gap-3 p-5 sm:gap-4 sm:p-6">
+          {Array.from({ length: NODE_COUNT }, (_, i) => {
+            const isLit = lit === i;
+            return (
+              <button
+                key={i}
+                type="button"
+                disabled={phase !== "input"}
+                aria-label={t("node", { n: i + 1 })}
+                onClick={() => void onNode(i)}
+                className="focus-ring aspect-square rounded-full border transition disabled:cursor-default"
+                style={{
+                  background: isLit
+                    ? NODE_COLORS[i]
+                    : "color-mix(in srgb, #1a003d 80%, black)",
+                  borderColor: isLit
+                    ? "rgba(255,255,255,0.55)"
+                    : "rgba(201,168,76,0.25)",
+                  boxShadow: isLit
+                    ? `0 0 28px ${NODE_COLORS[i]}, inset 0 0 20px rgba(255,255,255,0.15)`
+                    : "inset 0 0 18px rgba(90,42,158,0.25)",
+                  transform: isLit ? "scale(1.04)" : "scale(1)",
+                }}
+              >
+                <span
+                  className="mx-auto block h-2 w-2 rounded-full"
+                  style={{
+                    background: isLit
+                      ? "rgba(255,255,255,0.9)"
+                      : "rgba(201,168,76,0.35)",
+                  }}
+                />
+              </button>
+            );
+          })}
+        </div>
 
-        {!snap.running && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/45 px-4 text-center">
+        {(phase === "idle" || phase === "wrong") && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/50 px-4 text-center">
             <p className="font-display text-lg text-[var(--holive-gold)]">
-              {snap.over ? t("gameOver") : t("title")}
+              {phase === "wrong" ? t("gameOver") : t("title")}
             </p>
-            <p className="mt-2 text-xs text-white/70">{t("tap")}</p>
+            <p className="mt-2 max-w-xs text-xs text-white/70">{t("tap")}</p>
             <button
               type="button"
               className="focus-ring mt-4 bg-[var(--holive-gold)] px-4 py-2 text-xs font-semibold text-[var(--holive-black)]"
-              onClick={(e) => {
-                e.stopPropagation();
-                start();
-              }}
+              onClick={start}
             >
-              {snap.over ? t("restart") : t("start")}
+              {phase === "wrong" ? t("restart") : t("start")}
             </button>
           </div>
         )}

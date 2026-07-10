@@ -155,16 +155,81 @@
   "Footer": {
     "tagline": "Purity · Loyalty · Code",
     "rights": "© {year} Holive. holive.org",
-    "gameHint": "Made it this far? Holi is waiting below."
+    "gameHint": "Made it this far? Sync the neural pulse below."
   },
   "HoliGame": {
-    "title": "Holi Run",
-    "subtitle": "Tap / space to jump. Collect gold. Avoid the void.",
-    "start": "Play",
-    "restart": "Again",
+    "title": "Neural Pulse",
+    "subtitle": "Watch the sequence. Replay the signal.",
+    "coach": "Holi coaches — you sync the nodes.",
+    "start": "Sync",
+    "restart": "Resync",
     "score": "Score",
+    "level": "Depth",
     "highScore": "Best",
-    "gameOver": "Round over",
-    "tap": "Tap to jump"
+    "gameOver": "Signal lost",
+    "tap": "Memorize purple & gold pulses, then tap them back.",
+    "watch": "Watch the pulse…",
+    "yourTurn": "Your turn — replay the signal",
+    "levelUp": "Signal locked. Going deeper…",
+    "node": "Node {n}",
+    "reduced": "Motion reduced — high score still saved."
+  },
+  "Widgets": {
+    "neural": {
+      "eyebrow": "Digital nervous system",
+      "live": "Mesh live",
+      "hint": "Hover a node · Holive constellation",
+      "nodes": {
+        "core": {
+          "title": "Holive core",
+          "text": "Brand and code share one pulse — purity in, systems out."
+        },
+        "brand": {
+          "title": "Brand signal",
+          "text": "Identity that stays loyal while channels multiply."
+        },
+        "code": {
+          "title": "Living code",
+          "text": "Sites, SaaS, and automations that keep the vision online."
+        },
+        "pulse": {
+          "title": "Market pulse",
+          "text": "Content and campaigns timed to real attention, not noise."
+        },
+        "grow": {
+          "title": "Growth loop",
+          "text": "Measure, iterate, deepen loyalty — then scale."
+        },
+        "sync": {
+          "title": "Client sync",
+          "text": "Advisory that keeps tech decisions aligned with business."
+        }
+      }
+    },
+    "pulse": {
+      "eyebrow": "Holive pulse",
+      "status": "Systems online",
+      "rows": {
+        "systems": {
+          "label": "Systems",
+          "hint": "Active builds"
+        },
+        "courses": {
+          "label": "Courses",
+          "hint": "Tracks warming"
+        },
+        "signals": {
+          "label": "Signals",
+          "hint": "Demo telemetry"
+        },
+        "loyalty": {
+          "label": "Loyalty",
+          "hint": "Retention vibe"
+        }
+      }
+    },
+    "terminal": {
+      "title": "holive://process"
+    }
   }
 }

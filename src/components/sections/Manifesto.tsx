@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import {
@@ -7,6 +8,16 @@ import {
   HoliDoodleMotif,
   SketchDivider,
 } from "@/components/ui/Doodle";
+
+const LivePulse = dynamic(
+  () => import("@/components/effects/LivePulse").then((m) => m.LivePulse),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-28 animate-pulse border border-[var(--border)] bg-[var(--surface)]" />
+    ),
+  },
+);
 
 const pillarKeys = ["purity", "loyalty", "code"] as const;
 
@@ -42,11 +53,15 @@ export function Manifesto() {
           </p>
         </SectionReveal>
 
+        <SectionReveal delay={0.1} className="mt-10">
+          <LivePulse />
+        </SectionReveal>
+
         <SketchDivider className="mt-12 mb-2" />
 
         <div className="mt-10 grid gap-8 md:grid-cols-3 md:gap-8">
           {pillarKeys.map((key, i) => (
-            <SectionReveal key={key} delay={0.08 * i}>
+            <SectionReveal key={key} delay={0.08 * i} immersive>
               <div className="doodle-stroke-top">
                 <h3 className="font-display text-xl font-semibold text-[var(--holive-purple-bright)]">
                   {t(`pillars.${key}.title`)}

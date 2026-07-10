@@ -78,6 +78,10 @@ export function Footer() {
         <p className="font-mono-code mt-8 text-center text-[0.65rem] tracking-[0.25em] text-[color-mix(in_srgb,var(--foreground)_40%,transparent)]">
           {t("gameHint")}
         </p>
+        <p
+          aria-hidden
+          className="mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-[var(--holive-gold)] to-transparent opacity-60"
+        />
 
         {/* Hidden until user scrolls to the very bottom */}
         <div ref={sentinelRef} className="mt-10 min-h-[2rem]">

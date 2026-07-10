@@ -1,13 +1,26 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import dynamic from "next/dynamic";
+import { useLocale, useTranslations } from "next-intl";
 import { SectionReveal } from "@/components/ui/SectionReveal";
 import { CrayonUnderline, HoliDoodleMotif } from "@/components/ui/Doodle";
+
+const TerminalMoment = dynamic(
+  () =>
+    import("@/components/effects/TerminalMoment").then((m) => m.TerminalMoment),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-40 animate-pulse border border-[var(--border)] bg-[#0a0810]" />
+    ),
+  },
+);
 
 const steps = ["listen", "design", "build", "evolve"] as const;
 
 export function Process() {
   const t = useTranslations("Process");
+  const locale = useLocale();
 
   return (
     <section id="process" className="doodle-zone section-pad relative bg-[var(--surface-muted)]">
@@ -29,23 +42,29 @@ export function Process() {
           <CrayonUnderline />
         </SectionReveal>
 
-        <ol className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((key, i) => (
-            <SectionReveal key={key} delay={0.06 * i}>
-              <li className="doodle-border-sketch px-4 py-5">
-                <span className="font-display text-4xl font-semibold text-[color-mix(in_srgb,var(--holive-purple)_55%,transparent)]">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-display mt-3 text-xl font-semibold">
-                  {t(`steps.${key}.title`)}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-[color-mix(in_srgb,var(--foreground)_72%,transparent)]">
-                  {t(`steps.${key}.text`)}
-                </p>
-              </li>
-            </SectionReveal>
-          ))}
-        </ol>
+        <div className="mt-10 grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <ol className="grid gap-8 sm:grid-cols-2">
+            {steps.map((key, i) => (
+              <SectionReveal key={key} delay={0.06 * i} immersive>
+                <li className="doodle-border-sketch px-4 py-5">
+                  <span className="font-display text-4xl font-semibold text-[color-mix(in_srgb,var(--holive-purple)_55%,transparent)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="font-display mt-3 text-xl font-semibold">
+                    {t(`steps.${key}.title`)}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[color-mix(in_srgb,var(--foreground)_72%,transparent)]">
+                    {t(`steps.${key}.text`)}
+                  </p>
+                </li>
+              </SectionReveal>
+            ))}
+          </ol>
+
+          <SectionReveal delay={0.12} className="lg:sticky lg:top-24">
+            <TerminalMoment locale={locale} />
+          </SectionReveal>
+        </div>
       </div>
     </section>
   );

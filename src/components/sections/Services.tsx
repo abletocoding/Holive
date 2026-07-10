@@ -32,7 +32,7 @@ export function Services() {
 
         <div className="story-rail mt-16 space-y-14 md:space-y-20">
           {layers.map((key, i) => (
-            <SectionReveal key={key} delay={0.05 * i}>
+            <SectionReveal key={key} delay={0.05 * i} immersive>
               <article
                 className={`relative grid gap-3 pl-8 md:grid-cols-2 md:items-baseline md:gap-12 md:pl-0 ${
                   i % 2 === 1 ? "md:text-right" : ""

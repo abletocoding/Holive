@@ -155,16 +155,81 @@
   "Footer": {
     "tagline": "Pureza · Lealtad · Código",
     "rights": "© {year} Holive. holive.org",
-    "gameHint": "¿Llegaste hasta aquí? Holi te espera abajo."
+    "gameHint": "¿Llegaste hasta aquí? Sincroniza el pulso neural abajo."
   },
   "HoliGame": {
-    "title": "Holi Run",
-    "subtitle": "Toca / espacio para saltar. Recoge oro. Evita el vacío.",
-    "start": "Jugar",
-    "restart": "Otra ronda",
+    "title": "Pulso Neural",
+    "subtitle": "Observa la secuencia. Repite la señal.",
+    "coach": "Holi entrena — tú sincronizas los nodos.",
+    "start": "Sincronizar",
+    "restart": "Otra señal",
     "score": "Puntos",
+    "level": "Profundidad",
     "highScore": "Récord",
-    "gameOver": "Fin de ronda",
-    "tap": "Toca para saltar"
+    "gameOver": "Señal perdida",
+    "tap": "Memoriza los pulsos púrpura y oro, luego repítelos.",
+    "watch": "Observa el pulso…",
+    "yourTurn": "Tu turno — repite la señal",
+    "levelUp": "Señal fijada. Más profundo…",
+    "node": "Nodo {n}",
+    "reduced": "Movimiento reducido — el récord se guarda igual."
+  },
+  "Widgets": {
+    "neural": {
+      "eyebrow": "Sistema nervioso digital",
+      "live": "Malla en vivo",
+      "hint": "Pasa el cursor · constelación Holive",
+      "nodes": {
+        "core": {
+          "title": "Núcleo Holive",
+          "text": "Marca y código comparten un pulso — pureza entra, sistemas salen."
+        },
+        "brand": {
+          "title": "Señal de marca",
+          "text": "Identidad leal mientras los canales se multiplican."
+        },
+        "code": {
+          "title": "Código vivo",
+          "text": "Webs, SaaS y automatizaciones que mantienen la visión online."
+        },
+        "pulse": {
+          "title": "Pulso de mercado",
+          "text": "Contenido y campañas al ritmo de la atención real, sin ruido."
+        },
+        "grow": {
+          "title": "Bucle de crecimiento",
+          "text": "Medir, iterar, profundizar lealtad — luego escalar."
+        },
+        "sync": {
+          "title": "Sincronía cliente",
+          "text": "Asesoría que alinea decisiones tech con el negocio."
+        }
+      }
+    },
+    "pulse": {
+      "eyebrow": "Pulso Holive",
+      "status": "Sistemas en línea",
+      "rows": {
+        "systems": {
+          "label": "Sistemas",
+          "hint": "Builds activos"
+        },
+        "courses": {
+          "label": "Cursos",
+          "hint": "Tracks en calentamiento"
+        },
+        "signals": {
+          "label": "Señales",
+          "hint": "Telemetría demo"
+        },
+        "loyalty": {
+          "label": "Lealtad",
+          "hint": "Vibe de retención"
+        }
+      }
+    },
+    "terminal": {
+      "title": "holive://proceso"
+    }
   }
 }

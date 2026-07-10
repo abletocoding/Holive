@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { useTheme } from "@/components/theme/ThemeProvider";
@@ -19,13 +20,27 @@ export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   function switchLocale(next: "es" | "en") {
     router.replace(pathname, { locale: next });
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-[color-mix(in_srgb,var(--background)_72%,transparent)] backdrop-blur-md">
+    <header
+      className={`fixed inset-x-0 top-0 z-50 backdrop-blur-md transition-[background,border-color,box-shadow] duration-300 ${
+        scrolled
+          ? "border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_88%,transparent)] shadow-[0_8px_32px_rgba(16,24,32,0.12)]"
+          : "border-b border-transparent bg-[color-mix(in_srgb,var(--background)_72%,transparent)]"
+      }`}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
         <a
           href="#top"
