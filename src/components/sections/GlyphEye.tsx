@@ -1,179 +1,100 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { ExperienceBand } from "@/components/sections/ExperienceBand";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useIsCoarsePointer } from "@/hooks/useIsCoarsePointer";
 
-const GLYPHS =
-  "HOLIVE·SEMBRAR·COSECHAR·PUREZA·LEALTAD·CÓDIGO·01アイウエオアカサタナハマヤラワ01#@$%&*+=<>/\\|";
-
 /**
- * Character-cascade watching eye — matrix glyphs form an iris that tracks
- * pointer / touch / scroll face. Desktop denser; mobile lighter 2D.
+ * Holive watching eye — premium CSS/SVG iris that tracks pointer / face scroll.
+ * Replaces the noisy glyph-cascade with intentional brand vision.
  */
 export function GlyphEye() {
   const t = useTranslations("Experience.glyphEye");
   const reduced = usePrefersReducedMotion();
   const coarse = useIsCoarsePointer();
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const look = useRef({ x: 0, y: 0, tx: 0, ty: 0 });
+  const rafRef = useRef(0);
+  const [blink, setBlink] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let raf = 0;
-    let w = 0;
-    let h = 0;
-    const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.25 : 1.75);
-    const look = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
-    const cols: { y: number; speed: number; chars: string[] }[] = [];
-    const cell = coarse ? 14 : 11;
-    const t0 = performance.now();
-
-    const resize = () => {
-      const parent = canvas.parentElement;
-      w = parent?.clientWidth || 640;
-      h = parent?.clientHeight || 420;
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
-      canvas.style.width = `${w}px`;
-      canvas.style.height = `${h}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      const n = Math.ceil(w / cell) + 2;
-      cols.length = 0;
-      for (let i = 0; i < n; i++) {
-        const len = 8 + Math.floor(Math.random() * 14);
-        const chars: string[] = [];
-        for (let j = 0; j < len; j++) {
-          chars.push(GLYPHS[(Math.random() * GLYPHS.length) | 0]!);
-        }
-        cols.push({
-          y: Math.random() * h,
-          speed: 0.35 + Math.random() * (coarse ? 0.9 : 1.4),
-          chars,
-        });
-      }
-    };
+    const stage = stageRef.current;
+    if (!stage) return;
 
     const onPointer = (e: PointerEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      look.tx = (e.clientX - rect.left) / rect.width;
-      look.ty = (e.clientY - rect.top) / rect.height;
+      const rect = stage.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+      look.current.tx = Math.max(-1, Math.min(1, nx));
+      look.current.ty = Math.max(-1, Math.min(1, ny));
     };
 
     const onScroll = () => {
-      const rect = canvas.getBoundingClientRect();
+      const rect = stage.getBoundingClientRect();
       const mid = rect.top + rect.height / 2;
-      const face = 0.5 + (window.innerHeight / 2 - mid) / window.innerHeight;
-      look.ty = Math.min(0.85, Math.max(0.15, face));
+      const face = (window.innerHeight / 2 - mid) / (window.innerHeight * 0.55);
+      look.current.ty = Math.max(-0.85, Math.min(0.85, face));
     };
 
-    const draw = (now: number) => {
-      const tSec = (now - t0) / 1000;
-      look.x += (look.tx - look.x) * 0.08;
-      look.y += (look.ty - look.y) * 0.08;
+    const tick = () => {
+      const L = look.current;
+      const ease = coarse ? 0.12 : 0.09;
+      L.x += (L.tx - L.x) * ease;
+      L.y += (L.ty - L.y) * ease;
 
-      ctx.fillStyle = "#101820";
-      ctx.fillRect(0, 0, w, h);
+      const iris = stage.querySelector<HTMLElement>("[data-iris]");
+      const pupil = stage.querySelector<HTMLElement>("[data-pupil]");
+      const glint = stage.querySelector<HTMLElement>("[data-glint]");
+      const ball = stage.querySelector<HTMLElement>("[data-ball]");
 
-      const cx = w * 0.5;
-      const cy = h * 0.52;
-      const eyeRx = Math.min(w, h) * 0.38;
-      const eyeRy = Math.min(w, h) * 0.28;
-      const pupilMax = eyeRx * 0.22;
-      const px = cx + (look.x - 0.5) * eyeRx * 0.55;
-      const py = cy + (look.y - 0.5) * eyeRy * 0.55;
+      const maxX = coarse ? 18 : 26;
+      const maxY = coarse ? 12 : 16;
+      const ix = L.x * maxX;
+      const iy = L.y * maxY;
 
-      // Cascade behind / through eye
-      ctx.font = `${cell - 2}px "IBM Plex Mono", ui-monospace, monospace`;
-      ctx.textAlign = "center";
-      for (let i = 0; i < cols.length; i++) {
-        const col = cols[i]!;
-        if (!reduced) col.y += col.speed;
-        if (col.y > h + col.chars.length * cell) {
-          col.y = -col.chars.length * cell;
-          for (let j = 0; j < col.chars.length; j++) {
-            col.chars[j] = GLYPHS[(Math.random() * GLYPHS.length) | 0]!;
-          }
-        }
-        const x = i * cell;
-        for (let j = 0; j < col.chars.length; j++) {
-          const y = col.y + j * cell;
-          const dx = x - px;
-          const dy = y - py;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const inIris = dist < pupilMax * 2.4;
-          const inWhite =
-            ((x - cx) / eyeRx) ** 2 + ((y - cy) / eyeRy) ** 2 < 1;
-
-          if (inIris) {
-            ctx.fillStyle =
-              j === col.chars.length - 1 ? "#C9A84C" : "#330072";
-          } else if (inWhite) {
-            ctx.fillStyle =
-              j === col.chars.length - 1
-                ? "rgba(201,168,76,0.85)"
-                : "rgba(90,42,158,0.55)";
-          } else {
-            ctx.fillStyle =
-              j === col.chars.length - 1
-                ? "rgba(0,255,65,0.35)"
-                : "rgba(51,0,114,0.22)";
-          }
-          if ((now / 180 + i + j) % 17 < 1) {
-            col.chars[j] = GLYPHS[(Math.random() * GLYPHS.length) | 0]!;
-          }
-          ctx.fillText(col.chars[j]!, x, y);
-        }
+      if (iris) iris.style.transform = `translate(${ix}px, ${iy}px)`;
+      if (pupil) pupil.style.transform = `translate(${ix * 1.15}px, ${iy * 1.15}px)`;
+      if (glint) {
+        glint.style.transform = `translate(${ix * 0.7 - 10}px, ${iy * 0.7 - 12}px)`;
+      }
+      if (ball && !reduced) {
+        ball.style.transform = `rotateX(${(-L.y * 8).toFixed(2)}deg) rotateY(${(L.x * 10).toFixed(2)}deg)`;
       }
 
-      // Eye outline (crayon)
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, eyeRx, eyeRy, 0, 0, Math.PI * 2);
-      ctx.strokeStyle = "rgba(201,168,76,0.55)";
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Pupil void
-      const pulse = reduced ? 1 : 1 + Math.sin(tSec * 2.2) * 0.04;
-      ctx.beginPath();
-      ctx.ellipse(px, py, pupilMax * pulse, pupilMax * 1.1 * pulse, 0, 0, Math.PI * 2);
-      ctx.fillStyle = "#101820";
-      ctx.fill();
-      ctx.strokeStyle = "#C9A84C";
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Gold glint
-      ctx.beginPath();
-      ctx.arc(px + pupilMax * 0.35, py - pupilMax * 0.3, pupilMax * 0.18, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(201,168,76,0.9)";
-      ctx.fill();
-
-      raf = requestAnimationFrame(draw);
+      rafRef.current = requestAnimationFrame(tick);
     };
 
-    resize();
+    setReady(true);
     onScroll();
-    window.addEventListener("resize", resize);
     window.addEventListener("pointermove", onPointer, { passive: true });
     window.addEventListener("pointerdown", onPointer, { passive: true });
     window.addEventListener("scroll", onScroll, { passive: true });
-    raf = requestAnimationFrame(draw);
+    rafRef.current = requestAnimationFrame(tick);
 
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
+      cancelAnimationFrame(rafRef.current);
       window.removeEventListener("pointermove", onPointer);
       window.removeEventListener("pointerdown", onPointer);
       window.removeEventListener("scroll", onScroll);
     };
-  }, [reduced, coarse]);
+  }, [coarse, reduced]);
+
+  useEffect(() => {
+    if (reduced) return;
+    let timeout: ReturnType<typeof setTimeout>;
+    const schedule = () => {
+      timeout = setTimeout(() => {
+        setBlink(true);
+        setTimeout(() => setBlink(false), 140);
+        schedule();
+      }, 3200 + Math.random() * 4200);
+    };
+    schedule();
+    return () => clearTimeout(timeout);
+  }, [reduced]);
 
   return (
     <ExperienceBand
@@ -183,12 +104,159 @@ export function GlyphEye() {
       refran={t("refran")}
       dark
     >
-      <div className="relative mx-auto aspect-[16/10] max-h-[28rem] w-full overflow-hidden border border-[color-mix(in_srgb,#C9A84C_35%,transparent)] bg-[#101820] md:max-h-[32rem]">
-        <canvas
-          ref={canvasRef}
-          className="pointer-events-none absolute inset-0 h-full w-full"
+      <div
+        ref={stageRef}
+        className={`watching-eye-stage relative mx-auto aspect-[16/10] max-h-[28rem] w-full overflow-hidden border border-[color-mix(in_srgb,#C9A84C_35%,transparent)] bg-[#0a1018] md:max-h-[32rem] ${
+          ready ? "is-ready" : ""
+        }`}
+        style={{ perspective: "900px" }}
+      >
+        {/* Soft brand atmosphere */}
+        <div
           aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 55% at 50% 48%, rgba(51,0,114,0.45) 0%, transparent 62%), radial-gradient(ellipse 90% 70% at 50% 100%, rgba(201,168,76,0.08) 0%, transparent 50%)",
+          }}
         />
+
+        {/* Crayon ring frame */}
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-[6%] h-[88%] w-[88%] opacity-40"
+          viewBox="0 0 400 260"
+        >
+          <ellipse
+            cx="200"
+            cy="130"
+            rx="168"
+            ry="98"
+            fill="none"
+            stroke="#C9A84C"
+            strokeWidth="2.5"
+            strokeDasharray="3 7"
+          />
+        </svg>
+
+        <div
+          data-ball
+          className="watching-eye-ball absolute left-1/2 top-[48%] w-[min(72%,22rem)] -translate-x-1/2 -translate-y-1/2"
+          style={{
+            transformStyle: "preserve-3d",
+            transition: reduced ? "none" : undefined,
+          }}
+        >
+          {/* Sclera */}
+          <div
+            className="relative mx-auto aspect-[5/3] w-full overflow-hidden"
+            style={{
+              borderRadius: "50% 50% 50% 50% / 58% 58% 42% 42%",
+              background:
+                "radial-gradient(ellipse at 45% 40%, #ffffff 0%, #f4f0ea 55%, #e8e2d8 100%)",
+              boxShadow:
+                "inset 0 0 40px rgba(51,0,114,0.12), inset 0 -18px 36px rgba(16,24,32,0.18), 0 0 0 2px rgba(16,24,32,0.55)",
+            }}
+          >
+            {/* Lid overlay for blink */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 z-20 origin-top bg-[#0a1018] transition-transform duration-100"
+              style={{
+                transform: blink ? "scaleY(1)" : "scaleY(0)",
+              }}
+            />
+
+            {/* Iris */}
+            <div
+              data-iris
+              className="watching-iris absolute left-1/2 top-1/2 z-[1] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+              style={{
+                width: "42%",
+                aspectRatio: "1",
+                borderRadius: "50%",
+                background: `
+                  radial-gradient(circle at 50% 50%, #101820 0 28%, transparent 29%),
+                  repeating-conic-gradient(
+                    from 0deg,
+                    #C9A84C 0deg 8deg,
+                    #a8883a 8deg 14deg,
+                    #F1B500 14deg 18deg,
+                    #C9A84C 18deg 26deg,
+                    #8a6e2e 26deg 32deg
+                  )
+                `,
+                boxShadow:
+                  "0 0 0 3px #101820, 0 0 24px rgba(201,168,76,0.35), inset 0 0 16px rgba(16,24,32,0.35)",
+              }}
+            >
+              {!reduced && (
+                <div
+                  aria-hidden
+                  className="watching-iris-spin absolute inset-[-8%] rounded-full opacity-40"
+                  style={{
+                    background:
+                      "conic-gradient(from 40deg, transparent 0deg, rgba(51,0,114,0.55) 50deg, transparent 100deg)",
+                  }}
+                />
+              )}
+            </div>
+
+            {/* Pupil */}
+            <div
+              data-pupil
+              className="absolute left-1/2 top-1/2 z-[2] -translate-x-1/2 -translate-y-1/2 will-change-transform"
+              style={{
+                width: "14%",
+                aspectRatio: "1",
+                borderRadius: "50%",
+                background:
+                  "radial-gradient(circle at 40% 35%, #2a3540 0%, #101820 70%)",
+                boxShadow: "0 0 0 1.5px #C9A84C",
+              }}
+            />
+
+            {/* Specular */}
+            <div
+              data-glint
+              className="absolute left-1/2 top-1/2 z-[3] will-change-transform"
+              style={{
+                width: "5%",
+                aspectRatio: "1",
+                borderRadius: "50%",
+                background: "rgba(255,255,255,0.92)",
+                boxShadow: "0 0 8px rgba(255,255,255,0.5)",
+              }}
+            />
+
+            {/* Lower lid shade */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-[28%]"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(16,24,32,0.22), transparent)",
+              }}
+            />
+          </div>
+
+          {/* Crayon lashes suggestion */}
+          <svg
+            aria-hidden
+            className="pointer-events-none absolute -top-[6%] left-[8%] w-[84%]"
+            viewBox="0 0 200 24"
+          >
+            <path
+              d="M10 18c30-16 70-20 90-18c22 2 58 10 90 20"
+              fill="none"
+              stroke="#101820"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              opacity="0.75"
+            />
+          </svg>
+        </div>
+
         <p className="pointer-events-none absolute bottom-3 left-0 right-0 text-center font-mono-code text-[0.65rem] tracking-[0.2em] text-[color-mix(in_srgb,#C9A84C_70%,white)]">
           {t("hint")}
         </p>

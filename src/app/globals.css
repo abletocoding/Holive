@@ -309,6 +309,53 @@ html.has-brand-cursor [role="button"] {
   animation: holiHaloSpin 1.8s ease-in-out infinite;
 }
 
+.holi-mascot.holi-alive[data-pose="walk"] .holi-leg-walk-front,
+.holi-mascot.holi-alive[data-pose="walk"] .holi-arm-walk-back {
+  transform-origin: 100px 160px;
+  animation: holiWalkSwing 0.7s ease-in-out infinite;
+}
+
+.holi-mascot.holi-alive[data-pose="walk"] .holi-leg-walk-back,
+.holi-mascot.holi-alive[data-pose="walk"] .holi-arm-walk-front {
+  transform-origin: 100px 160px;
+  animation: holiWalkSwing 0.7s ease-in-out infinite reverse;
+}
+
+.holi-mascot.holi-alive[data-pose="walk"] {
+  animation: holiBob 0.7s ease-in-out infinite;
+}
+
+@keyframes holiWalkSwing {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(10deg);
+  }
+}
+
+/* Watching eye iris shimmer */
+@keyframes watchingIrisSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.watching-iris-spin {
+  animation: watchingIrisSpin 14s linear infinite;
+}
+
+.watching-eye-stage .watching-eye-ball {
+  will-change: transform;
+}
+
+.comic-stage {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 .holi-peek-in {
   animation: holiPeek 2.4s ease-in-out infinite;
 }
@@ -510,6 +557,12 @@ html.has-brand-cursor [role="button"] {
   .holi-bob,
   .holi-mascot.holi-alive .holi-halo,
   .holi-mascot.holi-alive .holi-arm-wave,
+  .holi-mascot.holi-alive[data-pose="walk"],
+  .holi-mascot.holi-alive[data-pose="walk"] .holi-leg-walk-front,
+  .holi-mascot.holi-alive[data-pose="walk"] .holi-leg-walk-back,
+  .holi-mascot.holi-alive[data-pose="walk"] .holi-arm-walk-front,
+  .holi-mascot.holi-alive[data-pose="walk"] .holi-arm-walk-back,
+  .watching-iris-spin,
   .holi-peek-in,
   .logo-morph.is-morphing .logo-morph-halo,
   .logo-morph.is-morphing .logo-morph-body,

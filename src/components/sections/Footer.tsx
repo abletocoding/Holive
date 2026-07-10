@@ -18,6 +18,7 @@ const footerLinks = [
   { href: "/services", key: "services" as const },
   { href: "/digital", key: "digital" as const },
   { href: "/courses", key: "courses" as const },
+  { href: "/historias", key: "stories" as const },
   { href: "/blog", key: "blog" as const },
   { href: "/about", key: "about" as const },
   { href: "/contact", key: "contact" as const },

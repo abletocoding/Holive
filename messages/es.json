@@ -78,7 +78,7 @@
     "historias": {
       "eyebrow": "Historias de Holi",
       "title": "Historietas del ecosistema",
-      "intro": "Tiras de crayón con refranes empresariales — sembrar, cosechar y dejar la zona cómoda sin perder el alma."
+      "intro": "Experiencias de historieta animada con Holi — toca cada panel, siembra el refrán, cosecha la idea."
     }
   },
   "Holi": {
@@ -313,17 +313,21 @@
   "HoliStories": {
     "eyebrow": "Historias de Holi",
     "title": "Historietas del ecosistema",
-    "intro": "Holi no flota sobre tu trabajo: cuenta tiras cortas con moral empresarial. Sembrar. Cosechar. Ser útil.",
+    "intro": "Toca cada tira: Holi avanza panel a panel con refranes del oficio. Sembrar. Cosechar. Ser útil — sin flotar sobre tu trabajo.",
     "seeAll": "Ver todas las historietas",
+    "tapHint": "Toca para el siguiente panel",
+    "panelsLabel": "Paneles",
+    "panelDot": "Panel {n}",
+    "advanceAria": "{title}: panel {panel} de {total}. Toca para avanzar.",
     "episodes": {
       "seed": {
         "number": "Episodio 01",
         "title": "La semilla y el reloj",
         "moral": "Quien siembra proceso cosecha tiempo.",
         "panels": {
-          "0": "Holi planta un proceso pequeño.",
-          "1": "El reloj sigue, pero el caos baja.",
-          "2": "Cosecha: horas libres para servir mejor."
+          "0": "Holi planta un proceso chiquito — sin teatro.",
+          "1": "El reloj sigue. El caos, no.",
+          "2": "Cosecha: horas libres para servir de verdad."
         }
       },
       "comfort": {
@@ -331,7 +335,7 @@
         "title": "Fuera de la zona cómoda",
         "moral": "Dejar lo cómodo no es abandonar el alma.",
         "panels": {
-          "0": "Todo funciona… a medias y a mano.",
+          "0": "Todo “funciona”… a medias y a mano.",
           "1": "Holi señala la puerta del almacén digital.",
           "2": "Mismo oficio. Mejor sistema. Misma lealtad."
         }
@@ -341,8 +345,8 @@
         "title": "Teatro vs utilidad",
         "moral": "Si no ayuda a servir, no es estrategia.",
         "panels": {
-          "0": "Luces, slides, aplausos…",
-          "1": "Holi pregunta: ¿sirve a tu cliente?",
+          "0": "Luces, slides, aplausos… y cero clientes mejor atendidos.",
+          "1": "Holi pregunta: ¿esto sirve a quien te paga?",
           "2": "Se queda lo útil. Se va el ruido."
         }
       },
@@ -351,8 +355,8 @@
         "title": "Un nodo débil",
         "moral": "El negocio es un ecosistema: un nodo flojo debilita la malla.",
         "panels": {
-          "0": "Marca fuerte, ops flojas.",
-          "1": "Holi tira del hilo: todo se mueve.",
+          "0": "Marca brillante. Ops flojas. La malla cruje.",
+          "1": "Holi tira del hilo — todo se mueve junto.",
           "2": "Equilibra nodos. El pulso vuelve."
         }
       },
@@ -361,8 +365,8 @@
         "title": "Temporada de embudos",
         "moral": "Paciencia con el sistema; urgencia con la claridad.",
         "panels": {
-          "0": "Quieren frutos ya.",
-          "1": "Holi riega el embudo con calma.",
+          "0": "Quieren frutos ayer. El embudo aún es semilla.",
+          "1": "Holi riega con calma — y corta el ruido.",
           "2": "Claridad primero. Luego la cosecha."
         }
       },
@@ -371,9 +375,9 @@
         "title": "La mesa abierta",
         "moral": "La lealtad se siembra en cada entrega.",
         "panels": {
-          "0": "Un cliente vuelve con duda.",
-          "1": "Holi sirve claridad, no teatro.",
-          "2": "Confianza cosechada. Mesa lista."
+          "0": "Un cliente vuelve con duda — no con queja de teatro.",
+          "1": "Holi sirve claridad. Sin guion vacío.",
+          "2": "Confianza cosechada. Mesa lista otra vez."
         }
       }
     }
@@ -383,7 +387,7 @@
       "eyebrow": "Visión",
       "title": "El ojo que atiende",
       "refran": "Quien no mira al cliente, trabaja a ciegas.",
-      "hint": "Mueve el cursor · el ojo de glifos te sigue"
+      "hint": "Mueve el cursor · el ojo te sigue"
     },
     "kinetic": {
       "eyebrow": "Túnel tipográfico",

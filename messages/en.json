@@ -7,12 +7,12 @@
     "skip": "Skip to content",
     "home": "Home",
     "manifesto": "Manifesto",
-    "services": "Services",
+    "services": "Solutions",
     "digital": "Digitalization",
     "courses": "Courses",
     "blog": "Blog",
     "stories": "Stories",
-    "about": "About",
+    "about": "Philosophy",
     "process": "Process",
     "contact": "Contact",
     "themeLight": "Light mode",
@@ -30,7 +30,7 @@
   },
   "Pages": {
     "services": {
-      "eyebrow": "Services",
+      "eyebrow": "Solutions",
       "title": "Solutions that move brand and market",
       "intro": "Strategy, content, design, and print — one voice across physical and digital.",
       "holiTip": "Pick one channel to tend well before you open ten more."
@@ -78,7 +78,7 @@
     "historias": {
       "eyebrow": "Holi Stories",
       "title": "Comic strips from the ecosystem",
-      "intro": "Crayon strips with business proverbs — plant, harvest, and leave comfort without losing soul."
+      "intro": "Animated comic experiences with Holi — tap each panel, plant the refrán, harvest the idea."
     }
   },
   "Holi": {
@@ -313,17 +313,21 @@
   "HoliStories": {
     "eyebrow": "Holi Stories",
     "title": "Comic strips from the ecosystem",
-    "intro": "Holi doesn’t float over your work — she tells short strips with business morals. Plant. Harvest. Stay useful.",
+    "intro": "Tap each strip: Holi advances panel by panel with business refranes. Plant. Harvest. Stay useful — she never floats over your work.",
     "seeAll": "See all comic strips",
+    "tapHint": "Tap for the next panel",
+    "panelsLabel": "Panels",
+    "panelDot": "Panel {n}",
+    "advanceAria": "{title}: panel {panel} of {total}. Tap to advance.",
     "episodes": {
       "seed": {
         "number": "Episode 01",
         "title": "The seed and the clock",
         "moral": "Plant process, harvest time.",
         "panels": {
-          "0": "Holi plants one small process.",
-          "1": "The clock still ticks — chaos drops.",
-          "2": "Harvest: hours freed to serve better."
+          "0": "Holi plants one small process — no theater.",
+          "1": "The clock still ticks. Chaos doesn’t.",
+          "2": "Harvest: hours freed to serve for real."
         }
       },
       "comfort": {
@@ -331,7 +335,7 @@
         "title": "Leaving comfort",
         "moral": "Leaving comfort is not abandoning soul.",
         "panels": {
-          "0": "Everything works… halfway, by hand.",
+          "0": "Everything “works”… halfway, by hand.",
           "1": "Holi points to the digital warehouse door.",
           "2": "Same craft. Better system. Same loyalty."
         }
@@ -341,8 +345,8 @@
         "title": "Theater vs usefulness",
         "moral": "If it doesn’t help you serve, it isn’t strategy.",
         "panels": {
-          "0": "Lights, slides, applause…",
-          "1": "Holi asks: does this serve your client?",
+          "0": "Lights, slides, applause… zero better-served clients.",
+          "1": "Holi asks: does this serve the people who pay you?",
           "2": "Useful stays. Noise leaves."
         }
       },
@@ -351,8 +355,8 @@
         "title": "One weak node",
         "moral": "Business is an ecosystem — one weak node softens the mesh.",
         "panels": {
-          "0": "Strong brand, soft ops.",
-          "1": "Holi pulls the thread — everything moves.",
+          "0": "Bright brand. Soft ops. The mesh creaks.",
+          "1": "Holi pulls the thread — everything moves together.",
           "2": "Balance the nodes. Pulse returns."
         }
       },
@@ -361,8 +365,8 @@
         "title": "Funnel season",
         "moral": "Patience with systems; urgency with clarity.",
         "panels": {
-          "0": "They want fruit now.",
-          "1": "Holi waters the funnel calmly.",
+          "0": "They want fruit yesterday. The funnel is still a seed.",
+          "1": "Holi waters calmly — and cuts the noise.",
           "2": "Clarity first. Then harvest."
         }
       },
@@ -371,9 +375,9 @@
         "title": "The open table",
         "moral": "Loyalty is planted in every delivery.",
         "panels": {
-          "0": "A client returns with doubt.",
-          "1": "Holi serves clarity, not theater.",
-          "2": "Trust harvested. Table ready."
+          "0": "A client returns with doubt — not theater complaints.",
+          "1": "Holi serves clarity. No empty script.",
+          "2": "Trust harvested. Table ready again."
         }
       }
     }
@@ -383,7 +387,7 @@
       "eyebrow": "Vision",
       "title": "The eye that pays attention",
       "refran": "Ignore the client and you work blind.",
-      "hint": "Move the pointer · the glyph eye follows"
+      "hint": "Move the pointer · the eye follows"
     },
     "kinetic": {
       "eyebrow": "Typography tunnel",

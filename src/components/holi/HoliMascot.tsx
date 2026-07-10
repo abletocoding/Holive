@@ -2,7 +2,15 @@
 
 import { useId } from "react";
 
-export type HoliPose = "idle" | "wave" | "think" | "celebrate" | "guide" | "peek";
+export type HoliPose =
+  | "idle"
+  | "wave"
+  | "think"
+  | "celebrate"
+  | "guide"
+  | "peek"
+  | "plant"
+  | "walk";
 
 type Props = {
   className?: string;
@@ -194,6 +202,52 @@ export function HoliMascot({
               />
             </>
           )}
+          {pose === "plant" && (
+            <>
+              <path
+                d="M62 132c-16 18-22 36-18 52"
+                fill="none"
+                stroke="#101820"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+              <path
+                d="M138 130c12 22 8 40-2 54"
+                fill="none"
+                stroke="#101820"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+              <circle cx="52" cy="188" r="5" fill="#C9A84C" stroke="#101820" strokeWidth="1.5" />
+              <path
+                d="M52 183c0-6 3-10 6-12"
+                fill="none"
+                stroke="#330072"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </>
+          )}
+          {pose === "walk" && (
+            <>
+              <path
+                className="holi-arm-walk-back"
+                d="M62 128c-18 14-24 32-20 48"
+                fill="none"
+                stroke="#101820"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+              <path
+                className="holi-arm-walk-front"
+                d="M138 128c16-8 28 6 30 28"
+                fill="none"
+                stroke="#101820"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </>
+          )}
           {(pose === "idle" || pose === "peek") && (
             <>
               <path
@@ -214,7 +268,27 @@ export function HoliMascot({
           )}
 
           {/* Legs — peek hides lower body slightly via clip feel */}
-          {pose !== "peek" && (
+          {pose === "walk" && (
+            <>
+              <path
+                className="holi-leg-walk-back"
+                d="M88 178c-14 16-10 36-2 52"
+                fill="none"
+                stroke="#101820"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+              <path
+                className="holi-leg-walk-front"
+                d="M112 178c16 12 10 34 4 52"
+                fill="none"
+                stroke="#101820"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+              />
+            </>
+          )}
+          {pose !== "peek" && pose !== "walk" && (
             <>
               <path
                 d="M88 178c-6 22-10 38-8 52"
