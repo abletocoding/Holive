@@ -37,9 +37,12 @@ export function Footer({ showGame = true }: { showGame?: boolean }) {
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) setUnlocked(true);
+        if (entry?.isIntersecting) {
+          setUnlocked(true);
+          io.disconnect();
+        }
       },
-      { rootMargin: "0px", threshold: 0.2 },
+      { rootMargin: "240px 0px", threshold: 0 },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -103,13 +106,20 @@ export function Footer({ showGame = true }: { showGame?: boolean }) {
               aria-hidden
               className="mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-[var(--holive-gold)] to-transparent opacity-60"
             />
-            <div ref={sentinelRef} className="mt-10 min-h-[2rem]">
+            <div ref={sentinelRef} className="mt-10 min-h-[12rem] scroll-mt-8">
               {unlocked ? (
                 <div className="animate-[fadeIn_0.6s_ease] -mx-5 md:-mx-8">
                   <HoliGame />
                 </div>
               ) : (
-                <div className="h-8" aria-hidden />
+                <div
+                  className="flex min-h-[12rem] items-center justify-center border border-[color-mix(in_srgb,var(--holive-gold)_20%,transparent)] bg-[color-mix(in_srgb,var(--holive-purple)_8%,transparent)] px-4 text-center"
+                  aria-hidden
+                >
+                  <span className="font-mono-code text-[0.65rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--foreground)_45%,transparent)] uppercase">
+                    …
+                  </span>
+                </div>
               )}
             </div>
           </>
