@@ -731,7 +731,7 @@ export function HoliGame() {
         </div>
       </header>
 
-      <div className="flex max-h-[4.75rem] flex-wrap items-center justify-center gap-1.5 overflow-y-auto overscroll-contain pb-1 sm:max-h-none sm:gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-1.5 pb-1 sm:gap-2">
         <ControlBtn
           onClick={() => void onToggleFs()}
           label={isFs ? t("exitFullscreen") : t("fullscreen")}
