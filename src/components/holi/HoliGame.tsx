@@ -647,11 +647,12 @@ export function HoliGame() {
       ref={stageRef}
       role="application"
       aria-label={t("title")}
-      className={`neural-shake-target fixed inset-0 z-[var(--z-overlay-game)] grid min-h-[100dvh] w-full grid-rows-[auto_auto_minmax(0,1fr)] bg-[#05030a] text-[var(--holive-white)] select-none ${shake > 0 ? "neural-shaking" : ""}`}
+      className={`neural-shake-target fixed inset-0 z-[var(--z-overlay-game)] grid h-[100svh] max-h-[100dvh] min-h-[100svh] w-full grid-rows-[auto_auto_minmax(0,1fr)] overflow-x-clip overflow-y-hidden bg-[#05030a] text-[var(--holive-white)] select-none touch-manipulation ${shake > 0 ? "neural-shaking" : ""}`}
     >
+
       <NeuralBackdrop
         reduced={reduced}
-        parallax={!reduced}
+        parallax={!reduced && phase !== "train" && phase !== "hub" && phase !== "freestyle"}
         theme={theme}
         levelId={phase === "hub" || phase === "train" || phase === "freestyle" ? 0 : levelId}
       />
@@ -662,11 +663,16 @@ export function HoliGame() {
         shake={shake}
         theme={theme}
         celebrate={phase === "cleared" || phase === "victory"}
-        ambient={phase !== "hub" && phase !== "train" && phase !== "paused"}
+        ambient={
+          phase !== "hub" &&
+          phase !== "train" &&
+          phase !== "freestyle" &&
+          phase !== "paused"
+        }
       />
 
-      <div className="relative z-20 flex flex-col gap-1.5 px-3 pt-[max(0.65rem,env(safe-area-inset-top))] sm:px-5">
-      <header className="flex items-start justify-between gap-3">
+      <div className="relative z-20 flex shrink-0 flex-col gap-1 px-3 pt-[max(0.5rem,env(safe-area-inset-top))] sm:gap-1.5 sm:px-5">
+      <header className="flex items-start justify-between gap-2 sm:gap-3">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <HoliMascot
             pose={
@@ -725,7 +731,7 @@ export function HoliGame() {
         </div>
       </header>
 
-      <div className="flex flex-wrap items-center justify-center gap-1.5 pb-1 sm:gap-2">
+      <div className="flex max-h-[4.75rem] flex-wrap items-center justify-center gap-1.5 overflow-y-auto overscroll-contain pb-1 sm:max-h-none sm:gap-2">
         <ControlBtn
           onClick={() => void onToggleFs()}
           label={isFs ? t("exitFullscreen") : t("fullscreen")}
@@ -734,7 +740,7 @@ export function HoliGame() {
           onClick={() => void onToggleMute()}
           label={muted || !audioOn ? t("unmute") : t("mute")}
         />
-        <label className="flex items-center gap-2 rounded border border-white/15 bg-black/35 px-2 py-1.5 text-[0.65rem] text-white/70">
+        <label className="flex min-h-11 items-center gap-2 rounded border border-white/15 bg-black/35 px-2 py-1.5 text-[0.65rem] text-white/70">
           <span className="sr-only">{t("volume")}</span>
           <span aria-hidden className="opacity-60">
             ♪
@@ -746,7 +752,7 @@ export function HoliGame() {
             step={0.05}
             value={volume}
             onChange={(e) => onVolume(Number(e.target.value))}
-            className="h-1.5 w-20 accent-[var(--holive-gold)] sm:w-28"
+            className="h-8 w-20 accent-[var(--holive-gold)] sm:w-28"
             aria-label={t("volume")}
           />
         </label>
@@ -766,18 +772,18 @@ export function HoliGame() {
       </div>
       </div>
 
-      <div className="relative z-20 flex flex-col items-center gap-1 px-3">
+      <div className="relative z-20 flex shrink-0 flex-col items-center gap-0.5 px-3 sm:gap-1">
       {(fsDenied || !fsSupported) && (
         <p className="px-2 text-center text-[0.65rem] text-white/40">
           {t("fullscreenDenied")}
         </p>
       )}
 
-      <p className="font-mono-code px-2 py-0.5 text-center text-[0.7rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--holive-gold)_75%,white)] sm:text-xs">
+      <p className="font-mono-code px-2 py-0.5 text-center text-[0.65rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--holive-gold)_75%,white)] sm:text-xs">
         {statusLabel}
       </p>
 
-      {phase !== "hub" && phase !== "train" && (
+      {phase !== "hub" && phase !== "train" && phase !== "freestyle" && (
         <div
           key={mantraIdx}
           className="mx-auto max-w-lg px-3 pb-1 text-center animate-[fadeIn_0.6s_ease]"
@@ -792,8 +798,12 @@ export function HoliGame() {
         </div>
       )}
 
-      {audioOn && !muted && phase !== "hub" && phase !== "train" && (
-        <p className="px-2 pb-0.5 text-center text-[0.6rem] tracking-wide text-white/35">
+      {audioOn &&
+        !muted &&
+        phase !== "hub" &&
+        phase !== "train" &&
+        phase !== "freestyle" && (
+        <p className="hidden px-2 pb-0.5 text-center text-[0.6rem] tracking-wide text-white/35 sm:block">
           {t("binauralHint", {
             beat: currentMeta.beatHz,
             carrier: currentMeta.carrierHz,
@@ -802,7 +812,7 @@ export function HoliGame() {
       )}
       </div>
 
-      <div className="relative z-10 flex min-h-0 items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-1 sm:px-8">
+      <div className="relative z-10 flex min-h-0 w-full items-stretch justify-center overflow-x-clip overflow-y-auto overscroll-contain px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1 sm:items-center sm:px-8">
         {phase === "train" ? (
           <TrainHub
             highScore={progress.highScore}
@@ -988,7 +998,7 @@ function LevelSelect({
       <button
         type="button"
         onClick={onTrain}
-        className="focus-ring mx-auto mb-3 block min-h-10 border border-white/20 bg-black/35 px-4 text-xs text-white/75 hover:border-[var(--holive-gold)]/50"
+        className="focus-ring mx-auto mb-3 block min-h-11 border border-white/20 bg-black/35 px-4 text-xs text-white/75 hover:border-[var(--holive-gold)]/50"
       >
         {t("hub.backToTrain")}
       </button>
@@ -1042,7 +1052,7 @@ function ControlBtn({
     <button
       type="button"
       onClick={onClick}
-      className="focus-ring min-h-10 rounded border border-white/20 bg-black/40 px-3 py-2 text-[0.65rem] font-medium tracking-wide text-white/85 backdrop-blur-sm hover:border-[var(--holive-gold)]/50 hover:text-[var(--holive-gold)] sm:text-xs"
+      className="focus-ring min-h-11 rounded border border-white/20 bg-black/40 px-3 py-2 text-[0.65rem] font-medium tracking-wide text-white/85 backdrop-blur-sm hover:border-[var(--holive-gold)]/50 hover:text-[var(--holive-gold)] sm:text-xs"
     >
       {label}
     </button>

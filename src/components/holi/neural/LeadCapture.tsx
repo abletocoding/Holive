@@ -78,7 +78,7 @@ export function LeadCapture({ score, level, onDone, onSkip }: Props) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t("email")}
-              className="focus-ring w-full border border-white/20 bg-black/50 px-3 py-2.5 text-sm text-white placeholder:text-white/35"
+              className="focus-ring min-h-11 w-full border border-white/20 bg-black/50 px-3 py-2.5 text-sm text-white placeholder:text-white/35"
             />
           </label>
           <label className="block">
@@ -89,7 +89,7 @@ export function LeadCapture({ score, level, onDone, onSkip }: Props) {
               value={objective}
               onChange={(e) => setObjective(e.target.value)}
               placeholder={t("objective")}
-              className="focus-ring w-full resize-none border border-white/20 bg-black/50 px-3 py-2.5 text-sm text-white placeholder:text-white/35"
+              className="focus-ring min-h-11 w-full resize-none border border-white/20 bg-black/50 px-3 py-2.5 text-sm text-white placeholder:text-white/35"
             />
           </label>
           {status === "err" && (
@@ -99,14 +99,14 @@ export function LeadCapture({ score, level, onDone, onSkip }: Props) {
             <button
               type="submit"
               disabled={status === "loading"}
-              className="focus-ring min-h-11 bg-[var(--holive-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--holive-black)] disabled:opacity-60"
+              className="focus-ring min-h-12 bg-[var(--holive-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--holive-black)] disabled:opacity-60"
             >
               {status === "loading" ? t("sending") : t("submit")}
             </button>
             <button
               type="button"
               onClick={onSkip}
-              className="focus-ring min-h-11 px-3 py-2 text-xs text-white/50 hover:text-white/80"
+              className="focus-ring min-h-12 px-3 py-2 text-xs text-white/50 hover:text-white/80"
             >
               {t("skip")}
             </button>

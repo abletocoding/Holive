@@ -105,7 +105,7 @@ export function NeuralBoard({
   const base = baseLayout(level.nodes);
 
   return (
-    <div className="relative mx-auto my-auto aspect-square w-full max-w-[min(88vw,26rem)] shrink-0 landscape:max-w-[min(62vh,28rem)]">
+    <div className="relative mx-auto my-auto aspect-square w-full max-w-[min(88vw,26rem)] max-h-[min(58svh,26rem)] shrink-0 overflow-x-clip touch-manipulation landscape:max-h-[min(72svh,28rem)] landscape:max-w-[min(62vh,28rem)]">
       {/* soft orbit guide */}
       {level.orbit && !reduced && (
         <div
@@ -141,7 +141,7 @@ export function NeuralBoard({
             disabled={disabled}
             aria-label={nodeLabel(i + 1)}
             onClick={() => onNode(i)}
-            className="focus-ring absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition active:scale-[0.97] disabled:cursor-default"
+            className="neural-touch focus-ring absolute min-h-11 min-w-11 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 transition active:scale-[0.97] disabled:cursor-default"
             style={{
               left: `${p.x}%`,
               top: `${p.y}%`,

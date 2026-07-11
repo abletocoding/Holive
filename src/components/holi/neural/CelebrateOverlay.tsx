@@ -80,7 +80,7 @@ export function CelebrateOverlay({
           : labels.levelCleared;
 
   return (
-    <div className="absolute inset-0 z-30 flex items-center justify-center overflow-y-auto overscroll-contain bg-[radial-gradient(ellipse_at_center,rgba(20,10,40,0.72),rgba(0,0,0,0.78))] px-4 py-[max(1.5rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))] text-center backdrop-blur-[3px]">
+    <div className="absolute inset-0 z-30 flex items-center justify-center overflow-x-clip overflow-y-auto overscroll-contain bg-[radial-gradient(ellipse_at_center,rgba(20,10,40,0.72),rgba(0,0,0,0.78))] px-3 py-[max(1rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))] text-center backdrop-blur-[3px] sm:px-4 sm:py-[max(1.5rem,env(safe-area-inset-top))]">
       <div
         className={`neural-celebrate-panel relative my-auto flex w-full max-w-md flex-col items-center ${
           win && !reduced ? "neural-celebrate-in" : "animate-[fadeIn_0.4s_ease]"
@@ -107,7 +107,7 @@ export function CelebrateOverlay({
           />
         </div>
 
-        <p className="font-display text-2xl tracking-wide text-[var(--holive-gold)] sm:text-3xl">
+        <p className="font-display text-xl tracking-wide text-[var(--holive-gold)] sm:text-3xl">
           {title}
         </p>
 
