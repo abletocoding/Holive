@@ -19,6 +19,7 @@ import {
   LEVELS,
   getLevel,
   randomNode,
+  type AudioBedId,
   type LevelDef,
 } from "@/lib/game/levels";
 import { insightForLevel, insightText } from "@/lib/game/insights";
@@ -40,8 +41,12 @@ import { themeForLevel } from "@/lib/game/levelThemes";
 import {
   loadFreestyleKit,
   saveFreestyleKit,
+  kitWithLayout,
+  type FreestyleHealerBed,
   type FreestyleKit,
+  type FreestyleMood,
   type FreestylePad,
+  type FreestyleSessionPhase,
 } from "@/lib/game/freestyleKit";
 import {
   loadDailyMissions,
@@ -61,6 +66,25 @@ type Phase =
   | "cleared"
   | "victory"
   | "paused";
+
+const HOLI_REACTIONS_ES = [
+  "Sí — sostén el groove",
+  "El ritmo te abraza",
+  "Calma en el pulso",
+  "Holi vibra contigo",
+];
+const HOLI_REACTIONS_EN = [
+  "Yes — hold the groove",
+  "Rhythm holds you",
+  "Calm in the pulse",
+  "Holi vibes with you",
+];
+
+function blurPlaySurface() {
+  if (typeof document === "undefined") return;
+  const el = document.activeElement;
+  if (el instanceof HTMLElement) el.blur();
+}
 
 /**
  * Neural Pulse — multi-level pattern memory arena.
@@ -106,6 +130,12 @@ export function HoliGame() {
   const [freestyleHits, setFreestyleHits] = useState(0);
   const [freestyleSeconds, setFreestyleSeconds] = useState(0);
   const [activePad, setActivePad] = useState<string | null>(null);
+  const [seqPlaying, setSeqPlaying] = useState(false);
+  const [seqStep, setSeqStep] = useState(0);
+  const [sessionPhase, setSessionPhase] =
+    useState<FreestyleSessionPhase>("idle");
+  const [breathOpen, setBreathOpen] = useState(true);
+  const [holiReaction, setHoliReaction] = useState<string | null>(null);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<NeuralAmbient | null>(null);
@@ -119,6 +149,9 @@ export function HoliGame() {
   const freestyleSecondsRef = useRef(0);
   const freestyleSavedSecondsRef = useRef(0);
   const metronomeBeatRef = useRef(0);
+  const seqStepRef = useRef(0);
+  const freestyleKitRef = useRef(freestyleKit);
+  const hitStreakRef = useRef(0);
 
   const level: LevelDef = getLevel(levelId);
   const theme = themeForLevel(levelId);
@@ -144,6 +177,7 @@ export function HoliGame() {
 
   useEffect(() => {
     saveFreestyleKit(freestyleKit);
+    freestyleKitRef.current = freestyleKit;
   }, [freestyleKit]);
 
   useEffect(() => {
@@ -158,15 +192,88 @@ export function HoliGame() {
     return () => window.clearInterval(id);
   }, [arena, phase]);
 
+  // Metronome only when sequencer is not driving clicks
   useEffect(() => {
-    if (!arena || phase !== "freestyle" || !freestyleKit.metronome) return;
+    if (
+      !arena ||
+      phase !== "freestyle" ||
+      !freestyleKit.metronome ||
+      seqPlaying
+    )
+      return;
     const beatMs = Math.max(320, Math.round(60000 / freestyleKit.tempo));
     const id = window.setInterval(() => {
       audioRef.current?.playMetronomeClick(metronomeBeatRef.current % 4 === 0);
       metronomeBeatRef.current += 1;
     }, beatMs);
     return () => window.clearInterval(id);
-  }, [arena, freestyleKit.metronome, freestyleKit.tempo, phase]);
+  }, [
+    arena,
+    freestyleKit.metronome,
+    freestyleKit.tempo,
+    phase,
+    seqPlaying,
+  ]);
+
+  // Step sequencer clock
+  useEffect(() => {
+    if (!arena || phase !== "freestyle" || !seqPlaying) return;
+    const beatMs = Math.max(220, Math.round(60000 / freestyleKit.tempo));
+    const id = window.setInterval(() => {
+      const kit = freestyleKitRef.current;
+      const steps = kit.seqSteps;
+      const next = (seqStepRef.current + 1) % steps;
+      seqStepRef.current = next;
+      setSeqStep(next);
+      if (kit.metronome) {
+        audioRef.current?.playMetronomeClick(next % 4 === 0);
+      }
+      kit.pads.forEach((pad, ti) => {
+        if (kit.pattern.tracks[ti]?.[next]) {
+          audioRef.current?.playFreestyleHit(ti, pad.tone);
+          setActivePad(pad.id);
+          window.setTimeout(
+            () =>
+              setActivePad((current) => (current === pad.id ? null : current)),
+            140,
+          );
+        }
+      });
+    }, beatMs);
+    return () => window.clearInterval(id);
+  }, [arena, freestyleKit.tempo, phase, seqPlaying]);
+
+  // Breath gate oscillation (~ inhale 2.4s / exhale 2.4s)
+  useEffect(() => {
+    if (!arena || phase !== "freestyle" || !freestyleKit.breathGate) {
+      setBreathOpen(true);
+      return;
+    }
+    setBreathOpen(true);
+    const id = window.setInterval(() => {
+      setBreathOpen((open) => !open);
+    }, 2400);
+    return () => window.clearInterval(id);
+  }, [arena, freestyleKit.breathGate, phase]);
+
+  // Intention session phases: warm 2m → flow 4m → cool 2m
+  useEffect(() => {
+    if (!arena || phase !== "freestyle" || sessionPhase === "idle") return;
+    const durations: Record<Exclude<FreestyleSessionPhase, "idle">, number> = {
+      warm: 120,
+      flow: 240,
+      cool: 120,
+    };
+    const ms = durations[sessionPhase] * 1000;
+    const id = window.setTimeout(() => {
+      setSessionPhase((current) => {
+        if (current === "warm") return "flow";
+        if (current === "flow") return "cool";
+        return "idle";
+      });
+    }, ms);
+    return () => window.clearTimeout(id);
+  }, [arena, phase, sessionPhase]);
 
   useEffect(() => {
     if (!arena) return;
@@ -221,6 +328,8 @@ export function HoliGame() {
   const enterTrain = useCallback(() => {
     abortWatchRef.current = true;
     finishFreestyleSession();
+    setSeqPlaying(false);
+    setSessionPhase("idle");
     stopAudio();
     setPhase("train");
     setLit(null);
@@ -232,6 +341,8 @@ export function HoliGame() {
   const enterClassicHub = useCallback(() => {
     abortWatchRef.current = true;
     finishFreestyleSession();
+    setSeqPlaying(false);
+    setSessionPhase("idle");
     stopAudio();
     setPhase("hub");
     setLit(null);
@@ -242,6 +353,7 @@ export function HoliGame() {
 
   const enterFreestyle = useCallback(async () => {
     abortWatchRef.current = true;
+    blurPlaySurface();
     setPhase("freestyle");
     setScore(0);
     setSeqLen(0);
@@ -255,33 +367,97 @@ export function HoliGame() {
     freestyleSecondsRef.current = 0;
     freestyleSavedSecondsRef.current = 0;
     metronomeBeatRef.current = 0;
+    seqStepRef.current = 0;
+    setSeqStep(0);
+    setSeqPlaying(false);
+    setSessionPhase("idle");
+    setHoliReaction(null);
+    hitStreakRef.current = 0;
+    const bed = (freestyleKit.healerBed || "crystal") as AudioBedId;
     try {
-      await ensureAudio("heal");
-      await audioRef.current?.setBed("heal");
+      await ensureAudio(bed);
+      await audioRef.current?.setBed(bed);
     } catch {
       /* autoplay denied */
     }
-  }, [ensureAudio]);
+    // Second blur after layout settles (iOS Safari focus residue)
+    window.setTimeout(blurPlaySurface, 50);
+  }, [ensureAudio, freestyleKit.healerBed]);
 
   const onFreestylePad = useCallback(
     async (pad: FreestylePad, index: number) => {
+      blurPlaySurface();
+      const bed = (freestyleKit.healerBed || "crystal") as AudioBedId;
       if (!audioRef.current || !audioOn) {
         try {
-          await ensureAudio("heal");
+          await ensureAudio(bed);
         } catch {
           /* autoplay denied */
         }
       }
       audioRef.current?.playFreestyleHit(index, pad.tone);
       setActivePad(pad.id);
-      window.setTimeout(() => setActivePad((current) => (current === pad.id ? null : current)), 180);
+      window.setTimeout(
+        () => setActivePad((current) => (current === pad.id ? null : current)),
+        180,
+      );
       setFreestyleHits((hits) => hits + 1);
       setMissions(recordMissionEvent({ type: "freestyleHit" }));
       setPulse(0.55);
       window.setTimeout(() => setPulse(0), 150);
+
+      hitStreakRef.current += 1;
+      if (hitStreakRef.current > 0 && hitStreakRef.current % 16 === 0) {
+        const pool = locale.startsWith("en")
+          ? HOLI_REACTIONS_EN
+          : HOLI_REACTIONS_ES;
+        const line = pool[Math.floor(Math.random() * pool.length)]!;
+        setHoliReaction(line);
+        setCoach("cheer");
+        audioRef.current?.playChime();
+        setFreestyleKit((kit) =>
+          kitWithLayout({ ...kit, jamStreak: kit.jamStreak + 1 }),
+        );
+        window.setTimeout(() => setHoliReaction(null), 2800);
+      }
+    },
+    [audioOn, ensureAudio, freestyleKit.healerBed, locale],
+  );
+
+  const onFreestyleBedChange = useCallback(
+    async (bed: FreestyleHealerBed) => {
+      setFreestyleKit((kit) => kitWithLayout({ ...kit, healerBed: bed }));
+      try {
+        if (!audioRef.current || !audioOn) {
+          await ensureAudio(bed as AudioBedId);
+        } else {
+          await audioRef.current.setBed(bed as AudioBedId);
+        }
+      } catch {
+        /* ignore */
+      }
     },
     [audioOn, ensureAudio],
   );
+
+  const onFreestyleMood = useCallback((mood: FreestyleMood) => {
+    setFreestyleKit((kit) => kitWithLayout({ ...kit, lastMood: mood }));
+    setCoach("cheer");
+  }, []);
+
+  const onSeqToggle = useCallback(() => {
+    setSeqPlaying((playing) => {
+      if (!playing) {
+        seqStepRef.current = -1;
+        setSeqStep(0);
+      }
+      return !playing;
+    });
+  }, []);
+
+  const onIntentionToggle = useCallback(() => {
+    setSessionPhase((phase) => (phase === "idle" ? "warm" : "idle"));
+  }, []);
 
   const flashFx = useCallback((intensity = 0.7) => {
     setPulse(intensity);
@@ -500,6 +676,8 @@ export function HoliGame() {
   const leaveArena = useCallback(async () => {
     abortWatchRef.current = true;
     finishFreestyleSession();
+    setSeqPlaying(false);
+    setSessionPhase("idle");
     await exitFs();
     stopAudio();
     setArena(false);
@@ -537,7 +715,11 @@ export function HoliGame() {
   const onToggleMute = useCallback(async () => {
     if (!audioRef.current || !audioOn) {
       try {
-        await ensureAudio(phase === "freestyle" ? "heal" : level.audioBed);
+        const bed =
+          phase === "freestyle"
+            ? ((freestyleKit.healerBed || "crystal") as AudioBedId)
+            : level.audioBed;
+        await ensureAudio(bed);
         setMuted(false);
         audioRef.current?.setMuted(false);
       } catch {
@@ -547,7 +729,13 @@ export function HoliGame() {
     }
     const next = audioRef.current.toggleMute();
     setMuted(next);
-  }, [audioOn, ensureAudio, level.audioBed, phase]);
+  }, [
+    audioOn,
+    ensureAudio,
+    freestyleKit.healerBed,
+    level.audioBed,
+    phase,
+  ]);
 
   const onVolume = useCallback(
     (v: number) => {
@@ -581,7 +769,11 @@ export function HoliGame() {
   const currentMeta =
     audioOn && audioRef.current
       ? audioRef.current.bedMeta
-      : bedMeta(phase === "freestyle" ? "heal" : level.audioBed);
+      : bedMeta(
+          phase === "freestyle"
+            ? ((freestyleKit.healerBed || "crystal") as AudioBedId)
+            : level.audioBed,
+        );
   const mantra = mantraForLocale(BUSINESS_MANTRAS[mantraIdx]!, locale);
   const insight = insightText(insightForLevel(levelId), locale);
 
@@ -750,8 +942,14 @@ export function HoliGame() {
             min={0}
             max={1}
             step={0.05}
+            inputMode="none"
             value={volume}
-            onChange={(e) => onVolume(Number(e.target.value))}
+            onChange={(e) => {
+              onVolume(Number(e.target.value));
+              e.currentTarget.blur();
+            }}
+            onPointerUp={(e) => e.currentTarget.blur()}
+            onTouchEnd={(e) => e.currentTarget.blur()}
             className="h-8 w-20 accent-[var(--holive-gold)] sm:w-28"
             aria-label={t("volume")}
           />
@@ -859,6 +1057,11 @@ export function HoliGame() {
             hits={freestyleHits}
             sessionSeconds={freestyleSeconds}
             reduced={reduced}
+            seqPlaying={seqPlaying}
+            seqStep={seqStep}
+            sessionPhase={sessionPhase}
+            breathOpen={breathOpen}
+            holiReaction={holiReaction}
             labels={{
               title: t("freestyle.title"),
               subtitle: t("freestyle.subtitle"),
@@ -874,9 +1077,56 @@ export function HoliGame() {
               lower: t("freestyle.lower"),
               higher: t("freestyle.higher"),
               pad: t("freestyle.pad"),
+              kit: t("freestyle.kit"),
+              close: t("freestyle.close"),
+              beds: t("freestyle.beds"),
+              bed: {
+                crystal: t("freestyle.bed.crystal"),
+                forest: t("freestyle.bed.forest"),
+                deepheal: t("freestyle.bed.deepheal"),
+                golden: t("freestyle.bed.golden"),
+                heal: t("freestyle.bed.heal"),
+              },
+              sequencer: t("freestyle.sequencer"),
+              play: t("freestyle.play"),
+              stop: t("freestyle.stop"),
+              record: t("freestyle.record"),
+              clear: t("freestyle.clear"),
+              steps: t("freestyle.steps"),
+              presets: t("freestyle.presets"),
+              presetPulse: t("freestyle.presetPulse"),
+              presetBreath: t("freestyle.presetBreath"),
+              presetSpiral: t("freestyle.presetSpiral"),
+              presetHeart: t("freestyle.presetHeart"),
+              harmonic: t("freestyle.harmonic"),
+              harmonicOn: t("freestyle.harmonicOn"),
+              harmonicOff: t("freestyle.harmonicOff"),
+              breath: t("freestyle.breath"),
+              breathOn: t("freestyle.breathOn"),
+              breathOff: t("freestyle.breathOff"),
+              intention: t("freestyle.intention"),
+              warm: t("freestyle.warm"),
+              flow: t("freestyle.flow"),
+              cool: t("freestyle.cool"),
+              startIntention: t("freestyle.startIntention"),
+              stopIntention: t("freestyle.stopIntention"),
+              mood: t("freestyle.mood"),
+              moods: {
+                calm: t("freestyle.moods.calm"),
+                open: t("freestyle.moods.open"),
+                bright: t("freestyle.moods.bright"),
+                grounded: t("freestyle.moods.grounded"),
+                flowing: t("freestyle.moods.flowing"),
+              },
+              jamStreak: t("freestyle.jamStreak"),
+              coachEmpty: t("freestyle.coachEmpty"),
             }}
             onHit={(pad, index) => void onFreestylePad(pad, index)}
             onKitChange={setFreestyleKit}
+            onSeqToggle={onSeqToggle}
+            onIntentionToggle={onIntentionToggle}
+            onMood={onFreestyleMood}
+            onBedChange={(bed) => void onFreestyleBedChange(bed)}
           />
         ) : (
           <NeuralBoard

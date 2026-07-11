@@ -12,7 +12,11 @@ export type AudioBedId =
   | "orbit"
   | "deep"
   | "master"
-  | "heal";
+  | "heal"
+  | "crystal"
+  | "forest"
+  | "deepheal"
+  | "golden";
 
 export type LevelDef = {
   id: number;
