@@ -779,9 +779,11 @@ export function HoliGame() {
         </p>
       )}
 
-      <p className="font-mono-code px-2 py-0.5 text-center text-[0.65rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--holive-gold)_75%,white)] sm:text-xs">
-        {statusLabel}
-      </p>
+      {phase !== "freestyle" && (
+        <p className="font-mono-code px-2 py-0.5 text-center text-[0.65rem] tracking-[0.22em] text-[color-mix(in_srgb,var(--holive-gold)_75%,white)] sm:text-xs">
+          {statusLabel}
+        </p>
+      )}
 
       {phase !== "hub" && phase !== "train" && phase !== "freestyle" && (
         <div
