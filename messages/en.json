@@ -237,7 +237,7 @@
       "classicBody": "Memorize purple and gold node sequences, clear depths, unlock rewards, and keep your high score moving.",
       "classicCta": "Open depth hub",
       "freestyleTitle": "Freestyle Healing Drum",
-      "freestyleBody": "Healer beds, step sequencer, intention sessions, and tuned pads — a deep rhythm sandbox with Holive calm.",
+      "freestyleBody": "Song charts, healer beds, sequencer, and solo immersive jam — hours of Holive rhythm.",
       "freestyleCta": "Enter freestyle"
     },
     "hub": {
@@ -246,7 +246,7 @@
     },
     "freestyle": {
       "title": "Freestyle Healing Drum",
-      "subtitle": "Tuned pads, healer beds, sequencer — rhythm and calm, no fail state.",
+      "subtitle": "Pads, healer beds, songs, and jam — rhythm without fail.",
       "coach": "Healing drum active — play your rhythm.",
       "status": "Freestyle healing drum",
       "hits": "Hits",
@@ -303,7 +303,39 @@
         "flowing": "Flowing"
       },
       "jamStreak": "Jam streaks",
-      "coachEmpty": "Tap a pad — Holi listens."
+      "coachEmpty": "Tap a pad — Holi listens.",
+      "immersive": "Solo",
+      "immersiveOn": "Hide chrome",
+      "peek": "Show controls",
+      "songs": "Songs",
+      "songMode": "Song chart",
+      "daily": "Daily",
+      "playSong": "Play chart",
+      "replay": "Replay",
+      "jamKit": "Encore jam",
+      "perfect": "Perfect",
+      "good": "Good",
+      "miss": "Miss",
+      "stars": "score",
+      "unlocks": "Unlocked",
+      "backJam": "Freestyle jam",
+      "chartReady": "Ready",
+      "songNames": {
+        "crystalDrive": "Crystal Drive",
+        "forestPulse": "Forest Pulse",
+        "goldenHeart": "Golden Heart",
+        "deepHealRitual": "Deep Heal Ritual",
+        "auroraSpiral": "Aurora Spiral",
+        "sunrootGroove": "Sunroot Groove"
+      },
+      "songMoods": {
+        "crystalDriveMood": "Bright crystal lanes — clean drive.",
+        "forestPulseMood": "Soft canopy breath and earth hits.",
+        "goldenHeartMood": "Warm twin-pulse heart groove.",
+        "deepHealRitualMood": "Slow ritual drones and deep pads.",
+        "auroraSpiralMood": "Spiral lanes racing around the kit.",
+        "sunrootGrooveMood": "Sunny root groove for long jams."
+      }
     },
     "missions": {
       "title": "Daily missions",
@@ -311,7 +343,8 @@
       "classicClears": "Clear one Classic depth",
       "classicScore": "Reach today's Classic score",
       "freestyleHits": "Land Freestyle drum hits",
-      "freestyleSeconds": "Hold a healing session"
+      "freestyleSeconds": "Hold a healing session",
+      "freestyleSong": "Clear today's song chart"
     },
     "enterArena": "Enter arena",
     "exitArena": "Exit",

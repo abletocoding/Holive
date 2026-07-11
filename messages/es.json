@@ -237,7 +237,7 @@
       "classicBody": "Memoriza secuencias púrpura y oro, supera profundidades, desbloquea recompensas y sube tu récord.",
       "classicCta": "Abrir profundidades",
       "freestyleTitle": "Tambor Sanador Freestyle",
-      "freestyleBody": "Camas sanadoras, secuenciador, sesiones de intención y pads afinados — un sandbox de ritmo con calma Holive.",
+      "freestyleBody": "Charts de canciones, camas sanadoras, secuenciador y jam inmersivo — horas de ritmo Holive.",
       "freestyleCta": "Entrar a freestyle"
     },
     "hub": {
@@ -246,7 +246,7 @@
     },
     "freestyle": {
       "title": "Tambor Sanador Freestyle",
-      "subtitle": "Pads afinados, camas sanadoras, secuenciador — ritmo y calma, sin fallo.",
+      "subtitle": "Pads, camas sanadoras, canciones y jam — ritmo sin fallo.",
       "coach": "Tambor sanador activo — toca tu ritmo.",
       "status": "Tambor sanador Freestyle",
       "hits": "Golpes",
@@ -303,7 +303,39 @@
         "flowing": "Fluidez"
       },
       "jamStreak": "Rachas de jam",
-      "coachEmpty": "Toca un pad — Holi escucha."
+      "coachEmpty": "Toca un pad — Holi escucha.",
+      "immersive": "Solo",
+      "immersiveOn": "Ocultar controles",
+      "peek": "Mostrar controles",
+      "songs": "Canciones",
+      "songMode": "Modo canción",
+      "daily": "Diaria",
+      "playSong": "Tocar chart",
+      "replay": "Repetir",
+      "jamKit": "Encore jam",
+      "perfect": "Perfecto",
+      "good": "Bien",
+      "miss": "Fallo",
+      "stars": "puntaje",
+      "unlocks": "Desbloqueado",
+      "backJam": "Jam freestyle",
+      "chartReady": "Listo",
+      "songNames": {
+        "crystalDrive": "Crystal Drive",
+        "forestPulse": "Pulso del Bosque",
+        "goldenHeart": "Corazón Dorado",
+        "deepHealRitual": "Ritual de Sanación",
+        "auroraSpiral": "Espiral Aurora",
+        "sunrootGroove": "Groove Raíz Solar"
+      },
+      "songMoods": {
+        "crystalDriveMood": "Carriles de cristal — drive limpio.",
+        "forestPulseMood": "Respiro de dosel y golpes de tierra.",
+        "goldenHeartMood": "Pulso gemelo cálido de corazón.",
+        "deepHealRitualMood": "Drones lentos y pads profundos.",
+        "auroraSpiralMood": "Carriles en espiral alrededor del kit.",
+        "sunrootGrooveMood": "Groove solar para jams largos."
+      }
     },
     "missions": {
       "title": "Misiones diarias",
@@ -311,7 +343,8 @@
       "classicClears": "Supera una profundidad Classic",
       "classicScore": "Alcanza el puntaje Classic de hoy",
       "freestyleHits": "Da golpes de tambor Freestyle",
-      "freestyleSeconds": "Sostén una sesión sanadora"
+      "freestyleSeconds": "Sostén una sesión sanadora",
+      "freestyleSong": "Supera el chart del día"
     },
     "enterArena": "Entrar a la arena",
     "exitArena": "Salir",

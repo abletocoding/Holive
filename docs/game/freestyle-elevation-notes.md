@@ -1,12 +1,24 @@
 # Freestyle elevation notes (2026-07)
 
+## iOS “typing” root cause + hard fix
+
+**Root cause:** Safari treated Freestyle as text entry because the play path still mounted native `<input type="range">` (tempo + pitch in the kit drawer, plus the arena volume slider). Even with `inputMode="none"` and blur-on-change, focusing a range control on iOS can show the keyboard accessory bar / caret / writing chrome — especially when fullscreen or when another focusable page field sits behind the overlay.
+
+**Hard fix shipped:**
+
+1. **Zero form controls on the Freestyle play path** — tempo/pitch use button steppers (`PointerStepper`); freestyle volume uses −/＋ buttons (no `<input>` / `<textarea>` / `contenteditable`).
+2. **Focus kill** — on Freestyle mount and every pad `pointerdown`: `document.activeElement?.blur()` + `window.getSelection()?.removeAllRanges()`.
+3. **`inert` behind the arena** — siblings of the fixed `[role=application]` stage are marked `inert` so next-intl/theme/search chrome cannot steal focus.
+4. **Exit fullscreen when entering Freestyle** — avoid fullscreen + residual input chrome pairing on iOS.
+5. **CSS on arena/pads** — `-webkit-user-select: none; user-select: none; caret-color: transparent; -webkit-touch-callout: none`.
+6. **Drawers/settings** — kit/seq panels use buttons only; drawers unmount when immersive/chart mode is on.
+7. **Pads** — `tabIndex={-1}`, touch `preventDefault`, no focus rings that imply text editing.
+
 ## Shipped in this pass
 
-- **iOS keyboard fix**: no text focus on play surface; range sliders blur after change (`inputMode="none"`); pad `touch-action: manipulation` + touchstart preventDefault; blur `activeElement` on Freestyle enter; LeadCapture stays off freestyle play.
-- **Healer beds** (fully synthesized Web Audio, no downloads): `crystal`, `forest`, `deepheal`, `golden`, plus classic `heal`. Crossfade via existing ambient engine; preference in kit localStorage.
-- **Step sequencer**: 8/16 steps, multi-track pad grid, paint + tap-record, play/stop loop synced to tempo/metronome, pattern presets, saved with kit.
-- **Jam depth**: breath-gated pads, intention timer (warm/flow/cool), harmonic scale mode, mood chips (no keyboard), Holi streak reactions, pattern library.
-- **Pad clipping fix**: board uses `max-h` against `svh`, inset layouts (18–82%), `ResizeObserver` + `fitPadDiameterPx` so 4/6/8 pads stay fully inside the play area on 320–430 widths and short heights (~667+).
-- **UI**: sacred-matrix Freestyle board, kit/sequencer drawers, Train hub crayon-premium mode cards.
+- **Immersive / Solo** — hides kit, sequencer, and HUD chrome; pads + thin edge handle (tap or swipe up) restore controls; minimal exit affordance.
+- **Song / Chart mode** — 6 original generative healer songs (crystal drive, forest pulse, golden heart, deep heal ritual, aurora spiral, sunroot groove). Timed pad charts, approaching highway cues, perfect/good/miss + streaks, stars, encore jam on that song’s kit. No copyrighted music — Web Audio beds + step charts only.
+- **Retention** — daily song mission, unlockable themes/Holi dances via song clears, jam streak reactions, pick song → play chart → encore freestyle flow.
+- **Pad fitting** — unchanged fit math (`fitPadDiameterPx` + inset layouts); verify unclipped on 390×844 smoke.
 
 Beds are generative oscillators/noise only — no Spotify/YouTube/third-party audio assets.

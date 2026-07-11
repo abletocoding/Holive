@@ -1,7 +1,12 @@
 const STORAGE_KEY = "holive-neural-missions-v1";
 
 export type MissionMode = "classic" | "freestyle";
-export type MissionMetric = "classicClears" | "classicScore" | "freestyleHits" | "freestyleSeconds";
+export type MissionMetric =
+  | "classicClears"
+  | "classicScore"
+  | "freestyleHits"
+  | "freestyleSeconds"
+  | "freestyleSong";
 
 export type Mission = {
   id: string;
@@ -17,7 +22,8 @@ export type MissionEvent =
   | { type: "classicClear"; count?: number }
   | { type: "classicScore"; score: number }
   | { type: "freestyleHit"; count?: number }
-  | { type: "freestyleSession"; seconds: number };
+  | { type: "freestyleSession"; seconds: number }
+  | { type: "freestyleSongClear"; count?: number };
 
 export function todayKey(date = new Date()) {
   return date.toISOString().slice(0, 10);
@@ -33,12 +39,18 @@ export function loadDailyMissions(dateKey = todayKey()): Mission[] {
       return fresh;
     }
     const parsed = JSON.parse(raw) as { day?: string; missions?: Partial<Mission>[] };
-    if (parsed.day !== dateKey || !Array.isArray(parsed.missions)) {
+    if (
+      parsed.day !== dateKey ||
+      !Array.isArray(parsed.missions) ||
+      parsed.missions.length !== defaultMissions(dateKey).length
+    ) {
       const fresh = defaultMissions(dateKey);
       saveDailyMissions(fresh);
       return fresh;
     }
-    return parsed.missions.map((mission, i) => normalizeMission(mission, defaultMissions(dateKey)[i]!));
+    return parsed.missions.map((mission, i) =>
+      normalizeMission(mission, defaultMissions(dateKey)[i]!),
+    );
   } catch {
     return defaultMissions(dateKey);
   }
@@ -57,7 +69,9 @@ export function saveDailyMissions(missions: Mission[]) {
 }
 
 export function recordMissionEvent(event: MissionEvent, dateKey = todayKey()) {
-  const missions = loadDailyMissions(dateKey).map((mission) => applyEvent(mission, event));
+  const missions = loadDailyMissions(dateKey).map((mission) =>
+    applyEvent(mission, event),
+  );
   saveDailyMissions(missions);
   return missions;
 }
@@ -108,6 +122,15 @@ function defaultMissions(day: string): Mission[] {
       progress: 0,
       completed: false,
     },
+    {
+      id: `${day}-freestyle-song`,
+      day,
+      mode: "freestyle",
+      metric: "freestyleSong",
+      target: 1,
+      progress: 0,
+      completed: false,
+    },
   ];
 }
 
@@ -126,6 +149,9 @@ function applyEvent(mission: Mission, event: MissionEvent): Mission {
   if (event.type === "freestyleSession" && mission.metric === "freestyleSeconds") {
     progress += Math.max(0, Math.round(event.seconds));
   }
+  if (event.type === "freestyleSongClear" && mission.metric === "freestyleSong") {
+    progress += event.count ?? 1;
+  }
 
   progress = Math.min(mission.target, progress);
   return {
@@ -135,7 +161,10 @@ function applyEvent(mission: Mission, event: MissionEvent): Mission {
   };
 }
 
-function normalizeMission(value: Partial<Mission>, fallback: Mission): Mission {
+function normalizeMission(
+  value: Partial<Mission>,
+  fallback: Mission,
+): Mission {
   const progress = Math.min(
     fallback.target,
     Math.max(0, Math.round(Number(value.progress) || 0)),

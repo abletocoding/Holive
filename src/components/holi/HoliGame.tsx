@@ -53,6 +53,7 @@ import {
   recordMissionEvent,
   type Mission,
 } from "@/lib/game/missions";
+import type { ChartJudgement, SongResult } from "@/lib/game/freestyleSongs";
 
 type Phase =
   | "train"
@@ -84,6 +85,23 @@ function blurPlaySurface() {
   if (typeof document === "undefined") return;
   const el = document.activeElement;
   if (el instanceof HTMLElement) el.blur();
+  window.getSelection()?.removeAllRanges();
+}
+
+/** Mark page chrome behind the fixed arena as inert so iOS won't focus it. */
+function setInertBehindArena(arenaEl: HTMLElement | null, on: boolean) {
+  if (!arenaEl) return;
+  let node: HTMLElement | null = arenaEl;
+  while (node && node !== document.body) {
+    const parentEl: HTMLElement | null = node.parentElement;
+    if (!parentEl) break;
+    for (const sibling of Array.from(parentEl.children)) {
+      if (sibling === node || !(sibling instanceof HTMLElement)) continue;
+      if (on) sibling.setAttribute("inert", "");
+      else sibling.removeAttribute("inert");
+    }
+    node = parentEl;
+  }
 }
 
 /**
@@ -136,6 +154,7 @@ export function HoliGame() {
     useState<FreestyleSessionPhase>("idle");
   const [breathOpen, setBreathOpen] = useState(true);
   const [holiReaction, setHoliReaction] = useState<string | null>(null);
+  const [freestyleImmersive, setFreestyleImmersive] = useState(false);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<NeuralAmbient | null>(null);
@@ -163,6 +182,21 @@ export function HoliGame() {
     setMissions(loadDailyMissions());
     setFreestyleKit(loadFreestyleKit());
   }, []);
+
+  useEffect(() => {
+    if (!arena) {
+      setInertBehindArena(stageRef.current, false);
+      return;
+    }
+    const el = stageRef.current;
+    setInertBehindArena(el, true);
+    blurPlaySurface();
+    return () => setInertBehindArena(el, false);
+  }, [arena]);
+
+  useEffect(() => {
+    if (phase !== "freestyle") setFreestyleImmersive(false);
+  }, [phase]);
 
   useEffect(() => {
     scoreRef.current = score;
@@ -354,7 +388,16 @@ export function HoliGame() {
   const enterFreestyle = useCallback(async () => {
     abortWatchRef.current = true;
     blurPlaySurface();
+    // Avoid fullscreen + any residual text chrome on iOS Safari
+    if (isFs) {
+      try {
+        await exitFs();
+      } catch {
+        /* ignore */
+      }
+    }
     setPhase("freestyle");
+    setFreestyleImmersive(false);
     setScore(0);
     setSeqLen(0);
     setStreak(0);
@@ -382,7 +425,8 @@ export function HoliGame() {
     }
     // Second blur after layout settles (iOS Safari focus residue)
     window.setTimeout(blurPlaySurface, 50);
-  }, [ensureAudio, freestyleKit.healerBed]);
+    window.setTimeout(blurPlaySurface, 300);
+  }, [ensureAudio, exitFs, freestyleKit.healerBed, isFs]);
 
   const onFreestylePad = useCallback(
     async (pad: FreestylePad, index: number) => {
@@ -423,6 +467,26 @@ export function HoliGame() {
     },
     [audioOn, ensureAudio, freestyleKit.healerBed, locale],
   );
+
+  const onSongResult = useCallback((result: SongResult) => {
+    if (result.stars >= 1) {
+      setMissions(recordMissionEvent({ type: "freestyleSongClear" }));
+      setCoach("cheer");
+      audioRef.current?.playChime();
+      setGoldBurst(1);
+      window.setTimeout(() => setGoldBurst(0), 700);
+    }
+  }, []);
+
+  const onChartJudgement = useCallback((judgement: ChartJudgement) => {
+    if (judgement === "perfect") {
+      setPulse(0.7);
+      window.setTimeout(() => setPulse(0), 120);
+    } else if (judgement === "miss") {
+      setCoach("oops");
+      window.setTimeout(() => setCoach("idle"), 400);
+    }
+  }, []);
 
   const onFreestyleBedChange = useCallback(
     async (bed: FreestyleHealerBed) => {
@@ -840,6 +904,12 @@ export function HoliGame() {
       role="application"
       aria-label={t("title")}
       className={`neural-shake-target fixed inset-0 z-[var(--z-overlay-game)] grid h-[100svh] max-h-[100dvh] min-h-[100svh] w-full grid-rows-[auto_auto_minmax(0,1fr)] overflow-x-clip overflow-y-hidden bg-[#05030a] text-[var(--holive-white)] select-none touch-manipulation ${shake > 0 ? "neural-shaking" : ""}`}
+      style={{
+        WebkitUserSelect: "none",
+        userSelect: "none",
+        WebkitTouchCallout: "none",
+        caretColor: "transparent",
+      }}
     >
 
       <NeuralBackdrop
@@ -863,6 +933,7 @@ export function HoliGame() {
         }
       />
 
+      {!(phase === "freestyle" && freestyleImmersive) && (
       <div className="relative z-20 flex shrink-0 flex-col gap-1 px-3 pt-[max(0.5rem,env(safe-area-inset-top))] sm:gap-1.5 sm:px-5">
       <header className="flex items-start justify-between gap-2 sm:gap-3">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
@@ -924,36 +995,75 @@ export function HoliGame() {
       </header>
 
       <div className="flex flex-wrap items-center justify-center gap-1.5 pb-1 sm:gap-2">
-        <ControlBtn
-          onClick={() => void onToggleFs()}
-          label={isFs ? t("exitFullscreen") : t("fullscreen")}
-        />
+        {phase !== "freestyle" && (
+          <ControlBtn
+            onClick={() => void onToggleFs()}
+            label={isFs ? t("exitFullscreen") : t("fullscreen")}
+          />
+        )}
         <ControlBtn
           onClick={() => void onToggleMute()}
           label={muted || !audioOn ? t("unmute") : t("mute")}
         />
-        <label className="flex min-h-11 items-center gap-2 rounded border border-white/15 bg-black/35 px-2 py-1.5 text-[0.65rem] text-white/70">
-          <span className="sr-only">{t("volume")}</span>
-          <span aria-hidden className="opacity-60">
-            ♪
-          </span>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            inputMode="none"
-            value={volume}
-            onChange={(e) => {
-              onVolume(Number(e.target.value));
-              e.currentTarget.blur();
-            }}
-            onPointerUp={(e) => e.currentTarget.blur()}
-            onTouchEnd={(e) => e.currentTarget.blur()}
-            className="h-8 w-20 accent-[var(--holive-gold)] sm:w-28"
-            aria-label={t("volume")}
-          />
-        </label>
+        {phase === "freestyle" ? (
+          <div className="flex min-h-11 items-center gap-1 rounded border border-white/15 bg-black/35 px-2 py-1.5 text-[0.65rem] text-white/70">
+            <span aria-hidden className="opacity-60">
+              ♪
+            </span>
+            <button
+              type="button"
+              tabIndex={-1}
+              className="focus-ring min-h-9 min-w-9 border border-white/10 text-sm"
+              aria-label={t("volume")}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                blurPlaySurface();
+                onVolume(Math.max(0, Math.round((volume - 0.05) * 100) / 100));
+              }}
+            >
+              −
+            </button>
+            <span className="min-w-[2.25rem] text-center font-mono-code text-[var(--holive-gold)]">
+              {Math.round(volume * 100)}
+            </span>
+            <button
+              type="button"
+              tabIndex={-1}
+              className="focus-ring min-h-9 min-w-9 border border-white/10 text-sm"
+              aria-label={t("volume")}
+              onPointerDown={(e) => {
+                e.preventDefault();
+                blurPlaySurface();
+                onVolume(Math.min(1, Math.round((volume + 0.05) * 100) / 100));
+              }}
+            >
+              +
+            </button>
+          </div>
+        ) : (
+          <label className="flex min-h-11 items-center gap-2 rounded border border-white/15 bg-black/35 px-2 py-1.5 text-[0.65rem] text-white/70">
+            <span className="sr-only">{t("volume")}</span>
+            <span aria-hidden className="opacity-60">
+              ♪
+            </span>
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.05}
+              inputMode="none"
+              value={volume}
+              onChange={(e) => {
+                onVolume(Number(e.target.value));
+                e.currentTarget.blur();
+              }}
+              onPointerUp={(e) => e.currentTarget.blur()}
+              onTouchEnd={(e) => e.currentTarget.blur()}
+              className="h-8 w-20 accent-[var(--holive-gold)] sm:w-28"
+              aria-label={t("volume")}
+            />
+          </label>
+        )}
         {playing && <ControlBtn onClick={pause} label={t("pause")} />}
         {phase === "paused" && <ControlBtn onClick={resume} label={t("resume")} />}
         {(playing || phase === "paused" || phase === "wrong") && (
@@ -969,9 +1079,23 @@ export function HoliGame() {
         <ControlBtn onClick={() => void leaveArena()} label={t("exitArena")} />
       </div>
       </div>
+      )}
 
-      <div className="relative z-20 flex shrink-0 flex-col items-center gap-0.5 px-3 sm:gap-1">
-      {(fsDenied || !fsSupported) && (
+      {phase === "freestyle" && freestyleImmersive && (
+        <div className="pointer-events-none absolute right-3 top-[max(0.5rem,env(safe-area-inset-top))] z-30">
+          <button
+            type="button"
+            tabIndex={-1}
+            className="pointer-events-auto focus-ring min-h-10 border border-white/20 bg-black/50 px-3 text-[0.65rem] text-white/75"
+            onClick={() => void leaveArena()}
+          >
+            {t("exitArena")}
+          </button>
+        </div>
+      )}
+
+      <div className={`relative z-20 flex shrink-0 flex-col items-center gap-0.5 px-3 sm:gap-1 ${phase === "freestyle" && freestyleImmersive ? "hidden" : ""}`}>
+      {(fsDenied || !fsSupported) && phase !== "freestyle" && (
         <p className="px-2 text-center text-[0.65rem] text-white/40">
           {t("fullscreenDenied")}
         </p>
@@ -1038,6 +1162,7 @@ export function HoliGame() {
                 classicScore: t("missions.classicScore"),
                 freestyleHits: t("missions.freestyleHits"),
                 freestyleSeconds: t("missions.freestyleSeconds"),
+                freestyleSong: t("missions.freestyleSong"),
               },
             }}
             onClassic={enterClassicHub}
@@ -1062,6 +1187,8 @@ export function HoliGame() {
             sessionPhase={sessionPhase}
             breathOpen={breathOpen}
             holiReaction={holiReaction}
+            immersive={freestyleImmersive}
+            onImmersiveChange={setFreestyleImmersive}
             labels={{
               title: t("freestyle.title"),
               subtitle: t("freestyle.subtitle"),
@@ -1120,6 +1247,38 @@ export function HoliGame() {
               },
               jamStreak: t("freestyle.jamStreak"),
               coachEmpty: t("freestyle.coachEmpty"),
+              immersive: t("freestyle.immersive"),
+              immersiveOn: t("freestyle.immersiveOn"),
+              peek: t("freestyle.peek"),
+              songs: t("freestyle.songs"),
+              songMode: t("freestyle.songMode"),
+              daily: t("freestyle.daily"),
+              playSong: t("freestyle.playSong"),
+              replay: t("freestyle.replay"),
+              jamKit: t("freestyle.jamKit"),
+              perfect: t("freestyle.perfect"),
+              good: t("freestyle.good"),
+              miss: t("freestyle.miss"),
+              stars: t("freestyle.stars"),
+              unlocks: t("freestyle.unlocks"),
+              backJam: t("freestyle.backJam"),
+              chartReady: t("freestyle.chartReady"),
+            }}
+            songLabels={{
+              crystalDrive: t("freestyle.songNames.crystalDrive"),
+              forestPulse: t("freestyle.songNames.forestPulse"),
+              goldenHeart: t("freestyle.songNames.goldenHeart"),
+              deepHealRitual: t("freestyle.songNames.deepHealRitual"),
+              auroraSpiral: t("freestyle.songNames.auroraSpiral"),
+              sunrootGroove: t("freestyle.songNames.sunrootGroove"),
+            }}
+            songMoods={{
+              crystalDriveMood: t("freestyle.songMoods.crystalDriveMood"),
+              forestPulseMood: t("freestyle.songMoods.forestPulseMood"),
+              goldenHeartMood: t("freestyle.songMoods.goldenHeartMood"),
+              deepHealRitualMood: t("freestyle.songMoods.deepHealRitualMood"),
+              auroraSpiralMood: t("freestyle.songMoods.auroraSpiralMood"),
+              sunrootGrooveMood: t("freestyle.songMoods.sunrootGrooveMood"),
             }}
             onHit={(pad, index) => void onFreestylePad(pad, index)}
             onKitChange={setFreestyleKit}
@@ -1127,6 +1286,8 @@ export function HoliGame() {
             onIntentionToggle={onIntentionToggle}
             onMood={onFreestyleMood}
             onBedChange={(bed) => void onFreestyleBedChange(bed)}
+            onSongResult={onSongResult}
+            onChartJudgement={onChartJudgement}
           />
         ) : (
           <NeuralBoard
