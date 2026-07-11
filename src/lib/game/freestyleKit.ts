@@ -1,6 +1,7 @@
 const STORAGE_KEY = "holive-neural-freestyle-kit-v1";
 
 export type FreestyleTheme = "pulse" | "heal" | "gold" | "night";
+export type FreestylePadCount = 4 | 6 | 8;
 
 export type FreestylePad = {
   id: string;
@@ -13,6 +14,7 @@ export type FreestylePad = {
 
 export type FreestyleKit = {
   theme: FreestyleTheme;
+  padCount: FreestylePadCount;
   tempo: number;
   metronome: boolean;
   pads: FreestylePad[];
@@ -25,10 +27,13 @@ const DEFAULT_PADS: FreestylePad[] = [
   { id: "aura", label: "Aura", tone: 329.63, color: "var(--holive-gold-bright)" },
   { id: "mesh", label: "Mesh", tone: 392, color: "color-mix(in srgb, var(--holive-purple) 70%, white)" },
   { id: "heal", label: "Heal", tone: 528, color: "color-mix(in srgb, var(--holive-gold) 70%, white)" },
+  { id: "sun", label: "Sun", tone: 639, color: "color-mix(in srgb, var(--holive-gold-bright) 70%, white)" },
+  { id: "moon", label: "Moon", tone: 741, color: "color-mix(in srgb, var(--holive-purple-bright) 72%, white)" },
 ];
 
 export const DEFAULT_FREESTYLE_KIT: FreestyleKit = {
   theme: "heal",
+  padCount: 6,
   tempo: 72,
   metronome: false,
   pads: DEFAULT_PADS,
@@ -96,15 +101,25 @@ export function themePadColors(theme: FreestyleTheme) {
 }
 
 export function kitWithLayout(kit: FreestyleKit): FreestyleKit {
-  const pads = kit.pads.slice(0, 8);
-  const layout = LAYOUTS[pads.length] ?? LAYOUTS[6]!;
+  const padCount = normalizePadCount(kit.padCount ?? kit.pads.length);
   const colors = themePadColors(kit.theme);
+  const pads = Array.from({ length: padCount }, (_, i) => {
+    const pad = kit.pads[i] ?? DEFAULT_PADS[i % DEFAULT_PADS.length]!;
+    return {
+      ...pad,
+      id: safeText(pad.id, `pad-${i + 1}`),
+      label: safeText(pad.label, `Pad ${i + 1}`),
+      tone: clamp(Number(pad.tone) || DEFAULT_PADS[i % DEFAULT_PADS.length]!.tone, 80, 1200),
+      color: safeText(pad.color, colors[i % colors.length]!),
+    };
+  });
+  const layout = LAYOUTS[padCount];
 
   return {
     ...kit,
+    padCount,
     pads: pads.map((pad, i) => ({
       ...pad,
-      color: pad.color || colors[i % colors.length]!,
       x: layout[i]?.x ?? 50,
       y: layout[i]?.y ?? 50,
     })),
@@ -115,15 +130,17 @@ export function normalizeKit(value: unknown): FreestyleKit {
   const parsed = (value ?? {}) as Partial<FreestyleKit>;
   const theme = isTheme(parsed.theme) ? parsed.theme : DEFAULT_FREESTYLE_KIT.theme;
   const colors = themePadColors(theme);
+  const padCount = normalizePadCount(parsed.padCount ?? parsed.pads?.length);
   const pads = Array.isArray(parsed.pads) && parsed.pads.length >= 4
     ? parsed.pads
     : DEFAULT_FREESTYLE_KIT.pads;
 
   return kitWithLayout({
     theme,
+    padCount,
     tempo: clamp(Math.round(Number(parsed.tempo) || DEFAULT_FREESTYLE_KIT.tempo), 40, 140),
     metronome: Boolean(parsed.metronome),
-    pads: pads.slice(0, 8).map((pad, i) => ({
+    pads: pads.slice(0, padCount).map((pad, i) => ({
       id: safeText(pad.id, `pad-${i + 1}`),
       label: safeText(pad.label, `Pad ${i + 1}`),
       tone: clamp(Number(pad.tone) || DEFAULT_FREESTYLE_KIT.pads[i % DEFAULT_FREESTYLE_KIT.pads.length]!.tone, 80, 1200),
@@ -153,6 +170,13 @@ export function saveFreestyleKit(kit: FreestyleKit) {
 
 function isTheme(value: unknown): value is FreestyleTheme {
   return value === "pulse" || value === "heal" || value === "gold" || value === "night";
+}
+
+function normalizePadCount(value: unknown): FreestylePadCount {
+  const n = Number(value);
+  if (n <= 4) return 4;
+  if (n >= 8) return 8;
+  return 6;
 }
 
 function safeText(value: unknown, fallback: string) {

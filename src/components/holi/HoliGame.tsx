@@ -857,9 +857,13 @@ export function HoliGame() {
               metronomeOn: t("freestyle.metronomeOn"),
               metronomeOff: t("freestyle.metronomeOff"),
               theme: t("freestyle.theme"),
+              layout: t("freestyle.layout"),
+              pitch: t("freestyle.pitch"),
+              lower: t("freestyle.lower"),
+              higher: t("freestyle.higher"),
               pad: t("freestyle.pad"),
             }}
-            onPad={(pad, index) => void onFreestylePad(pad, index)}
+            onHit={(pad, index) => void onFreestylePad(pad, index)}
             onKitChange={setFreestyleKit}
           />
         ) : (

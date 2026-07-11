@@ -256,6 +256,10 @@
       "metronomeOn": "Activo",
       "metronomeOff": "Inactivo",
       "theme": "Tema del kit",
+      "layout": "Layout de pads",
+      "pitch": "Afinación",
+      "lower": "Grave",
+      "higher": "Agudo",
       "pad": "Pad"
     },
     "missions": {

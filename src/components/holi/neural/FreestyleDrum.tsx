@@ -1,8 +1,10 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import type {
   FreestyleKit,
   FreestylePad,
+  FreestylePadCount,
   FreestyleTheme,
 } from "@/lib/game/freestyleKit";
 import { kitWithLayout, themePadColors } from "@/lib/game/freestyleKit";
@@ -23,13 +25,18 @@ type Props = {
     metronomeOn: string;
     metronomeOff: string;
     theme: string;
+    layout: string;
+    pitch: string;
+    lower: string;
+    higher: string;
     pad: string;
   };
-  onPad: (pad: FreestylePad, index: number) => void;
+  onHit: (pad: FreestylePad, index: number) => void;
   onKitChange: (kit: FreestyleKit) => void;
 };
 
 const THEMES: FreestyleTheme[] = ["heal", "pulse", "gold", "night"];
+const PAD_COUNTS: FreestylePadCount[] = [4, 6, 8];
 
 export function FreestyleDrum({
   kit,
@@ -38,10 +45,18 @@ export function FreestyleDrum({
   sessionSeconds,
   reduced,
   labels,
-  onPad,
+  onHit,
   onKitChange,
 }: Props) {
   const laidOut = kitWithLayout(kit);
+  const [selectedPadId, setSelectedPadId] = useState(laidOut.pads[0]?.id ?? "root");
+  const selectedIndex = Math.max(
+    0,
+    laidOut.pads.findIndex((pad) => pad.id === (activePad ?? selectedPadId)),
+  );
+  const selectedPad = laidOut.pads[selectedIndex] ?? laidOut.pads[0]!;
+  const pitchMin = Math.max(80, Math.round(selectedPad.tone * 0.5));
+  const pitchMax = Math.min(1200, Math.round(selectedPad.tone * 1.8));
 
   const updateTheme = (theme: FreestyleTheme) => {
     const colors = themePadColors(theme);
@@ -56,6 +71,23 @@ export function FreestyleDrum({
       }),
     );
   };
+
+  const updatePadCount = (padCount: FreestylePadCount) => {
+    onKitChange(kitWithLayout({ ...kit, padCount }));
+  };
+
+  const updateSelectedPitch = (tone: number) => {
+    onKitChange(
+      kitWithLayout({
+        ...kit,
+        pads: kit.pads.map((pad) =>
+          pad.id === selectedPad.id ? { ...pad, tone } : pad,
+        ),
+      }),
+    );
+  };
+
+  const dust = useMemo(() => [0, 1, 2, 3, 4], []);
 
   return (
     <div className="relative z-20 grid w-full max-w-5xl gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
@@ -79,7 +111,10 @@ export function FreestyleDrum({
               key={pad.id}
               type="button"
               aria-label={`${labels.pad} ${i + 1}: ${pad.label}`}
-              onClick={() => onPad(pad, i)}
+              onClick={() => {
+                setSelectedPadId(pad.id);
+                onHit(pad, i);
+              }}
               className="focus-ring absolute flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full border-2 transition active:scale-95"
               style={{
                 left: `${pad.x}%`,
@@ -96,10 +131,24 @@ export function FreestyleDrum({
               }}
             >
               {active && !reduced && (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-[-18%] rounded-full border border-white/35 neural-pulse-ring"
-                />
+                <>
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-[-18%] rounded-full border border-white/35 neural-pulse-ring"
+                  />
+                  {dust.map((dot) => (
+                    <span
+                      key={dot}
+                      aria-hidden
+                      className="pointer-events-none absolute h-1.5 w-1.5 rounded-full bg-[var(--holive-gold)] shadow-[0_0_12px_var(--holive-gold)] animate-ping"
+                      style={{
+                        left: `${22 + dot * 14}%`,
+                        top: `${18 + ((dot * 23) % 58)}%`,
+                        animationDelay: `${dot * 55}ms`,
+                      }}
+                    />
+                  ))}
+                </>
               )}
               <span className="font-display text-sm text-white drop-shadow">{pad.label}</span>
               <span className="font-mono-code mt-1 text-[0.55rem] tracking-[0.16em] text-white/65">
@@ -146,6 +195,28 @@ export function FreestyleDrum({
 
         <div className="mt-5">
           <p className="font-mono-code text-[0.6rem] tracking-[0.22em] text-white/45 uppercase">
+            {labels.layout}
+          </p>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {PAD_COUNTS.map((count) => (
+              <button
+                key={count}
+                type="button"
+                onClick={() => updatePadCount(count)}
+                className={`focus-ring min-h-10 border px-3 text-xs ${
+                  laidOut.padCount === count
+                    ? "border-[var(--holive-gold)] bg-[var(--holive-gold)] text-[var(--holive-black)]"
+                    : "border-white/15 text-white/75"
+                }`}
+              >
+                {count}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <p className="font-mono-code text-[0.6rem] tracking-[0.22em] text-white/45 uppercase">
             {labels.theme}
           </p>
           <div className="mt-2 grid grid-cols-2 gap-2">
@@ -165,6 +236,26 @@ export function FreestyleDrum({
             ))}
           </div>
         </div>
+
+        <label className="mt-5 block">
+          <span className="font-mono-code text-[0.6rem] tracking-[0.22em] text-white/45 uppercase">
+            {labels.pitch}: {selectedPad.label}
+          </span>
+          <input
+            type="range"
+            min={pitchMin}
+            max={pitchMax}
+            step={1}
+            value={Math.round(selectedPad.tone)}
+            onChange={(e) => updateSelectedPitch(Number(e.target.value))}
+            className="mt-3 w-full accent-[var(--holive-gold)]"
+          />
+          <div className="mt-1 flex justify-between font-mono-code text-[0.58rem] text-white/45">
+            <span>{labels.lower}</span>
+            <span className="text-[var(--holive-gold)]">{Math.round(selectedPad.tone)}Hz</span>
+            <span>{labels.higher}</span>
+          </div>
+        </label>
       </aside>
     </div>
   );

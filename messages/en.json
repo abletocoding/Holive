@@ -256,6 +256,10 @@
       "metronomeOn": "On",
       "metronomeOff": "Off",
       "theme": "Kit theme",
+      "layout": "Pad layout",
+      "pitch": "Pitch",
+      "lower": "Lower",
+      "higher": "Higher",
       "pad": "Pad"
     },
     "missions": {
