@@ -35,17 +35,35 @@ export function Footer({ showGame = true }: { showGame?: boolean }) {
     if (!showGame) return;
     const el = sentinelRef.current;
     if (!el) return;
+
+    let done = false;
+    const unlock = () => {
+      if (done) return;
+      done = true;
+      setUnlocked(true);
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
+
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry?.isIntersecting) {
-          setUnlocked(true);
-          io.disconnect();
-        }
+        if (entry?.isIntersecting) unlock();
       },
-      { rootMargin: "240px 0px", threshold: 0 },
+      { rootMargin: "320px 0px", threshold: 0 },
     );
     io.observe(el);
-    return () => io.disconnect();
+
+    const onScroll = () => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 360) unlock();
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    return () => {
+      io.disconnect();
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [showGame]);
 
   return (
