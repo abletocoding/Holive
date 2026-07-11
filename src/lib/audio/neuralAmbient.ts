@@ -44,6 +44,19 @@ const BEDS: Record<AudioBedId, BedConfig> = {
     lfoHz: 0.08,
     lfoDepth: 0.04,
   },
+  heal: {
+    carrierHz: 216,
+    beatHz: 4.5,
+    band: "theta-heal",
+    intent: "healing drum",
+    padGain: 0.64,
+    binauralGain: 0.36,
+    droneHz: [54, 81, 108, 162],
+    noiseLp: 380,
+    noiseGain: 0.13,
+    lfoHz: 0.04,
+    lfoDepth: 0.035,
+  },
   sprout: {
     carrierHz: 208,
     beatHz: 7.5,
@@ -383,6 +396,111 @@ export class NeuralAmbient {
     nf.connect(ng);
     ng.connect(hitGain);
     noise.start(now);
+  }
+
+  /** Shorter tuned pad hit for freestyle pads and UI previews. */
+  playPadHit(nodeIndex = 0, toneHz?: number) {
+    if (!this.ctx || this.muted || !this.started || !this.master) return;
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const base = toneHz ?? 196 + (nodeIndex % 8) * 28;
+
+    const out = ctx.createGain();
+    out.gain.setValueAtTime(0.0001, now);
+    out.gain.exponentialRampToValueAtTime(0.28, now + 0.014);
+    out.gain.exponentialRampToValueAtTime(0.0001, now + 0.9);
+    out.connect(this.master);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(2600, now);
+    filter.frequency.exponentialRampToValueAtTime(900, now + 0.7);
+    filter.Q.value = 0.8;
+    filter.connect(out);
+
+    [1, 1.5, 2].forEach((ratio, i) => {
+      const osc = ctx.createOscillator();
+      osc.type = i === 0 ? "sine" : "triangle";
+      osc.frequency.value = base * ratio;
+      const g = ctx.createGain();
+      g.gain.value = i === 0 ? 0.55 : 0.16;
+      osc.connect(g);
+      g.connect(filter);
+      osc.start(now);
+      osc.stop(now + 0.95);
+    });
+  }
+
+  /** Low hand-drum transient used by Freestyle healing mode. */
+  playDrumHit(nodeIndex = 0) {
+    if (!this.ctx || this.muted || !this.started || !this.master) return;
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const base = 88 + (nodeIndex % 4) * 12;
+
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(base * 1.6, now);
+    osc.frequency.exponentialRampToValueAtTime(base, now + 0.12);
+
+    const body = ctx.createGain();
+    body.gain.setValueAtTime(0.0001, now);
+    body.gain.exponentialRampToValueAtTime(0.42, now + 0.01);
+    body.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+
+    const noiseLen = Math.floor(ctx.sampleRate * 0.08);
+    const buf = ctx.createBuffer(1, noiseLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < noiseLen; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (noiseLen * 0.24));
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buf;
+    const nf = ctx.createBiquadFilter();
+    nf.type = "lowpass";
+    nf.frequency.value = 900 + nodeIndex * 80;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.18, now);
+    ng.gain.exponentialRampToValueAtTime(0.0001, now + 0.08);
+
+    osc.connect(body);
+    body.connect(this.master);
+    noise.connect(nf);
+    nf.connect(ng);
+    ng.connect(this.master);
+    osc.start(now);
+    osc.stop(now + 0.5);
+    noise.start(now);
+  }
+
+  playFreestyleHit(nodeIndex = 0, toneHz?: number) {
+    this.playDrumHit(nodeIndex);
+    this.playPadHit(nodeIndex, toneHz);
+  }
+
+  playMetronomeClick(accent = false) {
+    if (!this.ctx || this.muted || !this.started || !this.master) return;
+    const ctx = this.ctx;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    osc.type = "square";
+    osc.frequency.value = accent ? 1400 : 980;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.exponentialRampToValueAtTime(accent ? 0.18 : 0.12, now + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
+
+    const f = ctx.createBiquadFilter();
+    f.type = "bandpass";
+    f.frequency.value = accent ? 1400 : 980;
+    f.Q.value = 6;
+
+    osc.connect(f);
+    f.connect(g);
+    g.connect(this.master);
+    osc.start(now);
+    osc.stop(now + 0.07);
   }
 
   /** Soft chime on level clear / streak. */

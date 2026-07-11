@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { HoliMascot } from "@/components/holi/HoliMascot";
 import { NeuralBoard } from "@/components/holi/neural/NeuralBoard";
+import { TrainHub } from "@/components/holi/neural/TrainHub";
+import { FreestyleDrum } from "@/components/holi/neural/FreestyleDrum";
 import { NeuralEffects } from "@/components/holi/neural/NeuralEffects";
 import { LeadCapture } from "@/components/holi/neural/LeadCapture";
 import { CelebrateOverlay } from "@/components/holi/neural/CelebrateOverlay";
@@ -35,9 +37,22 @@ import {
   type PulseProgress,
 } from "@/lib/game/progress";
 import { themeForLevel } from "@/lib/game/levelThemes";
+import {
+  loadFreestyleKit,
+  saveFreestyleKit,
+  type FreestyleKit,
+  type FreestylePad,
+} from "@/lib/game/freestyleKit";
+import {
+  loadDailyMissions,
+  recordMissionEvent,
+  type Mission,
+} from "@/lib/game/missions";
 
 type Phase =
+  | "train"
   | "hub"
+  | "freestyle"
   | "idle"
   | "watch"
   | "input"
@@ -68,7 +83,7 @@ export function HoliGame() {
   const [levelId, setLevelId] = useState(1);
   const [score, setScore] = useState(0);
   const [seqLen, setSeqLen] = useState(0);
-  const [phase, setPhase] = useState<Phase>("hub");
+  const [phase, setPhase] = useState<Phase>("train");
   const [lit, setLit] = useState<number | null>(null);
   const [distractor, setDistractor] = useState<number | null>(null);
   const [coach, setCoach] = useState<"idle" | "cheer" | "oops">("idle");
@@ -84,6 +99,13 @@ export function HoliGame() {
   const [reward, setReward] = useState<Reward | null>(null);
   const [showLead, setShowLead] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [missions, setMissions] = useState<Mission[]>(() => loadDailyMissions());
+  const [freestyleKit, setFreestyleKit] = useState<FreestyleKit>(() =>
+    loadFreestyleKit(),
+  );
+  const [freestyleHits, setFreestyleHits] = useState(0);
+  const [freestyleSeconds, setFreestyleSeconds] = useState(0);
+  const [activePad, setActivePad] = useState<string | null>(null);
 
   const stageRef = useRef<HTMLDivElement>(null);
   const audioRef = useRef<NeuralAmbient | null>(null);
@@ -94,6 +116,9 @@ export function HoliGame() {
   const pausePhaseRef = useRef<Phase>("idle");
   const scoreRef = useRef(0);
   const abortWatchRef = useRef(false);
+  const freestyleSecondsRef = useRef(0);
+  const freestyleSavedSecondsRef = useRef(0);
+  const metronomeBeatRef = useRef(0);
 
   const level: LevelDef = getLevel(levelId);
   const theme = themeForLevel(levelId);
@@ -102,6 +127,8 @@ export function HoliGame() {
 
   useEffect(() => {
     setProgress(loadProgress());
+    setMissions(loadDailyMissions());
+    setFreestyleKit(loadFreestyleKit());
   }, []);
 
   useEffect(() => {
@@ -114,6 +141,32 @@ export function HoliGame() {
       audioRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    saveFreestyleKit(freestyleKit);
+  }, [freestyleKit]);
+
+  useEffect(() => {
+    freestyleSecondsRef.current = freestyleSeconds;
+  }, [freestyleSeconds]);
+
+  useEffect(() => {
+    if (!arena || phase !== "freestyle") return;
+    const id = window.setInterval(() => {
+      setFreestyleSeconds((seconds) => seconds + 1);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [arena, phase]);
+
+  useEffect(() => {
+    if (!arena || phase !== "freestyle" || !freestyleKit.metronome) return;
+    const beatMs = Math.max(320, Math.round(60000 / freestyleKit.tempo));
+    const id = window.setInterval(() => {
+      audioRef.current?.playMetronomeClick(metronomeBeatRef.current % 4 === 0);
+      metronomeBeatRef.current += 1;
+    }, beatMs);
+    return () => window.clearInterval(id);
+  }, [arena, freestyleKit.metronome, freestyleKit.tempo, phase]);
 
   useEffect(() => {
     if (!arena) return;
@@ -151,6 +204,84 @@ export function HoliGame() {
   const bowlHit = useCallback((idx: number) => {
     audioRef.current?.playBowlHit(idx);
   }, []);
+
+  const recordClassicScore = useCallback((finalScore: number) => {
+    if (finalScore <= 0) return;
+    setMissions(recordMissionEvent({ type: "classicScore", score: finalScore }));
+  }, []);
+
+  const finishFreestyleSession = useCallback(() => {
+    const seconds = freestyleSecondsRef.current;
+    const unsaved = seconds - freestyleSavedSecondsRef.current;
+    if (unsaved <= 0) return;
+    freestyleSavedSecondsRef.current = seconds;
+    setMissions(recordMissionEvent({ type: "freestyleSession", seconds: unsaved }));
+  }, []);
+
+  const enterTrain = useCallback(() => {
+    abortWatchRef.current = true;
+    finishFreestyleSession();
+    stopAudio();
+    setPhase("train");
+    setLit(null);
+    setDistractor(null);
+    setCoach("idle");
+    busyRef.current = false;
+  }, [finishFreestyleSession, stopAudio]);
+
+  const enterClassicHub = useCallback(() => {
+    abortWatchRef.current = true;
+    finishFreestyleSession();
+    stopAudio();
+    setPhase("hub");
+    setLit(null);
+    setDistractor(null);
+    setCoach("idle");
+    busyRef.current = false;
+  }, [finishFreestyleSession, stopAudio]);
+
+  const enterFreestyle = useCallback(async () => {
+    abortWatchRef.current = true;
+    setPhase("freestyle");
+    setScore(0);
+    setSeqLen(0);
+    setStreak(0);
+    setReward(null);
+    setShowLead(false);
+    setCoach("cheer");
+    setActivePad(null);
+    setFreestyleHits(0);
+    setFreestyleSeconds(0);
+    freestyleSecondsRef.current = 0;
+    freestyleSavedSecondsRef.current = 0;
+    metronomeBeatRef.current = 0;
+    try {
+      await ensureAudio("heal");
+      await audioRef.current?.setBed("heal");
+    } catch {
+      /* autoplay denied */
+    }
+  }, [ensureAudio]);
+
+  const onFreestylePad = useCallback(
+    async (pad: FreestylePad, index: number) => {
+      if (!audioRef.current || !audioOn) {
+        try {
+          await ensureAudio("heal");
+        } catch {
+          /* autoplay denied */
+        }
+      }
+      audioRef.current?.playFreestyleHit(index, pad.tone);
+      setActivePad(pad.id);
+      window.setTimeout(() => setActivePad((current) => (current === pad.id ? null : current)), 180);
+      setFreestyleHits((hits) => hits + 1);
+      setMissions(recordMissionEvent({ type: "freestyleHit" }));
+      setPulse(0.55);
+      window.setTimeout(() => setPulse(0), 150);
+    },
+    [audioOn, ensureAudio],
+  );
 
   const flashFx = useCallback((intensity = 0.7) => {
     setPulse(intensity);
@@ -257,6 +388,7 @@ export function HoliGame() {
       setShake(0.85);
       window.setTimeout(() => setShake(0), 400);
       const next = recordScore(progress, levelId, finalScore);
+      recordClassicScore(finalScore);
       setProgress(next);
       if (!submittedRef.current && finalScore > 0) {
         submittedRef.current = true;
@@ -270,7 +402,7 @@ export function HoliGame() {
         }
       }
     },
-    [locale, levelId, progress],
+    [locale, levelId, progress, recordClassicScore],
   );
 
   const onLevelCleared = useCallback(
@@ -284,6 +416,8 @@ export function HoliGame() {
 
       let next = unlockLevel(progress, levelId + 1);
       next = recordScore(next, levelId, finalScore);
+      recordClassicScore(finalScore);
+      setMissions(recordMissionEvent({ type: "classicClear" }));
 
       const minted = mintReward({
         level: levelId,
@@ -306,7 +440,7 @@ export function HoliGame() {
       setProgress(next);
       saveProgress(next);
     },
-    [levelId, progress],
+    [levelId, progress, recordClassicScore],
   );
 
   const onNode = useCallback(
@@ -359,22 +493,23 @@ export function HoliGame() {
   const enterArena = useCallback(() => {
     setArena(true);
     setFsDenied(false);
-    setPhase("hub");
+    setPhase("train");
     setMantraIdx(Math.floor(Math.random() * BUSINESS_MANTRAS.length));
   }, []);
 
   const leaveArena = useCallback(async () => {
     abortWatchRef.current = true;
+    finishFreestyleSession();
     await exitFs();
     stopAudio();
     setArena(false);
-    setPhase("hub");
+    setPhase("train");
     setLit(null);
     setDistractor(null);
     setCoach("idle");
     busyRef.current = false;
     sequenceRef.current = [];
-  }, [exitFs, stopAudio]);
+  }, [exitFs, finishFreestyleSession, stopAudio]);
 
   const pause = useCallback(() => {
     if (phase === "watch" || phase === "input" || phase === "levelup") {
@@ -402,7 +537,7 @@ export function HoliGame() {
   const onToggleMute = useCallback(async () => {
     if (!audioRef.current || !audioOn) {
       try {
-        await ensureAudio();
+        await ensureAudio(phase === "freestyle" ? "heal" : level.audioBed);
         setMuted(false);
         audioRef.current?.setMuted(false);
       } catch {
@@ -412,7 +547,7 @@ export function HoliGame() {
     }
     const next = audioRef.current.toggleMute();
     setMuted(next);
-  }, [audioOn, ensureAudio]);
+  }, [audioOn, ensureAudio, level.audioBed, phase]);
 
   const onVolume = useCallback(
     (v: number) => {
@@ -443,7 +578,10 @@ export function HoliGame() {
     return () => window.removeEventListener("keydown", onKey);
   }, [arena, isFs, leaveArena, pause, phase, resume]);
 
-  const meta = audioOn && audioRef.current ? audioRef.current.bedMeta : bedMeta(level.audioBed);
+  const currentMeta =
+    audioOn && audioRef.current
+      ? audioRef.current.bedMeta
+      : bedMeta(phase === "freestyle" ? "heal" : level.audioBed);
   const mantra = mantraForLocale(BUSINESS_MANTRAS[mantraIdx]!, locale);
   const insight = insightText(insightForLevel(levelId), locale);
 
@@ -462,9 +600,13 @@ export function HoliGame() {
                 ? t("victory")
                 : phase === "paused"
                   ? t("paused")
-                  : phase === "hub"
-                    ? t("selectLevel")
-                    : t("subtitle");
+                  : phase === "freestyle"
+                    ? t("freestyle.status")
+                    : phase === "hub"
+                      ? t("selectLevel")
+                      : phase === "train"
+                        ? t("train.status")
+                        : t("subtitle");
 
   const playing =
     phase === "watch" || phase === "input" || phase === "levelup";
@@ -511,7 +653,7 @@ export function HoliGame() {
         reduced={reduced}
         parallax={!reduced}
         theme={theme}
-        levelId={phase === "hub" ? 0 : levelId}
+        levelId={phase === "hub" || phase === "train" || phase === "freestyle" ? 0 : levelId}
       />
       <NeuralEffects
         reduced={reduced}
@@ -520,7 +662,7 @@ export function HoliGame() {
         shake={shake}
         theme={theme}
         celebrate={phase === "cleared" || phase === "victory"}
-        ambient={phase !== "hub" && phase !== "paused"}
+        ambient={phase !== "hub" && phase !== "train" && phase !== "paused"}
       />
 
       <div className="relative z-20 flex flex-col gap-1.5 px-3 pt-[max(0.65rem,env(safe-area-inset-top))] sm:px-5">
@@ -532,7 +674,7 @@ export function HoliGame() {
                 ? "celebrate"
                 : coach === "oops"
                   ? "think"
-                  : phase === "hub"
+                  : phase === "hub" || phase === "train"
                     ? "wave"
                     : "guide"
             }
@@ -549,20 +691,28 @@ export function HoliGame() {
               {t("title")}
             </h2>
             <p className="truncate text-[0.65rem] text-white/50 sm:text-xs">
-              {phase === "hub"
-                ? t("coach")
-                : t(`levels.${level.key}.name` as "levels.seed.name")}
+              {phase === "train"
+                ? t("train.coach")
+                : phase === "hub"
+                  ? t("hub.coach")
+                  : phase === "freestyle"
+                    ? t("freestyle.coach")
+                    : t(`levels.${level.key}.name` as "levels.seed.name")}
             </p>
           </div>
         </div>
 
         <div className="font-mono-code shrink-0 text-right text-[0.65rem] tracking-wide sm:text-[0.7rem]">
           <div>
-            {t("score")}: {score}
+            {phase === "freestyle" ? t("freestyle.hits") : t("score")}:{" "}
+            {phase === "freestyle" ? freestyleHits : score}
           </div>
           <div>
-            {t("level")}: {levelId}
-            {seqLen > 0 ? ` · ${seqLen}/${level.clearLen}` : ""}
+            {phase === "freestyle"
+              ? `${t("freestyle.session")}: ${Math.floor(freestyleSeconds / 60)}:${String(
+                  freestyleSeconds % 60,
+                ).padStart(2, "0")}`
+              : `${t("level")}: ${levelId}${seqLen > 0 ? ` · ${seqLen}/${level.clearLen}` : ""}`}
           </div>
           <div className="text-[var(--holive-gold)]">
             {t("highScore")}: {progress.highScore}
@@ -611,16 +761,7 @@ export function HoliGame() {
             label={t("restart")}
           />
         )}
-        <ControlBtn
-          onClick={() => {
-            abortWatchRef.current = true;
-            stopAudio();
-            setPhase("hub");
-            setLit(null);
-            busyRef.current = false;
-          }}
-          label={t("levelsBtn")}
-        />
+        {phase !== "train" && <ControlBtn onClick={enterTrain} label={t("levelsBtn")} />}
         <ControlBtn onClick={() => void leaveArena()} label={t("exitArena")} />
       </div>
       </div>
@@ -636,7 +777,7 @@ export function HoliGame() {
         {statusLabel}
       </p>
 
-      {phase !== "hub" && (
+      {phase !== "hub" && phase !== "train" && (
         <div
           key={mantraIdx}
           className="mx-auto max-w-lg px-3 pb-1 text-center animate-[fadeIn_0.6s_ease]"
@@ -651,22 +792,75 @@ export function HoliGame() {
         </div>
       )}
 
-      {audioOn && !muted && phase !== "hub" && (
+      {audioOn && !muted && phase !== "hub" && phase !== "train" && (
         <p className="px-2 pb-0.5 text-center text-[0.6rem] tracking-wide text-white/35">
           {t("binauralHint", {
-            beat: meta.beatHz,
-            carrier: meta.carrierHz,
+            beat: currentMeta.beatHz,
+            carrier: currentMeta.carrierHz,
           })}
         </p>
       )}
       </div>
 
       <div className="relative z-10 flex min-h-0 items-center justify-center px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-1 sm:px-8">
-        {phase === "hub" ? (
+        {phase === "train" ? (
+          <TrainHub
+            highScore={progress.highScore}
+            unlockedLevel={progress.unlockedLevel}
+            totalLevels={LEVELS.length}
+            missions={missions}
+            labels={{
+              eyebrow: t("train.eyebrow"),
+              title: t("train.title"),
+              subtitle: t("train.subtitle"),
+              classicTitle: t("train.classicTitle"),
+              classicBody: t("train.classicBody"),
+              classicCta: t("train.classicCta"),
+              freestyleTitle: t("train.freestyleTitle"),
+              freestyleBody: t("train.freestyleBody"),
+              freestyleCta: t("train.freestyleCta"),
+              missionsTitle: t("missions.title"),
+              completed: t("missions.completed"),
+              highScore: t("highScore"),
+              unlocked: t("unlocked"),
+              mission: {
+                classicClears: t("missions.classicClears"),
+                classicScore: t("missions.classicScore"),
+                freestyleHits: t("missions.freestyleHits"),
+                freestyleSeconds: t("missions.freestyleSeconds"),
+              },
+            }}
+            onClassic={enterClassicHub}
+            onFreestyle={() => void enterFreestyle()}
+          />
+        ) : phase === "hub" ? (
           <LevelSelect
             progress={progress}
             onPick={(id) => void startLevel(id)}
             t={t}
+            onTrain={enterTrain}
+          />
+        ) : phase === "freestyle" ? (
+          <FreestyleDrum
+            kit={freestyleKit}
+            activePad={activePad}
+            hits={freestyleHits}
+            sessionSeconds={freestyleSeconds}
+            reduced={reduced}
+            labels={{
+              title: t("freestyle.title"),
+              subtitle: t("freestyle.subtitle"),
+              hits: t("freestyle.hits"),
+              session: t("freestyle.session"),
+              tempo: t("freestyle.tempo"),
+              metronome: t("freestyle.metronome"),
+              metronomeOn: t("freestyle.metronomeOn"),
+              metronomeOff: t("freestyle.metronomeOff"),
+              theme: t("freestyle.theme"),
+              pad: t("freestyle.pad"),
+            }}
+            onPad={(pad, index) => void onFreestylePad(pad, index)}
+            onKitChange={setFreestyleKit}
           />
         ) : (
           <NeuralBoard
@@ -737,7 +931,7 @@ export function HoliGame() {
             onRestart={() => void startLevel(levelId)}
             onNext={() => void startLevel(levelId + 1)}
             onHub={() => {
-              setPhase("hub");
+              enterTrain();
               setShowLead(false);
             }}
             onCopyCert={async () => {
@@ -777,14 +971,23 @@ export function HoliGame() {
 function LevelSelect({
   progress,
   onPick,
+  onTrain,
   t,
 }: {
   progress: PulseProgress;
   onPick: (id: number) => void;
+  onTrain: () => void;
   t: ReturnType<typeof useTranslations<"HoliGame">>;
 }) {
   return (
     <div className="relative z-20 w-full max-w-lg px-1">
+      <button
+        type="button"
+        onClick={onTrain}
+        className="focus-ring mx-auto mb-3 block min-h-10 border border-white/20 bg-black/35 px-4 text-xs text-white/75 hover:border-[var(--holive-gold)]/50"
+      >
+        {t("hub.backToTrain")}
+      </button>
       <p className="mb-4 text-center text-sm text-white/65">{t("selectBlurb")}</p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {LEVELS.map((lv) => {

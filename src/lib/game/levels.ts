@@ -11,7 +11,8 @@ export type AudioBedId =
   | "mesh"
   | "orbit"
   | "deep"
-  | "master";
+  | "master"
+  | "heal";
 
 export type LevelDef = {
   id: number;
