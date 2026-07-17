@@ -1,0 +1,69 @@
+{
+  "freestyle": {
+    "pageOX": 0,
+    "touchAction": "manipulation",
+    "padCount": 6,
+    "visiblePads": 6,
+    "clipped": 0,
+    "smallPads": 0,
+    "hasKit": true,
+    "hasSongs": true,
+    "hasSolo": true,
+    "playPathInputs": [],
+    "stats": [
+      {
+        "label": "Pad 1: Root",
+        "w": 100,
+        "h": 100,
+        "visible": true,
+        "clipped": false,
+        "tooSmall": false
+      },
+      {
+        "label": "Pad 2: Seed",
+        "w": 100,
+        "h": 100,
+        "visible": true,
+        "clipped": false,
+        "tooSmall": false
+      },
+      {
+        "label": "Pad 3: Stem",
+        "w": 100,
+        "h": 100,
+        "visible": true,
+        "clipped": false,
+        "tooSmall": false
+      },
+      {
+        "label": "Pad 4: Aura",
+        "w": 100,
+        "h": 100,
+        "visible": true,
+        "clipped": false,
+        "tooSmall": false
+      },
+      {
+        "label": "Pad 5: Mesh",
+        "w": 100,
+        "h": 100,
+        "visible": true,
+        "clipped": false,
+        "tooSmall": false
+      },
+      {
+        "label": "Pad 6: Heal",
+        "w": 100,
+        "h": 100,
+        "visible": true,
+        "clipped": false,
+        "tooSmall": false
+      }
+    ]
+  },
+  "classic": {
+    "pageOX": 0,
+    "touchAction": "manipulation"
+  },
+  "es": 200
+}

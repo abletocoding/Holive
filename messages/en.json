@@ -11,6 +11,7 @@
     "courses": "Courses",
     "process": "Process",
     "contact": "Contact",
+    "experiments": "Experiments",
     "themeLight": "Light mode",
     "themeDark": "Dark mode",
     "localeEs": "ES",
@@ -155,7 +156,182 @@
   "Footer": {
     "tagline": "Purity · Loyalty · Code",
     "rights": "© {year} Holive. holive.org",
-    "gameHint": "Made it this far? Holi is waiting below."
+    "gameHint": "Made it this far? Holi is waiting below.",
+    "experimentsLink": "Experiments archive",
+    "experimentsHint": "Secret files from the Holive lab."
+  },
+  "Experiments": {
+    "metaTitle": "Holive Experiments — Classified archive",
+    "metaDescription": "Secret archive of failed Holive lab experiments: the eye, the olive, rhythm, and business mysticism.",
+    "eyebrow": "HOLIVE LAB · CLASSIFIED ARCHIVE",
+    "title": "Experiments that should have stayed sealed… and here they are.",
+    "intro": "These are not generic demos. They are Holive lab dossiers: rare, failed, beautifully imperfect attempts where the eye, Holi, and entrepreneurial energy meet. Read them as secret files — with corporate humor and a moral.",
+    "openingRefran": "Who plants clarity harvests loyalty. / Quien siembra claridad, cosecha lealtad.",
+    "ctaOpen": "Open the first file",
+    "ctaHome": "Back to Holive",
+    "ctaContact": "Talk to Holive",
+    "indexLabel": "FILE INDEX",
+    "closingEyebrow": "END OF ARCHIVE",
+    "closingRefran": "The eye that watches with purpose does not blink at noise. / El ojo que mira con propósito no se cierra ante el ruido.",
+    "closingBody": "If something in this lab speaks to you, it is not magic: it is method. Let’s write the next experiment… inside your business.",
+    "toc": {
+      "exp-eye": "Watching eye",
+      "exp-spiral": "Mantra spiral",
+      "exp-seed": "Olive genesis",
+      "exp-mesh": "Loyalty mesh",
+      "exp-prism": "Prism storm",
+      "exp-orbit": "Sacred orbit",
+      "exp-nova": "Clarity nova",
+      "exp-cyclone": "Lexicon cyclone",
+      "exp-signal": "Craft radar",
+      "exp-mirror": "Mirror ledger",
+      "exp-liquid": "Liquid brief",
+      "exp-heartbeat": "Heartbeat KPI",
+      "exp-glitch": "Glitch dossier",
+      "exp-vortex": "Golden vortex",
+      "exp-tunnel": "Kinetic tunnel"
+    },
+    "files": {
+      "eye": {
+        "status": "FAILED · USEFUL",
+        "title": "The eye that never blinks in meetings",
+        "summary": "We tried to teach a digital iris to track client attention. Result: it watched us instead. Holi approved with a wink. The lab filed the failure… and turned it into ritual.",
+        "refran": "An attentive eye beats a thousand blind metrics. / El ojo atento vale más que mil métricas ciegas.",
+        "hint": "Move the cursor — the iris follows"
+      },
+      "spiral": {
+        "status": "UNFINISHED",
+        "title": "Corporate mantra waterfall",
+        "summary": "We wanted promises to fall like rain. Too much poetry, not enough KPI… until someone read them aloud. Now it reminds us: message is won by conscious repetition, not volume.",
+        "refran": "What repeats with soul becomes culture. / Lo que se repite con alma, se convierte en cultura.",
+        "l1": "Purity before noise",
+        "l2": "Loyalty before fashion",
+        "l3": "Code that serves",
+        "l4": "Sow to harvest",
+        "l5": "The eye sees the system",
+        "l6": "Holi walks with you"
+      },
+      "seed": {
+        "status": "GROWING",
+        "title": "Genesis of the sacred olive",
+        "summary": "One button. One olive. Too many meetings about growth. This file proves growth is not a dashboard: it is patience with direction.",
+        "refran": "Do not force the harvest; water the system. / No fuerces la cosecha; riega el sistema.",
+        "plant": "Plant",
+        "again": "Plant again",
+        "stages": {
+          "0": "Seed of intention",
+          "1": "Stem of discipline",
+          "2": "Leaves of clarity",
+          "3": "Living olive — Holive"
+        }
+      },
+      "mesh": {
+        "status": "CLASSIFIED",
+        "title": "Loyalty mesh (living network)",
+        "summary": "We connected nodes as if they were teams. When one moves, the rest answers. Failed as a product; shone as a metaphor: loyalty is a network, not a contract.",
+        "refran": "Loyalty is woven; it is not bought wholesale. / La lealtad se teje; no se compra al mayoreo.",
+        "hint": "Drag a node — the net responds",
+        "nodes": {
+          "core": "Holive",
+          "brand": "Brand",
+          "ops": "Ops",
+          "code": "Code",
+          "clients": "Clients"
+        }
+      },
+      "prism": {
+        "status": "UNSTABLE",
+        "title": "Brand prism storm",
+        "summary": "We threw purple and gold light through a prism. The lab lit up… and also got confused. Lesson: a strong brand refracts; a weak one dissolves.",
+        "refran": "A clear brand refracts; a confused one vanishes. / La marca clara refracta; la confusa se pierde.",
+        "hint": "Move the pointer — light splits"
+      },
+      "orbit": {
+        "status": "RITUAL",
+        "title": "Sacred orbits around Holi",
+        "summary": "We tried to orbit KPIs around Holi. Holi refused to be a satellite. Now he is the center and metrics revolve with respect. As it should be.",
+        "refran": "Put soul at the center and the system will orbit. / Pon el alma en el centro y el sistema orbitará."
+      },
+      "nova": {
+        "status": "ACTIVE",
+        "title": "Clarity nova (tap to expand)",
+        "summary": "Each tap expands a ring of clarity. Too many taps and the lab looks like a party. Exactly: clarity is also energy — dosed.",
+        "refran": "Clarity expanded with purpose is not noise. / Claridad expandida con propósito no es ruido.",
+        "hint": "Tap to expand clarity"
+      },
+      "cyclone": {
+        "status": "SPINNING",
+        "title": "Holive lexicon cyclone",
+        "summary": "Craft words spinning around the name. We wanted a word cloud and got a cyclone. Perfect: brand language should orbit, not float.",
+        "refran": "The right words find their center. / Las palabras correctas encuentran su centro.",
+        "w0": "Purity",
+        "w1": "Loyalty",
+        "w2": "Code",
+        "w3": "Sow",
+        "w4": "Harvest",
+        "w5": "System",
+        "w6": "Eye",
+        "w7": "Craft"
+      },
+      "signal": {
+        "status": "SCANNING",
+        "title": "Radar of the craft",
+        "summary": "A spectrum that pulses with scroll. We wanted to detect signal vs noise in the market. We found something better: the visitor’s rhythm.",
+        "refran": "Hear the rhythm before you raise the volume. / Escucha el ritmo antes de subir el volumen.",
+        "hint": "Scroll — the signal answers"
+      },
+      "mirror": {
+        "status": "REFLECTION",
+        "title": "Mirror ledger",
+        "summary": "Above: what you promise. Below: what you return. The mirror does not lie; the lab tried to sweeten it. Failed. Good.",
+        "refran": "What you sow in voice, you reap in deeds. / Lo que siembras en voz, lo cosechas en hechos.",
+        "aboveLabel": "PROMISE",
+        "belowLabel": "RETURN",
+        "aboveText": "We sow clarity.",
+        "belowText": "We harvest loyalty."
+      },
+      "liquid": {
+        "status": "FLUID",
+        "title": "Liquid brief (ink that listens)",
+        "summary": "A brief that behaves like living ink. It follows the cursor because the brief should follow the client — not the creative ego.",
+        "refran": "A living brief follows the problem, not the trend. / El brief vivo sigue al problema, no a la moda.",
+        "hint": "Move the cursor — the ink answers"
+      },
+      "heartbeat": {
+        "status": "BEATING",
+        "title": "KPI with an olive pulse",
+        "summary": "We turned a metric into a heartbeat. Because a business without rhythm is an org chart without soul. Tune the BPM: find your craft tempo.",
+        "refran": "Without rhythm there is no sustainable harvest. / Sin ritmo no hay cosecha sostenible.",
+        "metric": "Business rhythm",
+        "unit": "beats / intention",
+        "hint": "Tune the pulse of your system"
+      },
+      "glitch": {
+        "status": "CORRUPT → HEALABLE",
+        "title": "Glitch dossier (wounded files)",
+        "summary": "Files damaged by haste. Hover and they heal. Cheap metaphor… and true: attention repairs what haste breaks.",
+        "refran": "Haste corrupts; attention restores. / La prisa corrompe; la atención restaura.",
+        "fileLabel": "WOUNDED FILE",
+        "line1": "Holive does not sell miracles.",
+        "line2": "Holive plants systems that respect the soul of the craft.",
+        "hintCorrupt": "Hover to restore",
+        "hintClean": "Restored. Attention did its work."
+      },
+      "vortex": {
+        "status": "SPINNING",
+        "title": "Golden vortex of intention",
+        "summary": "A harvest spiral. We tried to visualize client attraction and got a vortex of intention. Better: attraction without purpose is just golden noise.",
+        "refran": "Focused intention attracts; scattered intention spins empty. / La intención enfocada atrae; la dispersa gira vacía.",
+        "hint": "The center is the craft"
+      },
+      "tunnel": {
+        "status": "UNDER CONSTRUCTION",
+        "title": "Kinetic tunnel of the craft",
+        "summary": "A corridor toward the Holive center. Many enter out of curiosity; few cross with method. The tunnel is not escape: it is focus.",
+        "refran": "The narrow path clarifies the destination. / El camino estrecho aclara el destino.",
+        "hint": "Toward the center"
+      }
+    }
   },
   "HoliGame": {
     "title": "Holi Run",

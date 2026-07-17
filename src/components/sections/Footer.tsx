@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
+import { Link } from "@/i18n/navigation";
 import { FloatAccent } from "@/components/ui/SectionReveal";
 import {
   HoliDoodleMotif,
@@ -86,6 +87,18 @@ export function Footer() {
         </div>
 
         <SketchDivider className="mt-12" />
+
+        <div className="mt-8 text-center">
+          <Link
+            href="/experimentos"
+            className="focus-ring font-mono-code text-[0.7rem] uppercase tracking-[0.28em] text-[var(--holive-gold)] transition hover:text-[var(--holive-gold-bright)]"
+          >
+            {t("experimentsLink")}
+          </Link>
+          <p className="mt-2 text-xs text-[color-mix(in_srgb,var(--foreground)_50%,transparent)]">
+            {t("experimentsHint")}
+          </p>
+        </div>
 
         <p className="font-mono-code mt-8 text-center text-[0.65rem] tracking-[0.25em] text-[color-mix(in_srgb,var(--foreground)_40%,transparent)]">
           {t("gameHint")}

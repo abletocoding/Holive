@@ -11,6 +11,7 @@
     "courses": "Cursos",
     "process": "Proceso",
     "contact": "Contacto",
+    "experiments": "Experimentos",
     "themeLight": "Modo claro",
     "themeDark": "Modo oscuro",
     "localeEs": "ES",
@@ -155,7 +156,182 @@
   "Footer": {
     "tagline": "Pureza · Lealtad · Código",
     "rights": "© {year} Holive. holive.org",
-    "gameHint": "¿Llegaste hasta aquí? Holi te espera abajo."
+    "gameHint": "¿Llegaste hasta aquí? Holi te espera abajo.",
+    "experimentsLink": "Archivo de experimentos",
+    "experimentsHint": "Archivos secretos del laboratorio Holive."
+  },
+  "Experiments": {
+    "metaTitle": "Experimentos Holive — Archivo clasificado",
+    "metaDescription": "Archivo secreto de experimentos fallidos del laboratorio Holive: ojo, olivo, ritmo y misticismo empresarial.",
+    "eyebrow": "LABORATORIO HOLIVE · ARCHIVO CLASIFICADO",
+    "title": "Experimentos que no debieron salir… y aquí están.",
+    "intro": "Estos no son demos genéricas. Son expedientes del laboratorio Holive: intentos raros, fallidos y hermosamente imperfectos donde el ojo, Holi y la energía empresarial se encuentran. Léelos como dossiers secretos — con humor corporativo y moraleja.",
+    "openingRefran": "Quien siembra claridad, cosecha lealtad. / Who plants clarity harvests loyalty.",
+    "ctaOpen": "Abrir el primer expediente",
+    "ctaHome": "Volver a Holive",
+    "ctaContact": "Hablar con Holive",
+    "indexLabel": "ÍNDICE DE EXPEDIENTES",
+    "closingEyebrow": "CIERRE DEL ARCHIVO",
+    "closingRefran": "El ojo que mira con propósito no se cierra ante el ruido. / The eye that watches with purpose does not blink at noise.",
+    "closingBody": "Si algo de este laboratorio te habla, no es magia: es método. Escribamos el siguiente experimento… en tu negocio.",
+    "toc": {
+      "exp-eye": "Ojo que vigila",
+      "exp-spiral": "Espiral de mantras",
+      "exp-seed": "Génesis del olivo",
+      "exp-mesh": "Malla de lealtad",
+      "exp-prism": "Tormenta prisma",
+      "exp-orbit": "Órbita sagrada",
+      "exp-nova": "Nova de claridad",
+      "exp-cyclone": "Ciclón léxico",
+      "exp-signal": "Radar de oficio",
+      "exp-mirror": "Libro espejo",
+      "exp-liquid": "Brief líquido",
+      "exp-heartbeat": "KPI latido",
+      "exp-glitch": "Dossier glitch",
+      "exp-vortex": "Vórtice dorado",
+      "exp-tunnel": "Túnel cinético"
+    },
+    "files": {
+      "eye": {
+        "status": "FALLIDO · ÚTIL",
+        "title": "El ojo que no parpadea en junta",
+        "summary": "Intentamos enseñarle a un iris digital a rastrear la atención del cliente. Resultado: nos vigiló a nosotros. Holi aprobó el experimento con un guiño. El laboratorio archivó el fallo… y lo volvió ritual.",
+        "refran": "El ojo atento vale más que mil métricas ciegas. / An attentive eye beats a thousand blind metrics.",
+        "hint": "Mueve el cursor — el iris te sigue"
+      },
+      "spiral": {
+        "status": "INCONCLUSO",
+        "title": "Cascada de mantras empresariales",
+        "summary": "Quisimos hacer caer promesas como lluvia. Demasiado poesía, poco KPI… hasta que alguien leyó en voz alta. Ahora es un recordatorio: el mensaje se gana con repetición consciente, no con volumen.",
+        "refran": "Lo que se repite con alma, se convierte en cultura. / What repeats with soul becomes culture.",
+        "l1": "Pureza antes que ruido",
+        "l2": "Lealtad antes que moda",
+        "l3": "Código que sirve",
+        "l4": "Sembrar para cosechar",
+        "l5": "El ojo ve el sistema",
+        "l6": "Holi camina contigo"
+      },
+      "seed": {
+        "status": "CRECIENDO",
+        "title": "Génesis del olivo sagrado",
+        "summary": "Un botón. Un olivo. Demasiadas reuniones sobre growth. Este expediente demuestra que crecer no es un dashboard: es un acto de paciencia con dirección.",
+        "refran": "No fuerces la cosecha; riega el sistema. / Do not force the harvest; water the system.",
+        "plant": "Sembrar",
+        "again": "Otra siembra",
+        "stages": {
+          "0": "Semilla de intención",
+          "1": "Tallo de disciplina",
+          "2": "Hojas de claridad",
+          "3": "Olivo vivo — Holive"
+        }
+      },
+      "mesh": {
+        "status": "CLASIFICADO",
+        "title": "Malla de lealtad (red viva)",
+        "summary": "Conectamos nodos como si fueran equipos. Cuando uno se mueve, el resto responde. Falló como producto; brilló como metáfora: la lealtad es una red, no un contrato.",
+        "refran": "La lealtad se teje; no se compra al mayoreo. / Loyalty is woven; it is not bought wholesale.",
+        "hint": "Arrastra un nodo — la red responde",
+        "nodes": {
+          "core": "Holive",
+          "brand": "Marca",
+          "ops": "Operación",
+          "code": "Código",
+          "clients": "Clientes"
+        }
+      },
+      "prism": {
+        "status": "INESTABLE",
+        "title": "Tormenta prisma de marca",
+        "summary": "Lanzamos luz púrpura y oro a través de un prisma. El laboratorio se iluminó… y también se confundió. Lección: una marca fuerte refracta; una débil se diluye.",
+        "refran": "La marca clara refracta; la confusa se pierde. / A clear brand refracts; a confused one vanishes.",
+        "hint": "Mueve el puntero — la luz se parte"
+      },
+      "orbit": {
+        "status": "RITUAL",
+        "title": "Órbitas sagradas alrededor de Holi",
+        "summary": "Intentamos orbitar KPIs alrededor de Holi. Holi se negó a ser satélite. Ahora él es el centro y las métricas giran con respeto. Así debe ser.",
+        "refran": "Pon el alma en el centro y el sistema orbitará. / Put soul at the center and the system will orbit."
+      },
+      "nova": {
+        "status": "ACTIVO",
+        "title": "Nova de claridad (tap para expandir)",
+        "summary": "Cada toque expande un círculo de claridad. Demasiados toques y el laboratorio parece fiesta. Exacto: la claridad también es energía — dosificada.",
+        "refran": "Claridad expandida con propósito no es ruido. / Clarity expanded with purpose is not noise.",
+        "hint": "Toca para expandir claridad"
+      },
+      "cyclone": {
+        "status": "GIRANDO",
+        "title": "Ciclón del léxico Holive",
+        "summary": "Palabras de oficio girando alrededor del nombre. Intentamos un word cloud y nos salió un ciclón. Perfecto: el lenguaje de marca debe orbitar, no flotar.",
+        "refran": "Las palabras correctas encuentran su centro. / The right words find their center.",
+        "w0": "Pureza",
+        "w1": "Lealtad",
+        "w2": "Código",
+        "w3": "Sembrar",
+        "w4": "Cosechar",
+        "w5": "Sistema",
+        "w6": "Ojo",
+        "w7": "Oficio"
+      },
+      "signal": {
+        "status": "ESCANEANDO",
+        "title": "Radar del oficio",
+        "summary": "Un espectro que late con el scroll. Queríamos detectar señal vs ruido en el mercado. Detectamos algo mejor: el ritmo del visitante.",
+        "refran": "Escucha el ritmo antes de subir el volumen. / Hear the rhythm before you raise the volume.",
+        "hint": "Desplázate — la señal responde"
+      },
+      "mirror": {
+        "status": "REFLEJO",
+        "title": "Libro mayor espejo",
+        "summary": "Arriba: lo que prometes. Abajo: lo que devuelves. El espejo no miente; el laboratorio sí intentó endulzarlo. Falló. Bien.",
+        "refran": "Lo que siembras en voz, lo cosechas en hechos. / What you sow in voice, you reap in deeds.",
+        "aboveLabel": "PROMESA",
+        "belowLabel": "RETORNO",
+        "aboveText": "Sembramos claridad.",
+        "belowText": "Cosechamos lealtad."
+      },
+      "liquid": {
+        "status": "FLUIDO",
+        "title": "Brief líquido (tinta que escucha)",
+        "summary": "Un brief que se comporta como tinta viva. Sigue el cursor porque el brief debería seguir al cliente — no al ego del creativo.",
+        "refran": "El brief vivo sigue al problema, no a la moda. / A living brief follows the problem, not the trend.",
+        "hint": "Mueve el cursor — la tinta responde"
+      },
+      "heartbeat": {
+        "status": "LATIENDO",
+        "title": "KPI con pulso de olivo",
+        "summary": "Convertimos un indicador en latido. Porque un negocio sin ritmo es un organigrama sin alma. Ajusta el BPM: encuentra tu tempo de oficio.",
+        "refran": "Sin ritmo no hay cosecha sostenible. / Without rhythm there is no sustainable harvest.",
+        "metric": "Ritmo empresarial",
+        "unit": "latidos / intención",
+        "hint": "Ajusta el pulso de tu sistema"
+      },
+      "glitch": {
+        "status": "CORRUPTO → SANABLE",
+        "title": "Dossier glitch (archivos heridos)",
+        "summary": "Expedientes dañados por exceso de prisa. Al pasar el cursor, sanan. Metáfora barata… y verdadera: la atención repara lo que la prisa rompe.",
+        "refran": "La prisa corrompe; la atención restaura. / Haste corrupts; attention restores.",
+        "fileLabel": "ARCHIVO HERIDO",
+        "line1": "Holive no vende milagros.",
+        "line2": "Holive siembra sistemas que respetan el alma del oficio.",
+        "hintCorrupt": "Pasa el cursor para restaurar",
+        "hintClean": "Restaurado. La atención hizo su trabajo."
+      },
+      "vortex": {
+        "status": "GIRANDO",
+        "title": "Vórtice dorado de intención",
+        "summary": "Una espiral de cosecha. Intentamos visualizar atracción de clientes y nos salió un vórtice de intención. Mejor: la atracción sin propósito es solo ruido dorado.",
+        "refran": "La intención enfocada atrae; la dispersa gira vacía. / Focused intention attracts; scattered intention spins empty.",
+        "hint": "El centro es el oficio"
+      },
+      "tunnel": {
+        "status": "EN CONSTRUCCIÓN",
+        "title": "Túnel cinético del oficio",
+        "summary": "Un corredor hacia el centro Holive. Muchos entran por curiosidad; pocos atraviesan con método. El túnel no es escape: es enfoque.",
+        "refran": "El camino estrecho aclara el destino. / The narrow path clarifies the destination.",
+        "hint": "Hacia el centro"
+      }
+    }
   },
   "HoliGame": {
     "title": "Holi Run",
