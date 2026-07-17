@@ -15,7 +15,8 @@
     "themeLight": "Light mode",
     "themeDark": "Dark mode",
     "localeEs": "ES",
-    "localeEn": "EN"
+    "localeEn": "EN",
+    "consulta": "Consult"
   },
   "Hero": {
     "brand": "HOLIVE",
@@ -158,7 +159,9 @@
     "rights": "© {year} Holive. holive.org",
     "gameHint": "Made it this far? Holi is waiting below.",
     "experimentsLink": "Experiments archive",
-    "experimentsHint": "Secret files from the Holive lab."
+    "experimentsHint": "Secret files from the Holive lab.",
+    "consultaLink": "Free 15-min consult",
+    "consultaHint": "Automate with clarity. Quiz → book."
   },
   "Experiments": {
     "metaTitle": "Holive Experiments — Classified archive",
@@ -353,5 +356,273 @@
     "highScore": "Best",
     "gameOver": "Round over",
     "tap": "Tap to jump"
+  },
+  "Consulta": {
+    "metaTitle": "Holive Consult — Automate with clarity",
+    "metaDescription": "Book a free 15-minute consult. Get 5 ideas and a plan to systematize your business. Holive.org",
+    "hero": {
+      "eyebrow": "HOLIVE CONSULT · 15 MIN",
+      "title": "Automate without losing the soul of the craft.",
+      "sub": "If your business depends on you for everything, you don’t have a system — you have a bottleneck. Book a free consult and leave with actionable clarity.",
+      "cta": "Book free consult (15 min)",
+      "secondary": "What’s in the session",
+      "scarcity": "Few free consults per week — real capacity, not theater."
+    },
+    "problem": {
+      "eyebrow": "THE BOTTLENECK",
+      "title": "You own the business. You are the brake.",
+      "body": "You sell, deliver, invoice… and remain the only decision node. That isn’t leadership — it’s friction. Holive turns manual operations into living systems — with purity, loyalty, and code.",
+      "points": {
+        "a": {
+          "title": "Everything runs through you",
+          "text": "Every WhatsApp, quote, and “almost done” drains your energy."
+        },
+        "b": {
+          "title": "Tools without a system",
+          "text": "Loose apps aren’t automation. They’re expensive noise."
+        },
+        "c": {
+          "title": "Growth hurts",
+          "text": "More demand without process is chaos with nicer branding."
+        }
+      }
+    },
+    "proof": {
+      "eyebrow": "CREDIBILITY",
+      "title": "We work with owners who already sell — and want order.",
+      "body": "Real industries. Measurable direction. No confidential project names. Holive speaks in facts, not fog.",
+      "stats": {
+        "s1": {
+          "value": "15 min",
+          "label": "Focused consult: diagnosis + direction"
+        },
+        "s2": {
+          "value": "5 ideas",
+          "label": "Concrete moves you can execute"
+        },
+        "s3": {
+          "value": "1 plan",
+          "label": "Clear path: service, learning, or 1-1"
+        }
+      },
+      "quotes": {
+        "q1": {
+          "text": "Finally someone talked systems without selling magic.",
+          "attr": "Owner · professional services"
+        },
+        "q2": {
+          "text": "I left with a map. Not a generic PDF.",
+          "attr": "Founder · commerce & ops"
+        }
+      }
+    },
+    "session": {
+      "eyebrow": "RECIPROCITY",
+      "title": "What happens in your consult",
+      "body": "Not a demo. An authority session: we face your bottleneck and return clarity.",
+      "steps": {
+        "one": {
+          "title": "Honest diagnosis",
+          "text": "Where flow breaks: sales, ops, data, or decision."
+        },
+        "two": {
+          "title": "5 actionable ideas",
+          "text": "Concrete moves — not hallway theory."
+        },
+        "three": {
+          "title": "Next-step plan",
+          "text": "Holive service, courses if you don’t delegate yet, or deep 1-1."
+        }
+      }
+    },
+    "quizSection": {
+      "eyebrow": "SERIOUSNESS FILTER",
+      "title": "Questionnaire before the calendar",
+      "body": "Investing 3–4 minutes here raises session quality. Complete the gate to unlock booking."
+    },
+    "quiz": {
+      "progress": "Step {current} of {total}",
+      "next": "Continue",
+      "back": "Back",
+      "submit": "Unlock calendar",
+      "sending": "Saving…",
+      "error": "We couldn’t save. Try again.",
+      "missing": "Supabase isn’t configured here. Your answers weren’t stored.",
+      "unlockedEyebrow": "CALENDAR UNLOCKED",
+      "unlockedTitle": "Pick your 15-minute slot.",
+      "unlockedBody": "You’ll get confirmation. Come with context — we already read your questionnaire.",
+      "calLockedHint": "Complete the questionnaire to unlock the calendar.",
+      "calMissing": "Your lead is recorded. We’ll contact you to schedule (Cal.com not configured yet).",
+      "steps": {
+        "business_type": {
+          "title": "What kind of business do you run?",
+          "help": "Pick the closest category.",
+          "placeholder": ""
+        },
+        "stage": {
+          "title": "What stage are you in?",
+          "help": "No judgment — just context.",
+          "placeholder": ""
+        },
+        "bottleneck": {
+          "title": "What’s your bottleneck today?",
+          "help": "Be specific. A short paragraph is enough.",
+          "placeholder": "e.g. Manual quotes, WhatsApp follow-up, zero metrics…"
+        },
+        "revenue_range": {
+          "title": "Approx. monthly revenue",
+          "help": "Ranges to qualify — not to judge.",
+          "placeholder": ""
+        },
+        "delegation": {
+          "title": "Do you delegate or do almost everything?",
+          "help": "Honesty = better plan.",
+          "placeholder": ""
+        },
+        "tried_before": {
+          "title": "What have you tried before?",
+          "help": "Tools, freelancers, courses, nothing…",
+          "placeholder": "e.g. Tried Zapier, hired a community manager, bought a course…"
+        },
+        "priority_90d": {
+          "title": "Priority for the next 90 days",
+          "help": "One clear goal.",
+          "placeholder": "e.g. Automate quoting + follow-up without me 24/7"
+        },
+        "budget_quarter": {
+          "title": "Budget this quarter",
+          "help": "So we know if service, course, or 1-1 is the path.",
+          "placeholder": ""
+        },
+        "contact": {
+          "title": "Your details for the consult",
+          "help": "Real WhatsApp. City or timezone.",
+          "placeholder": ""
+        }
+      },
+      "options": {
+        "business_type": {
+          "retail": "Retail / commerce",
+          "services": "Professional services",
+          "saas": "SaaS / digital product",
+          "agency": "Agency / studio",
+          "other": "Other"
+        },
+        "stage": {
+          "validate": "Validating the offer",
+          "grow": "Growing with friction",
+          "scale": "Scaling operations",
+          "rebuild": "Reordering the chaos"
+        },
+        "revenue_range": {
+          "u50": "Up to $50k MXN",
+          "u150": "$50k – $150k MXN",
+          "u500": "$150k – $500k MXN",
+          "u1m": "$500k – $1M MXN",
+          "o1m": "Over $1M MXN"
+        },
+        "delegation": {
+          "solo": "I do almost everything",
+          "partial": "I delegate some, decide all",
+          "team": "Team / partial processes"
+        },
+        "budget_quarter": {
+          "u10": "Up to $10k MXN",
+          "u30": "$10k – $30k MXN",
+          "u80": "$30k – $80k MXN",
+          "o80": "Over $80k MXN"
+        }
+      },
+      "contact": {
+        "name": "Name",
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "zone": "City / timezone",
+        "pathLabel": "You lean toward… (optional)",
+        "paths": {
+          "service": "Holive does it",
+          "courses": "Learn first",
+          "advisory": "1-1 with Oscar"
+        }
+      }
+    },
+    "anchor": {
+      "eyebrow": "INVESTMENT ANCHOR",
+      "title": "Investment references (not a price shop)",
+      "body": "These ranges filter seriousness. After your consult, any service or course carries a special discount.",
+      "micro": "Seeing the anchor isn’t buying. It’s knowing we speak the same language.",
+      "items": {
+        "web": {
+          "title": "Operational web (capture + connect)",
+          "text": "Presence that converts and plugs into ops.",
+          "price": "from $6,000 MXN"
+        },
+        "plan": {
+          "title": "Systematized business plan",
+          "text": "Offer architecture, processes, and metrics.",
+          "price": "from $20,000 MXN"
+        },
+        "app": {
+          "title": "Self-hosted app / platform",
+          "text": "Custom product under your control.",
+          "price": "from $10,000 MXN"
+        },
+        "finance": {
+          "title": "Financial engineering / projections",
+          "text": "Models and clarity to decide with numbers.",
+          "price": "from $50,000 MXN"
+        }
+      }
+    },
+    "paths": {
+      "eyebrow": "THREE EXITS",
+      "title": "Choose how you want to move",
+      "service": {
+        "label": "A · SERVICE",
+        "title": "Holive does it for you",
+        "body": "Book the consult. Leave with a proposal and a post-session discount. Systems, not promises.",
+        "cta": "Book consult"
+      },
+      "courses": {
+        "label": "B · LEARN",
+        "title": "I don’t delegate yet — I want to learn",
+        "body": "No pressure. Enter Holive courses and build internal capacity.",
+        "cta": "See courses"
+      },
+      "advisory": {
+        "label": "C · 1-1 OSCAR",
+        "title": "Direct work with Oscar",
+        "body": "Deep session, real-time adjustments. From $200 USD/hr. For those who already know what they need.",
+        "cta": "Request 1-1"
+      }
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Before you book",
+      "items": {
+        "q1": {
+          "q": "Is the consult really free?",
+          "a": "Yes. 15 minutes. Limited weekly slots. We ask for a complete questionnaire — so the session is worth it."
+        },
+        "q2": {
+          "q": "What if I don’t have service budget yet?",
+          "a": "Perfect: exit B. Courses and method without pressure. Holive won’t push what you can’t sustain."
+        },
+        "q3": {
+          "q": "What is the 1-1 with Oscar?",
+          "a": "Direct work with the founder. From $200 USD/hour. High density, zero theater. Requested after (or during) the consult."
+        },
+        "q4": {
+          "q": "Do my data go to a third-party CRM?",
+          "a": "No. Our Supabase + internal alert. Privacy aligned with Holive."
+        }
+      }
+    },
+    "final": {
+      "eyebrow": "NEXT STEP",
+      "title": "Stop being the bottleneck.",
+      "body": "Complete the questionnaire, book 15 minutes, leave with 5 ideas and a plan. Holive.org — purity, loyalty, code.",
+      "cta": "Go to questionnaire"
+    }
   }
 }

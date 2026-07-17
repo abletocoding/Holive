@@ -23,6 +23,28 @@ export type GameScoreInsert = {
   locale?: string | null;
 };
 
+export type ConsultaPathInterest = "service" | "courses" | "advisory";
+
+export type ConsultaLeadInsert = {
+  business_type: string;
+  stage: string;
+  bottleneck: string;
+  revenue_range: string;
+  delegation: string;
+  tried_before: string;
+  priority_90d: string;
+  budget_quarter: string;
+  name: string;
+  email: string;
+  whatsapp: string;
+  zone: string;
+  locale?: string | null;
+  source?: string | null;
+  cal_booked?: boolean;
+  path_interest?: ConsultaPathInterest | null;
+  raw?: Record<string, unknown> | null;
+};
+
 export type LeadRow = LeadInsert & {
   id: string;
   created_at: string;
@@ -34,6 +56,11 @@ export type CourseWaitlistRow = CourseWaitlistInsert & {
 };
 
 export type GameScoreRow = GameScoreInsert & {
+  id: string;
+  created_at: string;
+};
+
+export type ConsultaLeadRow = ConsultaLeadInsert & {
   id: string;
   created_at: string;
 };
@@ -58,6 +85,12 @@ export type Database = {
         Row: GameScoreRow;
         Insert: GameScoreInsert;
         Update: Partial<GameScoreInsert>;
+        Relationships: [];
+      };
+      leads_consulta: {
+        Row: ConsultaLeadRow;
+        Insert: ConsultaLeadInsert;
+        Update: Partial<ConsultaLeadInsert>;
         Relationships: [];
       };
     };

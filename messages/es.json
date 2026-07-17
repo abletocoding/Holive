@@ -15,7 +15,8 @@
     "themeLight": "Modo claro",
     "themeDark": "Modo oscuro",
     "localeEs": "ES",
-    "localeEn": "EN"
+    "localeEn": "EN",
+    "consulta": "Consulta"
   },
   "Hero": {
     "brand": "HOLIVE",
@@ -158,7 +159,9 @@
     "rights": "© {year} Holive. holive.org",
     "gameHint": "¿Llegaste hasta aquí? Holi te espera abajo.",
     "experimentsLink": "Archivo de experimentos",
-    "experimentsHint": "Archivos secretos del laboratorio Holive."
+    "experimentsHint": "Archivos secretos del laboratorio Holive.",
+    "consultaLink": "Consulta gratis 15 min",
+    "consultaHint": "Automatiza con claridad. Cuestionario → agenda."
   },
   "Experiments": {
     "metaTitle": "Experimentos Holive — Archivo clasificado",
@@ -353,5 +356,273 @@
     "highScore": "Récord",
     "gameOver": "Fin de ronda",
     "tap": "Toca para saltar"
+  },
+  "Consulta": {
+    "metaTitle": "Consulta Holive — Automatiza con claridad",
+    "metaDescription": "Agenda una consultoría gratis de 15 minutos. Recibe 5 ideas y un plan para sistematizar tu negocio. Holive.org",
+    "hero": {
+      "eyebrow": "CONSULTORÍA HOLIVE · 15 MIN",
+      "title": "Automatiza sin perder el alma del oficio.",
+      "sub": "Si tu negocio depende de ti para todo, no tienes un sistema: tienes un cuello de botella. Agenda una consulta gratis y sal con claridad accionable.",
+      "cta": "Agenda consulta gratis (15 min)",
+      "secondary": "Qué incluye la sesión",
+      "scarcity": "Pocas consultas gratis por semana — cupo real, no teatro."
+    },
+    "problem": {
+      "eyebrow": "EL CUELLO DE BOTELLA",
+      "title": "Tienes el negocio. Tú eres el freno.",
+      "body": "Facturas, vendes, entregas… y sigues siendo el único punto de decisión. Eso no es liderazgo: es fricción. Holive existe para convertir operación manual en sistemas vivos — con pureza, lealtad y código.",
+      "points": {
+        "a": {
+          "title": "Todo pasa por ti",
+          "text": "Cada WhatsApp, cada cotización, cada “ya casi” digita tu energía."
+        },
+        "b": {
+          "title": "Herramientas sin sistema",
+          "text": "Apps sueltas no son automatización. Son ruido caro."
+        },
+        "c": {
+          "title": "Crecer duele",
+          "text": "Más demanda sin procesos es solo más caos con mejor branding."
+        }
+      }
+    },
+    "proof": {
+      "eyebrow": "CREDIBILIDAD",
+      "title": "Trabajamos con dueños que ya facturan — y quieren orden.",
+      "body": "Industrias reales. Resultados medibles. Sin nombrar proyectos confidenciales. Holive habla con hechos, no con humo.",
+      "stats": {
+        "s1": {
+          "value": "15 min",
+          "label": "Consulta enfocada: diagnóstico + dirección"
+        },
+        "s2": {
+          "value": "5 ideas",
+          "label": "Acciones concretas que puedes ejecutar"
+        },
+        "s3": {
+          "value": "1 plan",
+          "label": "Ruta clara: servicio, aprendizaje o 1-1"
+        }
+      },
+      "quotes": {
+        "q1": {
+          "text": "Por fin alguien habló de sistemas sin venderme magia.",
+          "attr": "Dueño · servicios profesionales"
+        },
+        "q2": {
+          "text": "Salí con un mapa. No con un PDF genérico.",
+          "attr": "Fundadora · comercio y operaciones"
+        }
+      }
+    },
+    "session": {
+      "eyebrow": "RECIPROCIDAD",
+      "title": "Qué pasa en tu consulta",
+      "body": "No es una demo. Es una sesión de autoridad: miramos tu cuello de botella y te devolvemos claridad.",
+      "steps": {
+        "one": {
+          "title": "Diagnóstico honesto",
+          "text": "Dónde se rompe el flujo: ventas, ops, datos o decisión."
+        },
+        "two": {
+          "title": "5 ideas accionables",
+          "text": "Movimientos concretos — no teoría de pasillo."
+        },
+        "three": {
+          "title": "Plan de siguiente paso",
+          "text": "Servicio Holive, cursos si aún no delegas, o 1-1 profundo."
+        }
+      }
+    },
+    "quizSection": {
+      "eyebrow": "FILTRO DE SERIEDAD",
+      "title": "Cuestionario antes del calendario",
+      "body": "Invertir 3–4 minutos aquí sube la calidad de la sesión. Completa el gate y desbloqueas la agenda."
+    },
+    "quiz": {
+      "progress": "Paso {current} de {total}",
+      "next": "Continuar",
+      "back": "Atrás",
+      "submit": "Desbloquear agenda",
+      "sending": "Guardando…",
+      "error": "No pudimos guardar. Intenta de nuevo.",
+      "missing": "Supabase no está configurado en este entorno. Tu respuesta no se guardó.",
+      "unlockedEyebrow": "AGENDA DESBLOQUEADA",
+      "unlockedTitle": "Elige tu horario de 15 minutos.",
+      "unlockedBody": "Recibirás confirmación. Llega con contexto: nosotros ya leímos tu cuestionario.",
+      "calLockedHint": "Completa el cuestionario para desbloquear el calendario.",
+      "calMissing": "Tu lead quedó registrado. Te contactamos para agendar (Cal.com aún no configurado).",
+      "steps": {
+        "business_type": {
+          "title": "¿Qué tipo de negocio tienes?",
+          "help": "Elige la categoría más cercana.",
+          "placeholder": ""
+        },
+        "stage": {
+          "title": "¿En qué etapa estás?",
+          "help": "Sin juicio — solo contexto.",
+          "placeholder": ""
+        },
+        "bottleneck": {
+          "title": "¿Cuál es tu cuello de botella hoy?",
+          "help": "Sé específico. Un párrafo basta.",
+          "placeholder": "Ej. Cotizaciones manuales, seguimiento en WhatsApp, cero métricas…"
+        },
+        "revenue_range": {
+          "title": "Facturación aproximada / mes",
+          "help": "Rangos para calificar, no para juzgar.",
+          "placeholder": ""
+        },
+        "delegation": {
+          "title": "¿Delegas o lo haces casi todo?",
+          "help": "Honestidad = mejor plan.",
+          "placeholder": ""
+        },
+        "tried_before": {
+          "title": "¿Qué intentaste antes?",
+          "help": "Herramientas, freelancers, cursos, nada…",
+          "placeholder": "Ej. Probé Zapier, contraté un community, compré un curso…"
+        },
+        "priority_90d": {
+          "title": "Prioridad en los próximos 90 días",
+          "help": "Una meta clara.",
+          "placeholder": "Ej. Automatizar cotización + seguimiento sin estar yo 24/7"
+        },
+        "budget_quarter": {
+          "title": "Presupuesto este trimestre",
+          "help": "Para saber si servicio, curso o 1-1 es el camino.",
+          "placeholder": ""
+        },
+        "contact": {
+          "title": "Tus datos para la consulta",
+          "help": "WhatsApp real. Zona horaria o ciudad.",
+          "placeholder": ""
+        }
+      },
+      "options": {
+        "business_type": {
+          "retail": "Comercio / retail",
+          "services": "Servicios profesionales",
+          "saas": "SaaS / producto digital",
+          "agency": "Agencia / estudio",
+          "other": "Otro"
+        },
+        "stage": {
+          "validate": "Validando oferta",
+          "grow": "Creciendo con fricción",
+          "scale": "Escalando operaciones",
+          "rebuild": "Reordenando el caos"
+        },
+        "revenue_range": {
+          "u50": "Hasta $50k MXN",
+          "u150": "$50k – $150k MXN",
+          "u500": "$150k – $500k MXN",
+          "u1m": "$500k – $1M MXN",
+          "o1m": "Más de $1M MXN"
+        },
+        "delegation": {
+          "solo": "Lo hago casi todo yo",
+          "partial": "Delego algo, decido todo",
+          "team": "Hay equipo / procesos parciales"
+        },
+        "budget_quarter": {
+          "u10": "Hasta $10k MXN",
+          "u30": "$10k – $30k MXN",
+          "u80": "$30k – $80k MXN",
+          "o80": "Más de $80k MXN"
+        }
+      },
+      "contact": {
+        "name": "Nombre",
+        "email": "Correo",
+        "whatsapp": "WhatsApp",
+        "zone": "Ciudad / zona horaria",
+        "pathLabel": "Inclinas a… (opcional)",
+        "paths": {
+          "service": "Que Holive lo haga",
+          "courses": "Aprender primero",
+          "advisory": "1-1 con Oscar"
+        }
+      }
+    },
+    "anchor": {
+      "eyebrow": "ANCLAJE DE INVERSIÓN",
+      "title": "Referencias de inversión (no es una tienda)",
+      "body": "Estos rangos filtran seriedad. Tras tu consulta, cualquier servicio o curso lleva descuento especial.",
+      "micro": "Ver el ancla no es comprar. Es saber si hablamos el mismo idioma.",
+      "items": {
+        "web": {
+          "title": "Web operativa (capta + conecta)",
+          "text": "Presencia que convierte y se integra a tu operación.",
+          "price": "desde $6,000 MXN"
+        },
+        "plan": {
+          "title": "Plan de negocio sistematizado",
+          "text": "Arquitectura de oferta, procesos y métricas.",
+          "price": "desde $20,000 MXN"
+        },
+        "app": {
+          "title": "App / plataforma propia self-hosted",
+          "text": "Producto a medida bajo tu control.",
+          "price": "desde $10,000 MXN"
+        },
+        "finance": {
+          "title": "Ingeniería financiera / proyecciones",
+          "text": "Modelos y claridad para decidir con números.",
+          "price": "desde $50,000 MXN"
+        }
+      }
+    },
+    "paths": {
+      "eyebrow": "TRES SALIDAS",
+      "title": "Elige cómo quieres avanzar",
+      "service": {
+        "label": "A · SERVICIO",
+        "title": "Holive lo hace por ti",
+        "body": "Agenda la consulta. Sales con propuesta y descuento post-sesión. Sistemas, no promesas.",
+        "cta": "Agendar consulta"
+      },
+      "courses": {
+        "label": "B · APRENDER",
+        "title": "Aún no delego — quiero aprender",
+        "body": "Sin presión. Entra al universo de cursos Holive y construye capacidad interna.",
+        "cta": "Ver cursos"
+      },
+      "advisory": {
+        "label": "C · 1-1 OSCAR",
+        "title": "Trabajo directo con Oscar",
+        "body": "Sesión profunda, ajustes en tiempo real. Desde $200 USD/hr. Para quien ya sabe lo que necesita.",
+        "cta": "Solicitar 1-1"
+      }
+    },
+    "faq": {
+      "eyebrow": "PREGUNTAS",
+      "title": "Antes de agendar",
+      "items": {
+        "q1": {
+          "q": "¿La consulta es realmente gratis?",
+          "a": "Sí. 15 minutos. Cupo limitado por semana. A cambio pedimos el cuestionario completo — así la sesión vale la pena."
+        },
+        "q2": {
+          "q": "¿Y si aún no tengo presupuesto de servicio?",
+          "a": "Perfecto: salida B. Cursos y método sin presión. Holive no empuja lo que no puedes sostener."
+        },
+        "q3": {
+          "q": "¿Qué es el 1-1 con Oscar?",
+          "a": "Trabajo directo con el fundador. Desde $200 USD/hora. Alta densidad, cero teatro. Se solicita tras (o en) la consulta."
+        },
+        "q4": {
+          "q": "¿Mis datos van a un CRM de terceros?",
+          "a": "No. Supabase propio + aviso interno. Privacidad alineada a Holive."
+        }
+      }
+    },
+    "final": {
+      "eyebrow": "SIGUIENTE PASO",
+      "title": "Deja de ser el cuello de botella.",
+      "body": "Completa el cuestionario, agenda 15 minutos, sal con 5 ideas y un plan. Holive.org — pureza, lealtad, código.",
+      "cta": "Ir al cuestionario"
+    }
   }
 }

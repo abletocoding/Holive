@@ -26,7 +26,7 @@ export const integrationSlots: IntegrationSlots = {
   cms: "none",
   payments: "none",
   crm: "supabase",
-  analytics: "none",
+  analytics: "plausible",
   chat: "none",
 };
 
