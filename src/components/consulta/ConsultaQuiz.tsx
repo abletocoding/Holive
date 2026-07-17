@@ -152,14 +152,14 @@ export function ConsultaQuiz() {
   if (status === "done") {
     return (
       <div id="consulta-agenda" className="scroll-mt-28 space-y-6">
-        <div className="rounded-sm border border-[color-mix(in_srgb,var(--holive-gold)_35%,transparent)] bg-[color-mix(in_srgb,var(--holive-purple)_18%,transparent)] px-5 py-6">
+        <div className="rounded-sm border border-[color-mix(in_srgb,var(--holive-gold)_40%,var(--border))] bg-[linear-gradient(160deg,#F7F4FB,#FFFFFF)] px-5 py-6">
           <p className="font-mono-code text-[0.65rem] uppercase tracking-[0.28em] text-[var(--holive-gold)]">
             {t("unlockedEyebrow")}
           </p>
-          <p className="font-display mt-2 text-2xl text-[var(--holive-white)] md:text-3xl">
+          <p className="font-display mt-2 text-2xl text-[var(--holive-purple)] md:text-3xl">
             {t("unlockedTitle")}
           </p>
-          <p className="mt-2 max-w-2xl text-sm text-[color-mix(in_srgb,var(--holive-white)_78%,transparent)]">
+          <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
             {t("unlockedBody")}
           </p>
         </div>
@@ -190,11 +190,11 @@ export function ConsultaQuiz() {
         </div>
       </div>
 
-      <div className="rounded-sm border border-[var(--border)] bg-[color-mix(in_srgb,var(--holive-black)_88%,var(--holive-purple))] p-5 md:p-7">
-        <h3 className="font-display text-xl text-[var(--holive-white)] md:text-2xl">
+      <div className="rounded-sm border border-[var(--border)] bg-white p-5 shadow-[0_16px_50px_rgba(51,0,114,0.07)] md:p-7">
+        <h3 className="font-display text-xl text-[var(--holive-purple)] md:text-2xl">
           {t(`steps.${step}.title`)}
         </h3>
-        <p className="mt-2 text-sm text-[color-mix(in_srgb,var(--holive-white)_70%,transparent)]">
+        <p className="mt-2 text-sm text-[var(--muted)]">
           {t(`steps.${step}.help`)}
         </p>
 
@@ -210,8 +210,8 @@ export function ConsultaQuiz() {
                     onClick={() => setField(step as keyof Answers, key as never)}
                     className={`focus-ring rounded-sm border px-4 py-3 text-left text-sm transition ${
                       selected
-                        ? "border-[var(--holive-gold)] bg-[color-mix(in_srgb,var(--holive-gold)_16%,transparent)] text-[var(--holive-gold-bright)]"
-                        : "border-[var(--border)] text-[var(--holive-white)] hover:border-[var(--holive-gold)]/50"
+                        ? "border-[var(--holive-gold)] bg-[color-mix(in_srgb,var(--holive-gold)_14%,white)] text-[var(--holive-purple)]"
+                        : "border-[var(--border)] text-[var(--holive-black)] hover:border-[var(--holive-gold)]/60"
                     }`}
                   >
                     {t(`options.${step}.${key}`)}

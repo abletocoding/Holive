@@ -362,16 +362,16 @@
     "metaDescription": "Agenda una consultoría gratis de 15 minutos. Recibe 5 ideas y un plan para sistematizar tu negocio. Holive.org",
     "hero": {
       "eyebrow": "CONSULTORÍA HOLIVE · 15 MIN",
-      "title": "Automatiza sin perder el alma del oficio.",
-      "sub": "Si tu negocio depende de ti para todo, no tienes un sistema: tienes un cuello de botella. Agenda una consulta gratis y sal con claridad accionable.",
-      "cta": "Agenda consulta gratis (15 min)",
+      "title": "Deja de ser el cuello de botella.",
+      "sub": "15 minutos. 5 ideas. Un plan. Sin teatro.",
+      "cta": "Agendar consulta gratis",
       "secondary": "Qué incluye la sesión",
       "scarcity": "Pocas consultas gratis por semana — cupo real, no teatro."
     },
     "problem": {
-      "eyebrow": "EL CUELLO DE BOTELLA",
-      "title": "Tienes el negocio. Tú eres el freno.",
-      "body": "Facturas, vendes, entregas… y sigues siendo el único punto de decisión. Eso no es liderazgo: es fricción. Holive existe para convertir operación manual en sistemas vivos — con pureza, lealtad y código.",
+      "eyebrow": "EL FRENO",
+      "title": "Tu negocio crece. Tú no das abasto.",
+      "body": "Si todo pasa por ti, no tienes sistema: tienes fricción.",
       "points": {
         "a": {
           "title": "Todo pasa por ti",
@@ -417,28 +417,28 @@
       }
     },
     "session": {
-      "eyebrow": "RECIPROCIDAD",
-      "title": "Qué pasa en tu consulta",
-      "body": "No es una demo. Es una sesión de autoridad: miramos tu cuello de botella y te devolvemos claridad.",
+      "eyebrow": "LA SESIÓN",
+      "title": "Qué pasa en 15 minutos",
+      "body": "Diagnóstico. Ideas. Plan.",
       "steps": {
         "one": {
-          "title": "Diagnóstico honesto",
-          "text": "Dónde se rompe el flujo: ventas, ops, datos o decisión."
+          "title": "Diagnóstico",
+          "text": "Dónde se rompe el flujo."
         },
         "two": {
-          "title": "5 ideas accionables",
-          "text": "Movimientos concretos — no teoría de pasillo."
+          "title": "5 ideas",
+          "text": "Movimientos concretos."
         },
         "three": {
-          "title": "Plan de siguiente paso",
-          "text": "Servicio Holive, cursos si aún no delegas, o 1-1 profundo."
+          "title": "Un plan",
+          "text": "Servicio, cursos o 1-1."
         }
       }
     },
     "quizSection": {
-      "eyebrow": "FILTRO DE SERIEDAD",
-      "title": "Cuestionario antes del calendario",
-      "body": "Invertir 3–4 minutos aquí sube la calidad de la sesión. Completa el gate y desbloqueas la agenda."
+      "eyebrow": "ANTES DE AGENDAR",
+      "title": "Cuestionario corto",
+      "body": "3–4 minutos. Desbloqueas el calendario."
     },
     "quiz": {
       "progress": "Paso {current} de {total}",
@@ -549,8 +549,8 @@
     "anchor": {
       "eyebrow": "ANCLAJE DE INVERSIÓN",
       "title": "Referencias de inversión (no es una tienda)",
-      "body": "Estos rangos filtran seriedad. Tras tu consulta, cualquier servicio o curso lleva descuento especial.",
-      "micro": "Ver el ancla no es comprar. Es saber si hablamos el mismo idioma.",
+      "body": "Rangos de referencia. Tras la consulta: descuento especial.",
+      "micro": "Ver el ancla no es comprar.",
       "items": {
         "web": {
           "title": "Web operativa (capta + conecta)",
@@ -580,19 +580,19 @@
       "service": {
         "label": "A · SERVICIO",
         "title": "Holive lo hace por ti",
-        "body": "Agenda la consulta. Sales con propuesta y descuento post-sesión. Sistemas, no promesas.",
+        "body": "Holive lo construye. Sales con propuesta y descuento.",
         "cta": "Agendar consulta"
       },
       "courses": {
         "label": "B · APRENDER",
         "title": "Aún no delego — quiero aprender",
-        "body": "Sin presión. Entra al universo de cursos Holive y construye capacidad interna.",
+        "body": "Aprende el método. Sin presión de servicio.",
         "cta": "Ver cursos"
       },
       "advisory": {
         "label": "C · 1-1 OSCAR",
         "title": "Trabajo directo con Oscar",
-        "body": "Sesión profunda, ajustes en tiempo real. Desde $200 USD/hr. Para quien ya sabe lo que necesita.",
+        "body": "Sesión densa con Oscar. Desde $200 USD/hr.",
         "cta": "Solicitar 1-1"
       }
     },
@@ -611,10 +611,6 @@
         "q3": {
           "q": "¿Qué es el 1-1 con Oscar?",
           "a": "Trabajo directo con el fundador. Desde $200 USD/hora. Alta densidad, cero teatro. Se solicita tras (o en) la consulta."
-        },
-        "q4": {
-          "q": "¿Mis datos van a un CRM de terceros?",
-          "a": "No. Supabase propio + aviso interno. Privacidad alineada a Holive."
         }
       }
     },
@@ -623,6 +619,37 @@
       "title": "Deja de ser el cuello de botella.",
       "body": "Completa el cuestionario, agenda 15 minutos, sal con 5 ideas y un plan. Holive.org — pureza, lealtad, código.",
       "cta": "Ir al cuestionario"
+    },
+    "results": {
+      "eyebrow": "ANTES → DESPUÉS",
+      "title": "Tres industrias. Un patrón: menos fricción.",
+      "body": "Ejemplos de dirección. Sin nombres confidenciales.",
+      "tap": "Toca para ver el después",
+      "after": "DESPUÉS",
+      "r1": {
+        "industry": "Servicios profesionales",
+        "before": "Cotizas y das seguimiento tú, a todas horas.",
+        "metric": "−12 h / sem",
+        "after": "Flujo de cotización + seguimiento sin depender de ti."
+      },
+      "r2": {
+        "industry": "Retail / comercio",
+        "before": "Inventario en Excel. Pedidos sueltos. Caos en caja.",
+        "metric": "+18% orden",
+        "after": "Stock y pedidos conectados a un solo ritmo operativo."
+      },
+      "r3": {
+        "industry": "Producto digital",
+        "before": "Onboarding manual. Churn que nadie ve a tiempo.",
+        "metric": "+35% activación",
+        "after": "Secuencias post-compra y métricas que sí se miran."
+      }
+    },
+    "surprise": {
+      "slots": "{n} consultas libres esta semana",
+      "meterTitle": "¿Cuántas horas al día eres el cuello de botella?",
+      "meterHelp": "Sé honesto. Mueve el control.",
+      "meterResult": "Con sistema, podrías liberar ~{n} h esta semana."
     }
   }
 }

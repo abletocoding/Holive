@@ -362,16 +362,16 @@
     "metaDescription": "Book a free 15-minute consult. Get 5 ideas and a plan to systematize your business. Holive.org",
     "hero": {
       "eyebrow": "HOLIVE CONSULT · 15 MIN",
-      "title": "Automate without losing the soul of the craft.",
-      "sub": "If your business depends on you for everything, you don’t have a system — you have a bottleneck. Book a free consult and leave with actionable clarity.",
-      "cta": "Book free consult (15 min)",
+      "title": "Stop being the bottleneck.",
+      "sub": "15 minutes. 5 ideas. One plan. No theater.",
+      "cta": "Book free consult",
       "secondary": "What’s in the session",
       "scarcity": "Few free consults per week — real capacity, not theater."
     },
     "problem": {
-      "eyebrow": "THE BOTTLENECK",
-      "title": "You own the business. You are the brake.",
-      "body": "You sell, deliver, invoice… and remain the only decision node. That isn’t leadership — it’s friction. Holive turns manual operations into living systems — with purity, loyalty, and code.",
+      "eyebrow": "THE BRAKE",
+      "title": "Your business grows. You can't keep up.",
+      "body": "If everything runs through you, you don't have a system: you have friction.",
       "points": {
         "a": {
           "title": "Everything runs through you",
@@ -417,28 +417,28 @@
       }
     },
     "session": {
-      "eyebrow": "RECIPROCITY",
-      "title": "What happens in your consult",
-      "body": "Not a demo. An authority session: we face your bottleneck and return clarity.",
+      "eyebrow": "THE SESSION",
+      "title": "What happens in 15 minutes",
+      "body": "Diagnosis. Ideas. Plan.",
       "steps": {
         "one": {
-          "title": "Honest diagnosis",
-          "text": "Where flow breaks: sales, ops, data, or decision."
+          "title": "Diagnosis",
+          "text": "Where the flow breaks."
         },
         "two": {
-          "title": "5 actionable ideas",
-          "text": "Concrete moves — not hallway theory."
+          "title": "5 ideas",
+          "text": "Concrete moves."
         },
         "three": {
-          "title": "Next-step plan",
-          "text": "Holive service, courses if you don’t delegate yet, or deep 1-1."
+          "title": "One plan",
+          "text": "Service, courses, or 1-1."
         }
       }
     },
     "quizSection": {
-      "eyebrow": "SERIOUSNESS FILTER",
-      "title": "Questionnaire before the calendar",
-      "body": "Investing 3–4 minutes here raises session quality. Complete the gate to unlock booking."
+      "eyebrow": "BEFORE YOU BOOK",
+      "title": "Short questionnaire",
+      "body": "3–4 minutes. Unlocks the calendar."
     },
     "quiz": {
       "progress": "Step {current} of {total}",
@@ -549,8 +549,8 @@
     "anchor": {
       "eyebrow": "INVESTMENT ANCHOR",
       "title": "Investment references (not a price shop)",
-      "body": "These ranges filter seriousness. After your consult, any service or course carries a special discount.",
-      "micro": "Seeing the anchor isn’t buying. It’s knowing we speak the same language.",
+      "body": "Reference ranges. After the consult: special discount.",
+      "micro": "Seeing the anchor isn't buying.",
       "items": {
         "web": {
           "title": "Operational web (capture + connect)",
@@ -580,19 +580,19 @@
       "service": {
         "label": "A · SERVICE",
         "title": "Holive does it for you",
-        "body": "Book the consult. Leave with a proposal and a post-session discount. Systems, not promises.",
+        "body": "Holive builds it. You leave with a proposal and discount.",
         "cta": "Book consult"
       },
       "courses": {
         "label": "B · LEARN",
         "title": "I don’t delegate yet — I want to learn",
-        "body": "No pressure. Enter Holive courses and build internal capacity.",
+        "body": "Learn the method. No service pressure.",
         "cta": "See courses"
       },
       "advisory": {
         "label": "C · 1-1 OSCAR",
         "title": "Direct work with Oscar",
-        "body": "Deep session, real-time adjustments. From $200 USD/hr. For those who already know what they need.",
+        "body": "Dense session with Oscar. From $200 USD/hr.",
         "cta": "Request 1-1"
       }
     },
@@ -611,10 +611,6 @@
         "q3": {
           "q": "What is the 1-1 with Oscar?",
           "a": "Direct work with the founder. From $200 USD/hour. High density, zero theater. Requested after (or during) the consult."
-        },
-        "q4": {
-          "q": "Do my data go to a third-party CRM?",
-          "a": "No. Our Supabase + internal alert. Privacy aligned with Holive."
         }
       }
     },
@@ -623,6 +619,37 @@
       "title": "Stop being the bottleneck.",
       "body": "Complete the questionnaire, book 15 minutes, leave with 5 ideas and a plan. Holive.org — purity, loyalty, code.",
       "cta": "Go to questionnaire"
+    },
+    "results": {
+      "eyebrow": "BEFORE → AFTER",
+      "title": "Three industries. One pattern: less friction.",
+      "body": "Direction examples. No confidential names.",
+      "tap": "Tap to see the after",
+      "after": "AFTER",
+      "r1": {
+        "industry": "Professional services",
+        "before": "You quote and follow up yourself, around the clock.",
+        "metric": "−12 h / week",
+        "after": "Quote + follow-up flow that doesn't depend on you."
+      },
+      "r2": {
+        "industry": "Retail / commerce",
+        "before": "Inventory in Excel. Loose orders. Checkout chaos.",
+        "metric": "+18% order",
+        "after": "Stock and orders tied to one operating rhythm."
+      },
+      "r3": {
+        "industry": "Digital product",
+        "before": "Manual onboarding. Churn nobody catches in time.",
+        "metric": "+35% activation",
+        "after": "Post-purchase sequences and metrics you actually watch."
+      }
+    },
+    "surprise": {
+      "slots": "{n} free consults left this week",
+      "meterTitle": "How many hours a day are you the bottleneck?",
+      "meterHelp": "Be honest. Move the slider.",
+      "meterResult": "With a system, you could free ~{n} h this week."
     }
   }
 }
