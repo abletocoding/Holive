@@ -88,16 +88,29 @@ export function Footer() {
 
         <SketchDivider className="mt-12" />
 
-        <div className="mt-8 text-center">
-          <Link
-            href="/experimentos"
-            className="focus-ring font-mono-code text-[0.7rem] uppercase tracking-[0.28em] text-[var(--holive-gold)] transition hover:text-[var(--holive-gold-bright)]"
-          >
-            {t("experimentsLink")}
-          </Link>
-          <p className="mt-2 text-xs text-[color-mix(in_srgb,var(--foreground)_50%,transparent)]">
-            {t("experimentsHint")}
-          </p>
+        <div className="mt-8 flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-center sm:gap-12">
+          <div>
+            <Link
+              href="/consulta"
+              className="focus-ring font-mono-code text-[0.7rem] uppercase tracking-[0.28em] text-[var(--holive-gold)] transition hover:text-[var(--holive-gold-bright)]"
+            >
+              {t("consultaLink")}
+            </Link>
+            <p className="mt-2 text-xs text-[color-mix(in_srgb,var(--foreground)_50%,transparent)]">
+              {t("consultaHint")}
+            </p>
+          </div>
+          <div>
+            <Link
+              href="/experimentos"
+              className="focus-ring font-mono-code text-[0.7rem] uppercase tracking-[0.28em] text-[var(--holive-gold)] transition hover:text-[var(--holive-gold-bright)]"
+            >
+              {t("experimentsLink")}
+            </Link>
+            <p className="mt-2 text-xs text-[color-mix(in_srgb,var(--foreground)_50%,transparent)]">
+              {t("experimentsHint")}
+            </p>
+          </div>
         </div>
 
         <p className="font-mono-code mt-8 text-center text-[0.65rem] tracking-[0.25em] text-[color-mix(in_srgb,var(--foreground)_40%,transparent)]">

@@ -64,6 +64,14 @@ export function SiteHeader() {
             </a>
           ))}
           <Link
+            href="/consulta"
+            className={`focus-ring transition-colors hover:text-[var(--holive-gold)] ${
+              pathname.startsWith("/consulta") ? "text-[var(--holive-gold)]" : ""
+            }`}
+          >
+            {t("consulta")}
+          </Link>
+          <Link
             href="/experimentos"
             className={`focus-ring transition-colors hover:text-[var(--holive-gold)] ${
               pathname.startsWith("/experimentos") ? "text-[var(--holive-gold)]" : ""
