@@ -17,7 +17,7 @@ export function ExpWordCyclone() {
   return (
     <ExperimentFile
       id="exp-cyclone"
-      code="EXP-008"
+      code="EXP-011"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

@@ -78,7 +78,7 @@ export function ExpGoldenVortex() {
   return (
     <ExperimentFile
       id="exp-vortex"
-      code="EXP-014"
+      code="EXP-017"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

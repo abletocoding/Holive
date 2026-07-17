@@ -105,7 +105,7 @@ export function ExpLiquidBrief() {
   return (
     <ExperimentFile
       id="exp-liquid"
-      code="EXP-011"
+      code="EXP-014"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

@@ -30,7 +30,7 @@ export function ExpGlitchDossier() {
   return (
     <ExperimentFile
       id="exp-glitch"
-      code="EXP-013"
+      code="EXP-016"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

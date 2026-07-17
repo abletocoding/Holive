@@ -32,7 +32,7 @@ export function ExpHeartbeatKPI() {
   return (
     <ExperimentFile
       id="exp-heartbeat"
-      code="EXP-012"
+      code="EXP-015"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

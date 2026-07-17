@@ -162,7 +162,7 @@
   },
   "Experiments": {
     "metaTitle": "Experimentos Holive — Archivo clasificado",
-    "metaDescription": "Archivo secreto de experimentos fallidos del laboratorio Holive: ojo, olivo, ritmo y misticismo empresarial.",
+    "metaDescription": "Archivo secreto de experimentos 3D fallidos del laboratorio Holive: iris, cristal, huerto, pacto y misticismo empresarial.",
     "eyebrow": "LABORATORIO HOLIVE · ARCHIVO CLASIFICADO",
     "title": "Experimentos que no debieron salir… y aquí están.",
     "intro": "Estos no son demos genéricas. Son expedientes del laboratorio Holive: intentos raros, fallidos y hermosamente imperfectos donde el ojo, Holi y la energía empresarial se encuentran. Léelos como dossiers secretos — con humor corporativo y moraleja.",
@@ -175,13 +175,16 @@
     "closingRefran": "El ojo que mira con propósito no se cierra ante el ruido. / The eye that watches with purpose does not blink at noise.",
     "closingBody": "Si algo de este laboratorio te habla, no es magia: es método. Escribamos el siguiente experimento… en tu negocio.",
     "toc": {
-      "exp-eye": "Ojo que vigila",
-      "exp-spiral": "Espiral de mantras",
-      "exp-seed": "Génesis del olivo",
-      "exp-mesh": "Malla de lealtad",
-      "exp-prism": "Tormenta prisma",
-      "exp-orbit": "Órbita sagrada",
-      "exp-nova": "Nova de claridad",
+      "exp-iris": "Iris de contención",
+      "exp-offering": "Icosaedro ofrenda",
+      "exp-tube": "Tubo de expedientes",
+      "exp-crystal": "Relicario de cristal",
+      "exp-field": "Campo de lealtad",
+      "exp-helmet": "Casco del oficio",
+      "exp-stretch": "Mantra estirado",
+      "exp-grove": "Huerto Holive",
+      "exp-pact": "Núcleo de pacto",
+      "exp-dissolve": "Sello que se disuelve",
       "exp-cyclone": "Ciclón léxico",
       "exp-signal": "Radar de oficio",
       "exp-mirror": "Libro espejo",
@@ -192,72 +195,80 @@
       "exp-tunnel": "Túnel cinético"
     },
     "files": {
-      "eye": {
-        "status": "FALLIDO · ÚTIL",
-        "title": "El ojo que no parpadea en junta",
-        "summary": "Intentamos enseñarle a un iris digital a rastrear la atención del cliente. Resultado: nos vigiló a nosotros. Holi aprobó el experimento con un guiño. El laboratorio archivó el fallo… y lo volvió ritual.",
-        "refran": "El ojo atento vale más que mil métricas ciegas. / An attentive eye beats a thousand blind metrics.",
-        "hint": "Mueve el cursor — el iris te sigue"
+      "iris": {
+        "status": "CONTENCIÓN FALLIDA",
+        "title": "Iris de contención",
+        "summary": "Un iris 3D que debía cerrarse ante el ruido del mercado. Se abre cuando te acercas. El laboratorio concluyó: la atención verdadera no se blindajea — se enfoca.",
+        "refran": "Quien cierra el ojo al cliente, abre la puerta a la irrelevancia. / Who shuts the eye to the client opens the door to irrelevance.",
+        "hint": "Acerca el cursor al centro — el iris cede"
       },
-      "spiral": {
-        "status": "INCONCLUSO",
-        "title": "Cascada de mantras empresariales",
-        "summary": "Quisimos hacer caer promesas como lluvia. Demasiado poesía, poco KPI… hasta que alguien leyó en voz alta. Ahora es un recordatorio: el mensaje se gana con repetición consciente, no con volumen.",
-        "refran": "Lo que se repite con alma, se convierte en cultura. / What repeats with soul becomes culture.",
+      "offering": {
+        "status": "MORFING",
+        "title": "Icosaedro ofrenda",
+        "summary": "Geometría fría que, al desplazar, se empapa de oro y se alarga hacia olivo. Falló como producto; funcionó como ritual: la forma sigue a la intención.",
+        "refran": "La estructura sin alma es andamio; con alma, es ofrenda. / Structure without soul is scaffolding; with soul, an offering.",
+        "hint": "Desplázate — la geometría se vuelve olivo"
+      },
+      "tube": {
+        "status": "ARCHIVO INFINITO",
+        "title": "Tubo de expedientes",
+        "summary": "Un cilindro de fichas CLASSIFIED girando sin fin. Quisimos indexar el laboratorio y creamos un vértigo. Lección: el archivo sin criterio es solo movimiento.",
+        "refran": "Clasificar no es entender; ordenar con propósito sí. / To classify is not to understand; to order with purpose is.",
+        "hint": "Scroll — el tubo responde"
+      },
+      "crystal": {
+        "status": "FRÁGIL · REFORMABLE",
+        "title": "Relicario de cristal",
+        "summary": "Un olivo de cristal que se hace pedazos al toque y vuelve a unirse. Metáfora barata de resiliencia… hasta que el equipo la vivió en un proyecto real.",
+        "refran": "Romperse no es fracasar si sabes volver a cuajar. / Breaking is not failure if you know how to set again.",
+        "hint": "Toca para romper / reformar"
+      },
+      "field": {
+        "status": "CAMPO VIVO",
+        "title": "Campo de lealtad",
+        "summary": "Partículas que escriben HOLIVE en el aire y se magnetizan al cursor. La lealtad no es un nodo: es un campo que responde cuando te mueves con cuidado.",
+        "refran": "La lealtad se siente en el campo, no en el contrato. / Loyalty is felt in the field, not in the contract.",
+        "hint": "Mueve el cursor — el campo se curva"
+      },
+      "helmet": {
+        "status": "BAJO VIDRIO",
+        "title": "Casco del oficio",
+        "summary": "Una cúpula de vidrio guarda el núcleo Holive. Si mueves el cursor con prisa, el color se parte. El oficio pide calma: la aberración delata la velocidad.",
+        "refran": "La prisa parte la luz; la calma la concentra. / Haste splits the light; calm concentrates it.",
+        "hint": "Mueve rápido — la luz se aberra"
+      },
+      "stretch": {
+        "status": "ESTIRADO POR VELOCIDAD",
+        "title": "Mantra estirado",
+        "summary": "Mantras 3D que se spaghettifican con la velocidad del scroll y vuelven al frenar. La prisa deforma el mensaje; el freno lo restaura.",
+        "refran": "Si tu mensaje se estira, estás yendo demasiado rápido. / If your message stretches, you are going too fast.",
+        "hint": "Scroll rápido estira; párate y recupera",
         "l1": "Pureza antes que ruido",
         "l2": "Lealtad antes que moda",
         "l3": "Código que sirve",
         "l4": "Sembrar para cosechar",
-        "l5": "El ojo ve el sistema",
-        "l6": "Holi camina contigo"
+        "l5": "El oficio tiene ritmo"
       },
-      "seed": {
-        "status": "CRECIENDO",
-        "title": "Génesis del olivo sagrado",
-        "summary": "Un botón. Un olivo. Demasiadas reuniones sobre growth. Este expediente demuestra que crecer no es un dashboard: es un acto de paciencia con dirección.",
-        "refran": "No fuerces la cosecha; riega el sistema. / Do not force the harvest; water the system.",
-        "plant": "Sembrar",
-        "again": "Otra siembra",
-        "stages": {
-          "0": "Semilla de intención",
-          "1": "Tallo de disciplina",
-          "2": "Hojas de claridad",
-          "3": "Olivo vivo — Holive"
-        }
+      "grove": {
+        "status": "HUERTO EXPERIMENTAL",
+        "title": "Huerto Holive",
+        "summary": "Un campo de tallos y olivos que se inclinan con el viento y ceden al cursor. Crecer no es Matrix: es cultivo. Empuja con respeto.",
+        "refran": "No pises la cosecha para llegar más rápido. / Do not trample the harvest to arrive sooner.",
+        "hint": "Mueve el cursor — el huerto cede"
       },
-      "mesh": {
-        "status": "CLASIFICADO",
-        "title": "Malla de lealtad (red viva)",
-        "summary": "Conectamos nodos como si fueran equipos. Cuando uno se mueve, el resto responde. Falló como producto; brilló como metáfora: la lealtad es una red, no un contrato.",
-        "refran": "La lealtad se teje; no se compra al mayoreo. / Loyalty is woven; it is not bought wholesale.",
-        "hint": "Arrastra un nodo — la red responde",
-        "nodes": {
-          "core": "Holive",
-          "brand": "Marca",
-          "ops": "Operación",
-          "code": "Código",
-          "clients": "Clientes"
-        }
+      "pact": {
+        "status": "ÓRBITA DE PACTO",
+        "title": "Núcleo de pacto",
+        "summary": "Un núcleo dorado con anillos y rastros. Arrastra y tuerces la gravedad. El pacto empresarial no es estático: se negocia con movimiento consciente.",
+        "refran": "El centro sostiene; las órbitas cumplen. / The center holds; the orbits fulfill.",
+        "hint": "Arrastra — tuerce la gravedad"
       },
-      "prism": {
-        "status": "INESTABLE",
-        "title": "Tormenta prisma de marca",
-        "summary": "Lanzamos luz púrpura y oro a través de un prisma. El laboratorio se iluminó… y también se confundió. Lección: una marca fuerte refracta; una débil se diluye.",
-        "refran": "La marca clara refracta; la confusa se pierde. / A clear brand refracts; a confused one vanishes.",
-        "hint": "Mueve el puntero — la luz se parte"
-      },
-      "orbit": {
-        "status": "RITUAL",
-        "title": "Órbitas sagradas alrededor de Holi",
-        "summary": "Intentamos orbitar KPIs alrededor de Holi. Holi se negó a ser satélite. Ahora él es el centro y las métricas giran con respeto. Así debe ser.",
-        "refran": "Pon el alma en el centro y el sistema orbitará. / Put soul at the center and the system will orbit."
-      },
-      "nova": {
-        "status": "ACTIVO",
-        "title": "Nova de claridad (tap para expandir)",
-        "summary": "Cada toque expande un círculo de claridad. Demasiados toques y el laboratorio parece fiesta. Exacto: la claridad también es energía — dosificada.",
-        "refran": "Claridad expandida con propósito no es ruido. / Clarity expanded with purpose is not noise.",
-        "hint": "Toca para expandir claridad"
+      "dissolve": {
+        "status": "SELLO → CÓDIGO",
+        "title": "Sello que se disuelve",
+        "summary": "El sello Holive se disuelve y deja ver código vivo. La marca no es barniz: es puerta. Cuando el sello cede, aparece el sistema.",
+        "refran": "El símbolo abre; el sistema sostiene. / The symbol opens; the system sustains.",
+        "hint": "Acércate o toca — el sello se disuelve"
       },
       "cyclone": {
         "status": "GIRANDO",

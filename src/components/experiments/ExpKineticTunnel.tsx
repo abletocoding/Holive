@@ -28,7 +28,7 @@ export function ExpKineticTunnel() {
   return (
     <ExperimentFile
       id="exp-tunnel"
-      code="EXP-015"
+      code="EXP-018"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

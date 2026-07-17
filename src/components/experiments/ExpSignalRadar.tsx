@@ -26,7 +26,7 @@ export function ExpSignalRadar() {
   return (
     <ExperimentFile
       id="exp-signal"
-      code="EXP-009"
+      code="EXP-012"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

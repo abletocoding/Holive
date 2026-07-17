@@ -3,13 +3,16 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { SectionReveal } from "@/components/ui/SectionReveal";
-import { ExpWatchingEye } from "@/components/experiments/ExpWatchingEye";
-import { ExpMantraSpiral } from "@/components/experiments/ExpMantraSpiral";
-import { ExpOliveGenesis } from "@/components/experiments/ExpOliveGenesis";
-import { ExpLoyaltyMesh } from "@/components/experiments/ExpLoyaltyMesh";
-import { ExpPrismStorm } from "@/components/experiments/ExpPrismStorm";
-import { ExpSacredOrbit } from "@/components/experiments/ExpSacredOrbit";
-import { ExpPulseNova } from "@/components/experiments/ExpPulseNova";
+import { ExpContainmentIris } from "@/components/experiments/ExpContainmentIris";
+import { ExpIcosahedronOffering } from "@/components/experiments/ExpIcosahedronOffering";
+import { ExpDossierTube } from "@/components/experiments/ExpDossierTube";
+import { ExpCrystalReliquary } from "@/components/experiments/ExpCrystalReliquary";
+import { ExpLoyaltyField } from "@/components/experiments/ExpLoyaltyField";
+import { ExpCraftHelmet } from "@/components/experiments/ExpCraftHelmet";
+import { ExpStretchedMantra } from "@/components/experiments/ExpStretchedMantra";
+import { ExpOliveGrove } from "@/components/experiments/ExpOliveGrove";
+import { ExpPactCore } from "@/components/experiments/ExpPactCore";
+import { ExpDissolveSeal } from "@/components/experiments/ExpDissolveSeal";
 import { ExpWordCyclone } from "@/components/experiments/ExpWordCyclone";
 import { ExpSignalRadar } from "@/components/experiments/ExpSignalRadar";
 import { ExpMirrorLedger } from "@/components/experiments/ExpMirrorLedger";
@@ -20,21 +23,24 @@ import { ExpGoldenVortex } from "@/components/experiments/ExpGoldenVortex";
 import { ExpKineticTunnel } from "@/components/experiments/ExpKineticTunnel";
 
 const TOC = [
-  { id: "exp-eye", code: "001" },
-  { id: "exp-spiral", code: "002" },
-  { id: "exp-seed", code: "003" },
-  { id: "exp-mesh", code: "004" },
-  { id: "exp-prism", code: "005" },
-  { id: "exp-orbit", code: "006" },
-  { id: "exp-nova", code: "007" },
-  { id: "exp-cyclone", code: "008" },
-  { id: "exp-signal", code: "009" },
-  { id: "exp-mirror", code: "010" },
-  { id: "exp-liquid", code: "011" },
-  { id: "exp-heartbeat", code: "012" },
-  { id: "exp-glitch", code: "013" },
-  { id: "exp-vortex", code: "014" },
-  { id: "exp-tunnel", code: "015" },
+  { id: "exp-iris", code: "001" },
+  { id: "exp-offering", code: "002" },
+  { id: "exp-tube", code: "003" },
+  { id: "exp-crystal", code: "004" },
+  { id: "exp-field", code: "005" },
+  { id: "exp-helmet", code: "006" },
+  { id: "exp-stretch", code: "007" },
+  { id: "exp-grove", code: "008" },
+  { id: "exp-pact", code: "009" },
+  { id: "exp-dissolve", code: "010" },
+  { id: "exp-cyclone", code: "011" },
+  { id: "exp-signal", code: "012" },
+  { id: "exp-mirror", code: "013" },
+  { id: "exp-liquid", code: "014" },
+  { id: "exp-heartbeat", code: "015" },
+  { id: "exp-glitch", code: "016" },
+  { id: "exp-vortex", code: "017" },
+  { id: "exp-tunnel", code: "018" },
 ] as const;
 
 /** Secret archive of Holive lab experiments — isolated from the main landing. */
@@ -64,7 +70,7 @@ export function ExperimentsArchive() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="#exp-eye"
+              href="#exp-iris"
               className="focus-ring rounded-sm border border-[var(--holive-gold)] bg-[var(--holive-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--holive-black)]"
             >
               {t("ctaOpen")}
@@ -103,13 +109,16 @@ export function ExperimentsArchive() {
       </section>
 
       <section className="section-pad mx-auto flex max-w-6xl flex-col gap-16 pb-24 md:gap-20">
-        <ExpWatchingEye />
-        <ExpMantraSpiral />
-        <ExpOliveGenesis />
-        <ExpLoyaltyMesh />
-        <ExpPrismStorm />
-        <ExpSacredOrbit />
-        <ExpPulseNova />
+        <ExpContainmentIris />
+        <ExpIcosahedronOffering />
+        <ExpDossierTube />
+        <ExpCrystalReliquary />
+        <ExpLoyaltyField />
+        <ExpCraftHelmet />
+        <ExpStretchedMantra />
+        <ExpOliveGrove />
+        <ExpPactCore />
+        <ExpDissolveSeal />
         <ExpWordCyclone />
         <ExpSignalRadar />
         <ExpMirrorLedger />

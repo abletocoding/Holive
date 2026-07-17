@@ -11,7 +11,7 @@ export function ExpMirrorLedger() {
   return (
     <ExperimentFile
       id="exp-mirror"
-      code="EXP-010"
+      code="EXP-013"
       status={t("status")}
       title={t("title")}
       summary={t("summary")}

@@ -16,6 +16,7 @@
     "@opennextjs/cloudflare": "^1.20.1",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",
+    "@react-three/postprocessing": "^3.0.4",
     "@supabase/supabase-js": "^2.110.2",
     "framer-motion": "^12.42.2",
     "next": "15.5.20",

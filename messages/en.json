@@ -162,7 +162,7 @@
   },
   "Experiments": {
     "metaTitle": "Holive Experiments — Classified archive",
-    "metaDescription": "Secret archive of failed Holive lab experiments: the eye, the olive, rhythm, and business mysticism.",
+    "metaDescription": "Secret archive of failed Holive 3D lab experiments: iris, crystal, grove, pact, and business mysticism.",
     "eyebrow": "HOLIVE LAB · CLASSIFIED ARCHIVE",
     "title": "Experiments that should have stayed sealed… and here they are.",
     "intro": "These are not generic demos. They are Holive lab dossiers: rare, failed, beautifully imperfect attempts where the eye, Holi, and entrepreneurial energy meet. Read them as secret files — with corporate humor and a moral.",
@@ -175,13 +175,16 @@
     "closingRefran": "The eye that watches with purpose does not blink at noise. / El ojo que mira con propósito no se cierra ante el ruido.",
     "closingBody": "If something in this lab speaks to you, it is not magic: it is method. Let’s write the next experiment… inside your business.",
     "toc": {
-      "exp-eye": "Watching eye",
-      "exp-spiral": "Mantra spiral",
-      "exp-seed": "Olive genesis",
-      "exp-mesh": "Loyalty mesh",
-      "exp-prism": "Prism storm",
-      "exp-orbit": "Sacred orbit",
-      "exp-nova": "Clarity nova",
+      "exp-iris": "Containment iris",
+      "exp-offering": "Icosahedron offering",
+      "exp-tube": "Dossier tube",
+      "exp-crystal": "Crystal reliquary",
+      "exp-field": "Loyalty field",
+      "exp-helmet": "Craft helmet",
+      "exp-stretch": "Stretched mantra",
+      "exp-grove": "Holive grove",
+      "exp-pact": "Pact core",
+      "exp-dissolve": "Dissolving seal",
       "exp-cyclone": "Lexicon cyclone",
       "exp-signal": "Craft radar",
       "exp-mirror": "Mirror ledger",
@@ -192,72 +195,80 @@
       "exp-tunnel": "Kinetic tunnel"
     },
     "files": {
-      "eye": {
-        "status": "FAILED · USEFUL",
-        "title": "The eye that never blinks in meetings",
-        "summary": "We tried to teach a digital iris to track client attention. Result: it watched us instead. Holi approved with a wink. The lab filed the failure… and turned it into ritual.",
-        "refran": "An attentive eye beats a thousand blind metrics. / El ojo atento vale más que mil métricas ciegas.",
-        "hint": "Move the cursor — the iris follows"
+      "iris": {
+        "status": "CONTAINMENT FAILED",
+        "title": "Containment iris",
+        "summary": "A 3D iris meant to seal out market noise. It opens when you approach. The lab concluded: true attention is not armor — it is focus.",
+        "refran": "Who shuts the eye to the client opens the door to irrelevance. / Quien cierra el ojo al cliente, abre la puerta a la irrelevancia.",
+        "hint": "Move toward the center — the iris yields"
       },
-      "spiral": {
-        "status": "UNFINISHED",
-        "title": "Corporate mantra waterfall",
-        "summary": "We wanted promises to fall like rain. Too much poetry, not enough KPI… until someone read them aloud. Now it reminds us: message is won by conscious repetition, not volume.",
-        "refran": "What repeats with soul becomes culture. / Lo que se repite con alma, se convierte en cultura.",
+      "offering": {
+        "status": "MORPHING",
+        "title": "Icosahedron offering",
+        "summary": "Cold geometry that, on scroll, soaks gold and lengthens into an olive. Failed as a product; worked as ritual: form follows intention.",
+        "refran": "Structure without soul is scaffolding; with soul, an offering. / La estructura sin alma es andamio; con alma, es ofrenda.",
+        "hint": "Scroll — geometry becomes olive"
+      },
+      "tube": {
+        "status": "INFINITE ARCHIVE",
+        "title": "Dossier tube",
+        "summary": "A cylinder of CLASSIFIED cards spinning forever. We tried to index the lab and created vertigo. Lesson: archive without criteria is only motion.",
+        "refran": "To classify is not to understand; to order with purpose is. / Clasificar no es entender; ordenar con propósito sí.",
+        "hint": "Scroll — the tube answers"
+      },
+      "crystal": {
+        "status": "FRAGILE · REFORMABLE",
+        "title": "Crystal reliquary",
+        "summary": "A crystal olive that shatters on tap and reforms. Cheap resilience metaphor… until the team lived it on a real project.",
+        "refran": "Breaking is not failure if you know how to set again. / Romperse no es fracasar si sabes volver a cuajar.",
+        "hint": "Tap to shatter / reform"
+      },
+      "field": {
+        "status": "LIVING FIELD",
+        "title": "Loyalty field",
+        "summary": "Particles that write HOLIVE in the air and magnetize to the cursor. Loyalty is not a node: it is a field that answers when you move with care.",
+        "refran": "Loyalty is felt in the field, not in the contract. / La lealtad se siente en el campo, no en el contrato.",
+        "hint": "Move the cursor — the field curves"
+      },
+      "helmet": {
+        "status": "UNDER GLASS",
+        "title": "Craft helmet",
+        "summary": "A glass dome guards the Holive core. Rush the cursor and color splits. Craft asks for calm: aberration betrays speed.",
+        "refran": "Haste splits the light; calm concentrates it. / La prisa parte la luz; la calma la concentra.",
+        "hint": "Move fast — light aberrates"
+      },
+      "stretch": {
+        "status": "STRETCHED BY VELOCITY",
+        "title": "Stretched mantra",
+        "summary": "3D mantras that spaghetti with scroll velocity and snap back when you stop. Haste deforms the message; braking restores it.",
+        "refran": "If your message stretches, you are going too fast. / Si tu mensaje se estira, estás yendo demasiado rápido.",
+        "hint": "Fast scroll stretches; stop to recover",
         "l1": "Purity before noise",
         "l2": "Loyalty before fashion",
         "l3": "Code that serves",
         "l4": "Sow to harvest",
-        "l5": "The eye sees the system",
-        "l6": "Holi walks with you"
+        "l5": "Craft has rhythm"
       },
-      "seed": {
-        "status": "GROWING",
-        "title": "Genesis of the sacred olive",
-        "summary": "One button. One olive. Too many meetings about growth. This file proves growth is not a dashboard: it is patience with direction.",
-        "refran": "Do not force the harvest; water the system. / No fuerces la cosecha; riega el sistema.",
-        "plant": "Plant",
-        "again": "Plant again",
-        "stages": {
-          "0": "Seed of intention",
-          "1": "Stem of discipline",
-          "2": "Leaves of clarity",
-          "3": "Living olive — Holive"
-        }
+      "grove": {
+        "status": "EXPERIMENTAL GROVE",
+        "title": "Holive grove",
+        "summary": "A field of stems and olives that lean with wind and yield to the cursor. Growth is not Matrix rain: it is cultivation. Push with respect.",
+        "refran": "Do not trample the harvest to arrive sooner. / No pises la cosecha para llegar más rápido.",
+        "hint": "Move the cursor — the grove yields"
       },
-      "mesh": {
-        "status": "CLASSIFIED",
-        "title": "Loyalty mesh (living network)",
-        "summary": "We connected nodes as if they were teams. When one moves, the rest answers. Failed as a product; shone as a metaphor: loyalty is a network, not a contract.",
-        "refran": "Loyalty is woven; it is not bought wholesale. / La lealtad se teje; no se compra al mayoreo.",
-        "hint": "Drag a node — the net responds",
-        "nodes": {
-          "core": "Holive",
-          "brand": "Brand",
-          "ops": "Ops",
-          "code": "Code",
-          "clients": "Clients"
-        }
+      "pact": {
+        "status": "PACT ORBIT",
+        "title": "Pact core",
+        "summary": "A golden core with rings and trails. Drag and twist gravity. The business pact is not static: it is negotiated with conscious motion.",
+        "refran": "The center holds; the orbits fulfill. / El centro sostiene; las órbitas cumplen.",
+        "hint": "Drag — twist gravity"
       },
-      "prism": {
-        "status": "UNSTABLE",
-        "title": "Brand prism storm",
-        "summary": "We threw purple and gold light through a prism. The lab lit up… and also got confused. Lesson: a strong brand refracts; a weak one dissolves.",
-        "refran": "A clear brand refracts; a confused one vanishes. / La marca clara refracta; la confusa se pierde.",
-        "hint": "Move the pointer — light splits"
-      },
-      "orbit": {
-        "status": "RITUAL",
-        "title": "Sacred orbits around Holi",
-        "summary": "We tried to orbit KPIs around Holi. Holi refused to be a satellite. Now he is the center and metrics revolve with respect. As it should be.",
-        "refran": "Put soul at the center and the system will orbit. / Pon el alma en el centro y el sistema orbitará."
-      },
-      "nova": {
-        "status": "ACTIVE",
-        "title": "Clarity nova (tap to expand)",
-        "summary": "Each tap expands a ring of clarity. Too many taps and the lab looks like a party. Exactly: clarity is also energy — dosed.",
-        "refran": "Clarity expanded with purpose is not noise. / Claridad expandida con propósito no es ruido.",
-        "hint": "Tap to expand clarity"
+      "dissolve": {
+        "status": "SEAL → CODE",
+        "title": "Dissolving seal",
+        "summary": "The Holive seal dissolves and reveals living code. Brand is not varnish: it is a door. When the seal yields, the system appears.",
+        "refran": "The symbol opens; the system sustains. / El símbolo abre; el sistema sostiene.",
+        "hint": "Approach or tap — the seal dissolves"
       },
       "cyclone": {
         "status": "SPINNING",
