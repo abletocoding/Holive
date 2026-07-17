@@ -11,6 +11,7 @@
     "courses": "Cursos",
     "process": "Proceso",
     "contact": "Contacto",
+    "experiments": "Experimentos",
     "themeLight": "Modo claro",
     "themeDark": "Modo oscuro",
     "localeEs": "ES",
@@ -155,7 +156,193 @@
   "Footer": {
     "tagline": "Pureza · Lealtad · Código",
     "rights": "© {year} Holive. holive.org",
-    "gameHint": "¿Llegaste hasta aquí? Holi te espera abajo."
+    "gameHint": "¿Llegaste hasta aquí? Holi te espera abajo.",
+    "experimentsLink": "Archivo de experimentos",
+    "experimentsHint": "Archivos secretos del laboratorio Holive."
+  },
+  "Experiments": {
+    "metaTitle": "Experimentos Holive — Archivo clasificado",
+    "metaDescription": "Archivo secreto de experimentos 3D fallidos del laboratorio Holive: iris, cristal, huerto, pacto y misticismo empresarial.",
+    "eyebrow": "LABORATORIO HOLIVE · ARCHIVO CLASIFICADO",
+    "title": "Experimentos que no debieron salir… y aquí están.",
+    "intro": "Estos no son demos genéricas. Son expedientes del laboratorio Holive: intentos raros, fallidos y hermosamente imperfectos donde el ojo, Holi y la energía empresarial se encuentran. Léelos como dossiers secretos — con humor corporativo y moraleja.",
+    "openingRefran": "Quien siembra claridad, cosecha lealtad. / Who plants clarity harvests loyalty.",
+    "ctaOpen": "Abrir el primer expediente",
+    "ctaHome": "Volver a Holive",
+    "ctaContact": "Hablar con Holive",
+    "indexLabel": "ÍNDICE DE EXPEDIENTES",
+    "closingEyebrow": "CIERRE DEL ARCHIVO",
+    "closingRefran": "El ojo que mira con propósito no se cierra ante el ruido. / The eye that watches with purpose does not blink at noise.",
+    "closingBody": "Si algo de este laboratorio te habla, no es magia: es método. Escribamos el siguiente experimento… en tu negocio.",
+    "toc": {
+      "exp-iris": "Iris de contención",
+      "exp-offering": "Icosaedro ofrenda",
+      "exp-tube": "Tubo de expedientes",
+      "exp-crystal": "Relicario de cristal",
+      "exp-field": "Campo de lealtad",
+      "exp-helmet": "Casco del oficio",
+      "exp-stretch": "Mantra estirado",
+      "exp-grove": "Huerto Holive",
+      "exp-pact": "Núcleo de pacto",
+      "exp-dissolve": "Sello que se disuelve",
+      "exp-cyclone": "Ciclón léxico",
+      "exp-signal": "Radar de oficio",
+      "exp-mirror": "Libro espejo",
+      "exp-liquid": "Brief líquido",
+      "exp-heartbeat": "KPI latido",
+      "exp-glitch": "Dossier glitch",
+      "exp-vortex": "Vórtice dorado",
+      "exp-tunnel": "Túnel cinético"
+    },
+    "files": {
+      "iris": {
+        "status": "CONTENCIÓN FALLIDA",
+        "title": "Iris de contención",
+        "summary": "Un iris 3D que debía cerrarse ante el ruido del mercado. Se abre cuando te acercas. El laboratorio concluyó: la atención verdadera no se blindajea — se enfoca.",
+        "refran": "Quien cierra el ojo al cliente, abre la puerta a la irrelevancia. / Who shuts the eye to the client opens the door to irrelevance.",
+        "hint": "Acerca el cursor al centro — el iris cede"
+      },
+      "offering": {
+        "status": "MORFING",
+        "title": "Icosaedro ofrenda",
+        "summary": "Geometría fría que, al desplazar, se empapa de oro y se alarga hacia olivo. Falló como producto; funcionó como ritual: la forma sigue a la intención.",
+        "refran": "La estructura sin alma es andamio; con alma, es ofrenda. / Structure without soul is scaffolding; with soul, an offering.",
+        "hint": "Desplázate — la geometría se vuelve olivo"
+      },
+      "tube": {
+        "status": "ARCHIVO INFINITO",
+        "title": "Tubo de expedientes",
+        "summary": "Un cilindro de fichas CLASSIFIED girando sin fin. Quisimos indexar el laboratorio y creamos un vértigo. Lección: el archivo sin criterio es solo movimiento.",
+        "refran": "Clasificar no es entender; ordenar con propósito sí. / To classify is not to understand; to order with purpose is.",
+        "hint": "Scroll — el tubo responde"
+      },
+      "crystal": {
+        "status": "FRÁGIL · REFORMABLE",
+        "title": "Relicario de cristal",
+        "summary": "Un olivo de cristal que se hace pedazos al toque y vuelve a unirse. Metáfora barata de resiliencia… hasta que el equipo la vivió en un proyecto real.",
+        "refran": "Romperse no es fracasar si sabes volver a cuajar. / Breaking is not failure if you know how to set again.",
+        "hint": "Toca para romper / reformar"
+      },
+      "field": {
+        "status": "CAMPO VIVO",
+        "title": "Campo de lealtad",
+        "summary": "Partículas que escriben HOLIVE en el aire y se magnetizan al cursor. La lealtad no es un nodo: es un campo que responde cuando te mueves con cuidado.",
+        "refran": "La lealtad se siente en el campo, no en el contrato. / Loyalty is felt in the field, not in the contract.",
+        "hint": "Mueve el cursor — el campo se curva"
+      },
+      "helmet": {
+        "status": "BAJO VIDRIO",
+        "title": "Casco del oficio",
+        "summary": "Una cúpula de vidrio guarda el núcleo Holive. Si mueves el cursor con prisa, el color se parte. El oficio pide calma: la aberración delata la velocidad.",
+        "refran": "La prisa parte la luz; la calma la concentra. / Haste splits the light; calm concentrates it.",
+        "hint": "Mueve rápido — la luz se aberra"
+      },
+      "stretch": {
+        "status": "ESTIRADO POR VELOCIDAD",
+        "title": "Mantra estirado",
+        "summary": "Mantras 3D que se spaghettifican con la velocidad del scroll y vuelven al frenar. La prisa deforma el mensaje; el freno lo restaura.",
+        "refran": "Si tu mensaje se estira, estás yendo demasiado rápido. / If your message stretches, you are going too fast.",
+        "hint": "Scroll rápido estira; párate y recupera",
+        "l1": "Pureza antes que ruido",
+        "l2": "Lealtad antes que moda",
+        "l3": "Código que sirve",
+        "l4": "Sembrar para cosechar",
+        "l5": "El oficio tiene ritmo"
+      },
+      "grove": {
+        "status": "HUERTO EXPERIMENTAL",
+        "title": "Huerto Holive",
+        "summary": "Un campo de tallos y olivos que se inclinan con el viento y ceden al cursor. Crecer no es Matrix: es cultivo. Empuja con respeto.",
+        "refran": "No pises la cosecha para llegar más rápido. / Do not trample the harvest to arrive sooner.",
+        "hint": "Mueve el cursor — el huerto cede"
+      },
+      "pact": {
+        "status": "ÓRBITA DE PACTO",
+        "title": "Núcleo de pacto",
+        "summary": "Un núcleo dorado con anillos y rastros. Arrastra y tuerces la gravedad. El pacto empresarial no es estático: se negocia con movimiento consciente.",
+        "refran": "El centro sostiene; las órbitas cumplen. / The center holds; the orbits fulfill.",
+        "hint": "Arrastra — tuerce la gravedad"
+      },
+      "dissolve": {
+        "status": "SELLO → CÓDIGO",
+        "title": "Sello que se disuelve",
+        "summary": "El sello Holive se disuelve y deja ver código vivo. La marca no es barniz: es puerta. Cuando el sello cede, aparece el sistema.",
+        "refran": "El símbolo abre; el sistema sostiene. / The symbol opens; the system sustains.",
+        "hint": "Acércate o toca — el sello se disuelve"
+      },
+      "cyclone": {
+        "status": "GIRANDO",
+        "title": "Ciclón del léxico Holive",
+        "summary": "Palabras de oficio girando alrededor del nombre. Intentamos un word cloud y nos salió un ciclón. Perfecto: el lenguaje de marca debe orbitar, no flotar.",
+        "refran": "Las palabras correctas encuentran su centro. / The right words find their center.",
+        "w0": "Pureza",
+        "w1": "Lealtad",
+        "w2": "Código",
+        "w3": "Sembrar",
+        "w4": "Cosechar",
+        "w5": "Sistema",
+        "w6": "Ojo",
+        "w7": "Oficio"
+      },
+      "signal": {
+        "status": "ESCANEANDO",
+        "title": "Radar del oficio",
+        "summary": "Un espectro que late con el scroll. Queríamos detectar señal vs ruido en el mercado. Detectamos algo mejor: el ritmo del visitante.",
+        "refran": "Escucha el ritmo antes de subir el volumen. / Hear the rhythm before you raise the volume.",
+        "hint": "Desplázate — la señal responde"
+      },
+      "mirror": {
+        "status": "REFLEJO",
+        "title": "Libro mayor espejo",
+        "summary": "Arriba: lo que prometes. Abajo: lo que devuelves. El espejo no miente; el laboratorio sí intentó endulzarlo. Falló. Bien.",
+        "refran": "Lo que siembras en voz, lo cosechas en hechos. / What you sow in voice, you reap in deeds.",
+        "aboveLabel": "PROMESA",
+        "belowLabel": "RETORNO",
+        "aboveText": "Sembramos claridad.",
+        "belowText": "Cosechamos lealtad."
+      },
+      "liquid": {
+        "status": "FLUIDO",
+        "title": "Brief líquido (tinta que escucha)",
+        "summary": "Un brief que se comporta como tinta viva. Sigue el cursor porque el brief debería seguir al cliente — no al ego del creativo.",
+        "refran": "El brief vivo sigue al problema, no a la moda. / A living brief follows the problem, not the trend.",
+        "hint": "Mueve el cursor — la tinta responde"
+      },
+      "heartbeat": {
+        "status": "LATIENDO",
+        "title": "KPI con pulso de olivo",
+        "summary": "Convertimos un indicador en latido. Porque un negocio sin ritmo es un organigrama sin alma. Ajusta el BPM: encuentra tu tempo de oficio.",
+        "refran": "Sin ritmo no hay cosecha sostenible. / Without rhythm there is no sustainable harvest.",
+        "metric": "Ritmo empresarial",
+        "unit": "latidos / intención",
+        "hint": "Ajusta el pulso de tu sistema"
+      },
+      "glitch": {
+        "status": "CORRUPTO → SANABLE",
+        "title": "Dossier glitch (archivos heridos)",
+        "summary": "Expedientes dañados por exceso de prisa. Al pasar el cursor, sanan. Metáfora barata… y verdadera: la atención repara lo que la prisa rompe.",
+        "refran": "La prisa corrompe; la atención restaura. / Haste corrupts; attention restores.",
+        "fileLabel": "ARCHIVO HERIDO",
+        "line1": "Holive no vende milagros.",
+        "line2": "Holive siembra sistemas que respetan el alma del oficio.",
+        "hintCorrupt": "Pasa el cursor para restaurar",
+        "hintClean": "Restaurado. La atención hizo su trabajo."
+      },
+      "vortex": {
+        "status": "GIRANDO",
+        "title": "Vórtice dorado de intención",
+        "summary": "Una espiral de cosecha. Intentamos visualizar atracción de clientes y nos salió un vórtice de intención. Mejor: la atracción sin propósito es solo ruido dorado.",
+        "refran": "La intención enfocada atrae; la dispersa gira vacía. / Focused intention attracts; scattered intention spins empty.",
+        "hint": "El centro es el oficio"
+      },
+      "tunnel": {
+        "status": "EN CONSTRUCCIÓN",
+        "title": "Túnel cinético del oficio",
+        "summary": "Un corredor hacia el centro Holive. Muchos entran por curiosidad; pocos atraviesan con método. El túnel no es escape: es enfoque.",
+        "refran": "El camino estrecho aclara el destino. / The narrow path clarifies the destination.",
+        "hint": "Hacia el centro"
+      }
+    }
   },
   "HoliGame": {
     "title": "Holi Run",

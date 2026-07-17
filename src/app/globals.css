@@ -201,3 +201,66 @@ body {
   background-size: 100% 6px;
   padding-top: 1.1rem;
 }
+
+/* ——— Holive Experiments archive (scoped; keep off landing) ——— */
+@keyframes exp-cyclone-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--a, 0deg))
+      translateX(var(--r, 40%)) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--a, 0deg) + 360deg))
+      translateX(var(--r, 40%)) rotate(-360deg);
+  }
+}
+
+.exp-cyclone-spin {
+  animation: exp-cyclone-spin linear infinite;
+}
+
+.exp-signal-bar {
+  height: calc(18% + (1 - var(--d, 0.5)) * 55% * var(--sp, 0.4));
+  opacity: calc(0.35 + var(--sp, 0.4) * 0.55);
+  transition: height 0.15s ease-out;
+}
+
+@keyframes exp-glitch-jitter {
+  0%,
+  100% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  60% {
+    transform: translate(-1px, 0);
+  }
+  80% {
+    transform: translate(1px, 1px);
+  }
+}
+
+.exp-glitch-jitter {
+  animation: exp-glitch-jitter 0.18s steps(2) infinite;
+}
+
+.exp-mirror-flip {
+  transform: scaleY(-1);
+}
+
+.exp-mirror-flip > * {
+  transform: scaleY(-1);
+}
+
+.exp-tunnel-ring {
+  --i: 0;
+  width: calc(8% + var(--i) * 7.5% + var(--tz, 0) * 0.35%);
+  height: calc(8% + var(--i) * 7.5% + var(--tz, 0) * 0.35%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: calc(0.15 + var(--i) * 0.05);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--holive-purple) 30%, transparent);
+}

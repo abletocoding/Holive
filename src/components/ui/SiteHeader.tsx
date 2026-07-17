@@ -1,16 +1,16 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { useTheme } from "@/components/theme/ThemeProvider";
 
-const links = [
-  { href: "#manifesto", key: "manifesto" as const },
-  { href: "#services", key: "services" as const },
-  { href: "#digital", key: "digital" as const },
-  { href: "#courses", key: "courses" as const },
-  { href: "#process", key: "process" as const },
-  { href: "#contact", key: "contact" as const },
+const sectionLinks = [
+  { hash: "manifesto", key: "manifesto" as const },
+  { hash: "services", key: "services" as const },
+  { hash: "digital", key: "digital" as const },
+  { hash: "courses", key: "courses" as const },
+  { hash: "process", key: "process" as const },
+  { hash: "contact", key: "contact" as const },
 ];
 
 export function SiteHeader() {
@@ -19,16 +19,21 @@ export function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const isHome = pathname === "/";
 
   function switchLocale(next: "es" | "en") {
     router.replace(pathname, { locale: next });
   }
 
+  function sectionHref(hash: string) {
+    return isHome ? `#${hash}` : `/#${hash}`;
+  }
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-[color-mix(in_srgb,var(--background)_72%,transparent)] backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-        <a
-          href="#top"
+        <Link
+          href="/"
           className="focus-ring flex items-center gap-2.5"
           aria-label="Holive"
         >
@@ -43,21 +48,29 @@ export function SiteHeader() {
           <span className="font-display text-sm font-semibold tracking-[0.28em] text-[var(--foreground)]">
             HOLIVE
           </span>
-        </a>
+        </Link>
 
         <nav
           className="hidden items-center gap-5 text-xs tracking-wide text-[color-mix(in_srgb,var(--foreground)_72%,transparent)] lg:flex"
           aria-label="Primary"
         >
-          {links.map((link) => (
+          {sectionLinks.map((link) => (
             <a
               key={link.key}
-              href={link.href}
+              href={sectionHref(link.hash)}
               className="focus-ring transition-colors hover:text-[var(--holive-gold)]"
             >
               {t(link.key)}
             </a>
           ))}
+          <Link
+            href="/experimentos"
+            className={`focus-ring transition-colors hover:text-[var(--holive-gold)] ${
+              pathname.startsWith("/experimentos") ? "text-[var(--holive-gold)]" : ""
+            }`}
+          >
+            {t("experiments")}
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">

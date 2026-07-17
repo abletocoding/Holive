@@ -1,0 +1,732 @@
+{
+  "base": "https://holive.org/es",
+  "failures": 0,
+  "matrix": [
+    {
+      "viewport": "phone-320-short",
+      "name": "phone-320-short",
+      "width": 320,
+      "height": 568,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 276,
+            "h": 276
+          },
+          "host": {
+            "w": 296,
+            "h": 319
+          },
+          "stageH": 568,
+          "innerH": 568,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 276,
+            "h": 276
+          },
+          "host": {
+            "w": 296,
+            "h": 319
+          },
+          "stageH": 568,
+          "innerH": 568,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 276,
+            "h": 276
+          },
+          "host": {
+            "w": 296,
+            "h": 319
+          },
+          "stageH": 568,
+          "innerH": 568,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "phone-320-tall",
+      "name": "phone-320-tall",
+      "width": 320,
+      "height": 720,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 276,
+            "h": 276
+          },
+          "host": {
+            "w": 296,
+            "h": 471
+          },
+          "stageH": 720,
+          "innerH": 720,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 276,
+            "h": 276
+          },
+          "host": {
+            "w": 296,
+            "h": 471
+          },
+          "stageH": 720,
+          "innerH": 720,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 276,
+            "h": 276
+          },
+          "host": {
+            "w": 296,
+            "h": 471
+          },
+          "stageH": 720,
+          "innerH": 720,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "phone-375",
+      "name": "phone-375",
+      "width": 375,
+      "height": 667,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 331,
+            "h": 331
+          },
+          "host": {
+            "w": 351,
+            "h": 418
+          },
+          "stageH": 667,
+          "innerH": 667,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 331,
+            "h": 331
+          },
+          "host": {
+            "w": 351,
+            "h": 418
+          },
+          "stageH": 667,
+          "innerH": 667,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 331,
+            "h": 331
+          },
+          "host": {
+            "w": 351,
+            "h": 418
+          },
+          "stageH": 667,
+          "innerH": 667,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "phone-390",
+      "name": "phone-390",
+      "width": 390,
+      "height": 844,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 346,
+            "h": 346
+          },
+          "host": {
+            "w": 366,
+            "h": 595
+          },
+          "stageH": 844,
+          "innerH": 844,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 346,
+            "h": 346
+          },
+          "host": {
+            "w": 366,
+            "h": 595
+          },
+          "stageH": 844,
+          "innerH": 844,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 346,
+            "h": 346
+          },
+          "host": {
+            "w": 366,
+            "h": 595
+          },
+          "stageH": 844,
+          "innerH": 844,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "phone-430",
+      "name": "phone-430",
+      "width": 430,
+      "height": 932,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 386,
+            "h": 386
+          },
+          "host": {
+            "w": 406,
+            "h": 733
+          },
+          "stageH": 932,
+          "innerH": 932,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 386,
+            "h": 386
+          },
+          "host": {
+            "w": 406,
+            "h": 733
+          },
+          "stageH": 932,
+          "innerH": 932,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 386,
+            "h": 386
+          },
+          "host": {
+            "w": 406,
+            "h": 733
+          },
+          "stageH": 932,
+          "innerH": 932,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "tablet-768-port",
+      "name": "tablet-768-port",
+      "width": 770,
+      "height": 1024,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 560,
+            "h": 560
+          },
+          "host": {
+            "w": 706,
+            "h": 820
+          },
+          "stageH": 1024,
+          "innerH": 1024,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 560,
+            "h": 560
+          },
+          "host": {
+            "w": 706,
+            "h": 820
+          },
+          "stageH": 1024,
+          "innerH": 1024,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 560,
+            "h": 560
+          },
+          "host": {
+            "w": 706,
+            "h": 820
+          },
+          "stageH": 1024,
+          "innerH": 1024,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "tablet-768-land",
+      "name": "tablet-768-land",
+      "width": 1024,
+      "height": 770,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 490,
+            "h": 490
+          },
+          "host": {
+            "w": 510,
+            "h": 636
+          },
+          "stageH": 770,
+          "innerH": 770,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 490,
+            "h": 490
+          },
+          "host": {
+            "w": 510,
+            "h": 636
+          },
+          "stageH": 770,
+          "innerH": 770,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 490,
+            "h": 490
+          },
+          "host": {
+            "w": 510,
+            "h": 636
+          },
+          "stageH": 770,
+          "innerH": 770,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "tablet-820-port",
+      "name": "tablet-820-port",
+      "width": 820,
+      "height": 1180,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 560,
+            "h": 560
+          },
+          "host": {
+            "w": 756,
+            "h": 976
+          },
+          "stageH": 1180,
+          "innerH": 1180,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 560,
+            "h": 560
+          },
+          "host": {
+            "w": 756,
+            "h": 976
+          },
+          "stageH": 1180,
+          "innerH": 1180,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 560,
+            "h": 560
+          },
+          "host": {
+            "w": 756,
+            "h": 976
+          },
+          "stageH": 1180,
+          "innerH": 1180,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "tablet-820-land",
+      "name": "tablet-820-land",
+      "width": 1180,
+      "height": 820,
+      "isMobile": true,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 524,
+            "h": 524
+          },
+          "host": {
+            "w": 545,
+            "h": 686
+          },
+          "stageH": 820,
+          "innerH": 820,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 524,
+            "h": 524
+          },
+          "host": {
+            "w": 545,
+            "h": 686
+          },
+          "stageH": 820,
+          "innerH": 820,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 524,
+            "h": 524
+          },
+          "host": {
+            "w": 545,
+            "h": 686
+          },
+          "stageH": 820,
+          "innerH": 820,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "tablet-1024-port",
+      "name": "tablet-1024-port",
+      "width": 1024,
+      "height": 1366,
+      "isMobile": false,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 490,
+            "h": 490
+          },
+          "host": {
+            "w": 510,
+            "h": 1232
+          },
+          "stageH": 1366,
+          "innerH": 1366,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 490,
+            "h": 490
+          },
+          "host": {
+            "w": 510,
+            "h": 1232
+          },
+          "stageH": 1366,
+          "innerH": 1366,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 490,
+            "h": 490
+          },
+          "host": {
+            "w": 510,
+            "h": 1232
+          },
+          "stageH": 1366,
+          "innerH": 1366,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    },
+    {
+      "viewport": "tablet-1024-land",
+      "name": "tablet-1024-land",
+      "width": 1366,
+      "height": 1024,
+      "isMobile": false,
+      "byCount": {
+        "4": {
+          "PAD_FIT": true,
+          "padCount": 4,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 524,
+            "h": 524
+          },
+          "host": {
+            "w": 545,
+            "h": 890
+          },
+          "stageH": 1024,
+          "innerH": 1024,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "6": {
+          "PAD_FIT": true,
+          "padCount": 6,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 524,
+            "h": 524
+          },
+          "host": {
+            "w": 545,
+            "h": 890
+          },
+          "stageH": 1024,
+          "innerH": 1024,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        },
+        "8": {
+          "PAD_FIT": true,
+          "padCount": 8,
+          "clippedViewport": 0,
+          "clippedBoard": 0,
+          "smallPads": 0,
+          "board": {
+            "w": 524,
+            "h": 524
+          },
+          "host": {
+            "w": 545,
+            "h": 890
+          },
+          "stageH": 1024,
+          "innerH": 1024,
+          "playPathInputs": 0,
+          "hasDvhJumpRisk": false
+        }
+      }
+    }
+  ]
+}
