@@ -1,7 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { SectionReveal } from "@/components/ui/SectionReveal";
+import {
+  FloatAccent,
+  SectionReveal,
+  StaggerGroup,
+  StaggerItem,
+} from "@/components/ui/SectionReveal";
 import { WaitlistForm } from "@/components/forms/WaitlistForm";
 import {
   CrayonUnderline,
@@ -23,21 +28,24 @@ export function Courses() {
           "linear-gradient(135deg, color-mix(in srgb, var(--holive-purple) 18%, var(--background)), var(--background) 55%, color-mix(in srgb, var(--holive-gold) 10%, var(--background)))",
       }}
     >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-2 top-12 opacity-50 md:right-8 md:top-20"
+      <FloatAccent
+        className="pointer-events-none absolute -right-2 top-12 opacity-60 md:right-8 md:top-20"
+        amplitude={14}
+        duration={3.6}
+        rotate={8}
       >
         <HoliDoodleMotif variant="spark" className="h-10 w-10" />
-      </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-16 left-4 opacity-40 md:left-10"
+      </FloatAccent>
+      <FloatAccent
+        className="pointer-events-none absolute bottom-16 left-4 opacity-50 md:left-10"
+        amplitude={9}
+        duration={5.2}
       >
         <HoliDoodleMotif variant="halo" className="h-9 w-9 -rotate-12" />
-      </div>
+      </FloatAccent>
 
       <div className="mx-auto max-w-6xl">
-        <SectionReveal>
+        <SectionReveal preset="pop">
           <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
             {t("eyebrow")}
           </p>
@@ -50,16 +58,16 @@ export function Courses() {
           </p>
         </SectionReveal>
 
-        <SectionReveal delay={0.1}>
-          <ul className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            {teasers.map((key) => (
-              <li key={key}>
-                <SketchFrame className="font-mono-code text-sm tracking-wide text-[color-mix(in_srgb,var(--foreground)_85%,transparent)]">
-                  {t(`teasers.${key}`)}
-                </SketchFrame>
-              </li>
-            ))}
-          </ul>
+        <StaggerGroup className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap" stagger={0.1}>
+          {teasers.map((key) => (
+            <StaggerItem key={key} preset="pop">
+              <SketchFrame className="font-mono-code text-sm tracking-wide text-[color-mix(in_srgb,var(--foreground)_85%,transparent)]">
+                {t(`teasers.${key}`)}
+              </SketchFrame>
+            </StaggerItem>
+          ))}
+        </StaggerGroup>
+        <SectionReveal delay={0.15} preset="rise" className="mt-6">
           <WaitlistForm />
         </SectionReveal>
       </div>

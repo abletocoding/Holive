@@ -1,10 +1,15 @@
-/** Subtle crayon / Holi doodle accents for selected soft sections. */
+"use client";
 
+/** Crayon / Holi doodle accents with Motion path draws. */
+
+import { motion, useReducedMotion } from "framer-motion";
 import type { ReactNode } from "react";
 
 type ClassProps = { className?: string };
 
 export function CrayonUnderline({ className = "" }: ClassProps) {
+  const reduce = useReducedMotion();
+
   return (
     <svg
       className={`mt-2 block h-3 w-[min(12rem,70%)] ${className}`}
@@ -12,25 +17,33 @@ export function CrayonUnderline({ className = "" }: ClassProps) {
       fill="none"
       aria-hidden
     >
-      <path
+      <motion.path
         d="M2 7c18-4 36 3 54-1s38-2 56 2 30-3 46-1"
         stroke="var(--holive-gold)"
         strokeWidth="2.4"
         strokeLinecap="round"
-        opacity="0.85"
+        initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 0.9 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.12 }}
       />
-      <path
+      <motion.path
         d="M6 9c22-2 40 1 58-2 20-3 36 2 52 0 14-2 28-1 40 1"
         stroke="var(--holive-purple)"
         strokeWidth="1.4"
         strokeLinecap="round"
-        opacity="0.45"
+        initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 0.5 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
       />
     </svg>
   );
 }
 
 export function SketchDivider({ className = "" }: ClassProps) {
+  const reduce = useReducedMotion();
+
   return (
     <svg
       className={`mx-auto my-8 block h-4 w-full max-w-md ${className}`}
@@ -38,19 +51,30 @@ export function SketchDivider({ className = "" }: ClassProps) {
       fill="none"
       aria-hidden
     >
-      <path
+      <motion.path
         d="M4 8c28-5 56 4 84-1 30-5 58 3 88 0 26-3 52-4 78 1 22 4 44 2 62-1"
         stroke="var(--holive-purple)"
         strokeWidth="1.8"
         strokeLinecap="round"
-        opacity="0.4"
+        initial={reduce ? false : { pathLength: 0, opacity: 0 }}
+        whileInView={{ pathLength: 1, opacity: 0.45 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.05, ease: "easeOut" }}
       />
-      <circle cx="160" cy="8" r="2.2" fill="var(--holive-gold)" opacity="0.7" />
+      <motion.circle
+        cx="160"
+        cy="8"
+        r="2.2"
+        fill="var(--holive-gold)"
+        initial={reduce ? false : { scale: 0, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 0.8 }}
+        viewport={{ once: true }}
+        transition={{ type: "spring", stiffness: 220, damping: 12, delay: 0.4 }}
+      />
     </svg>
   );
 }
 
-/** Tiny Holi-inspired olive-eye motif for soft section corners. */
 export function HoliDoodleMotif({
   className = "",
   variant = "olive",

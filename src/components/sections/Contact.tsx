@@ -10,7 +10,7 @@ export function Contact() {
   return (
     <section id="contact" className="section-pad">
       <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
-        <SectionReveal>
+        <SectionReveal preset="slideLeft">
           <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
             {t("eyebrow")}
           </p>
@@ -21,7 +21,7 @@ export function Contact() {
             {t("body")}
           </p>
         </SectionReveal>
-        <SectionReveal delay={0.1}>
+        <SectionReveal delay={0.12} preset="slideRight">
           <LeadForm />
         </SectionReveal>
       </div>

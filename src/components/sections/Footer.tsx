@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
+import { FloatAccent } from "@/components/ui/SectionReveal";
 import {
   HoliDoodleMotif,
   SketchDivider,
@@ -18,6 +20,7 @@ export function Footer() {
   const year = new Date().getFullYear();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [unlocked, setUnlocked] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const el = sentinelRef.current;
@@ -35,20 +38,29 @@ export function Footer() {
 
   return (
     <footer className="doodle-zone relative border-t border-[var(--border)] pb-10 pt-16">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-[8%] top-8 opacity-45"
+      <FloatAccent
+        className="pointer-events-none absolute left-[8%] top-8 opacity-50"
+        amplitude={7}
+        duration={5.5}
       >
         <HoliDoodleMotif variant="halo" />
-      </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-[6%] top-12 opacity-40"
+      </FloatAccent>
+      <FloatAccent
+        className="pointer-events-none absolute right-[6%] top-12 opacity-45"
+        amplitude={10}
+        duration={4}
+        rotate={6}
       >
         <HoliDoodleMotif variant="spark" className="h-7 w-7" />
-      </div>
+      </FloatAccent>
 
-      <div className="relative mx-auto max-w-6xl px-5 md:px-8">
+      <motion.div
+        className="relative mx-auto max-w-6xl px-5 md:px-8"
+        initial={reduce ? false : { opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: "spring", stiffness: 90, damping: 16 }}
+      >
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div className="flex items-center gap-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -79,17 +91,21 @@ export function Footer() {
           {t("gameHint")}
         </p>
 
-        {/* Hidden until user scrolls to the very bottom */}
         <div ref={sentinelRef} className="mt-10 min-h-[2rem]">
           {unlocked ? (
-            <div className="doodle-border-sketch animate-[fadeIn_0.6s_ease] p-3 md:p-4">
+            <motion.div
+              className="doodle-border-sketch p-3 md:p-4"
+              initial={reduce ? false : { opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: "spring", stiffness: 110, damping: 14 }}
+            >
               <HoliGame />
-            </div>
+            </motion.div>
           ) : (
             <div className="h-8" aria-hidden />
           )}
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }

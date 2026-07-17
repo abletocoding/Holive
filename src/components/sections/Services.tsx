@@ -18,7 +18,7 @@ export function Services() {
         className="pointer-events-none absolute -right-20 top-10 h-72 w-72 rounded-full bg-[var(--holive-purple)]/10 blur-3xl"
       />
       <div className="mx-auto max-w-6xl">
-        <SectionReveal>
+        <SectionReveal preset="drop">
           <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
             {t("eyebrow")}
           </p>
@@ -32,7 +32,11 @@ export function Services() {
 
         <div className="story-rail mt-16 space-y-14 md:space-y-20">
           {layers.map((key, i) => (
-            <SectionReveal key={key} delay={0.05 * i}>
+            <SectionReveal
+              key={key}
+              delay={0.04 * i}
+              preset={i % 2 === 0 ? "slideLeft" : "slideRight"}
+            >
               <article
                 className={`relative grid gap-3 pl-8 md:grid-cols-2 md:items-baseline md:gap-12 md:pl-0 ${
                   i % 2 === 1 ? "md:text-right" : ""

@@ -1,7 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { SectionReveal } from "@/components/ui/SectionReveal";
+import {
+  SectionReveal,
+  StaggerGroup,
+  StaggerItem,
+} from "@/components/ui/SectionReveal";
 
 const items = [
   "webs",
@@ -17,7 +21,7 @@ export function Digital() {
   return (
     <section id="digital" className="section-pad">
       <div className="mx-auto max-w-6xl">
-        <SectionReveal>
+        <SectionReveal preset="expand">
           <p className="font-mono-code text-xs uppercase tracking-[0.3em] text-[var(--holive-gold)]">
             {t("eyebrow")}
           </p>
@@ -29,10 +33,13 @@ export function Digital() {
           </p>
         </SectionReveal>
 
-        <ul className="mt-14 divide-y divide-[var(--border)] border-y border-[var(--border)]">
+        <StaggerGroup
+          className="mt-14 divide-y divide-[var(--border)] border-y border-[var(--border)]"
+          stagger={0.08}
+        >
           {items.map((key, i) => (
-            <SectionReveal key={key} delay={0.04 * i}>
-              <li className="group grid gap-2 py-7 transition-colors md:grid-cols-[minmax(0,1fr)_1.4fr] md:items-baseline md:gap-10">
+            <StaggerItem key={key} preset="slideLeft">
+              <li className="group grid list-none gap-2 py-7 transition-colors md:grid-cols-[minmax(0,1fr)_1.4fr] md:items-baseline md:gap-10">
                 <h3 className="font-display text-xl font-semibold group-hover:text-[var(--holive-purple-bright)]">
                   <span className="font-mono-code mr-3 text-xs text-[var(--holive-gold)]">
                     {`//${String(i + 1).padStart(2, "0")}`}
@@ -43,9 +50,9 @@ export function Digital() {
                   {t(`items.${key}.text`)}
                 </p>
               </li>
-            </SectionReveal>
+            </StaggerItem>
           ))}
-        </ul>
+        </StaggerGroup>
       </div>
     </section>
   );
